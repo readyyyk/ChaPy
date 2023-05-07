@@ -1,3 +1,7 @@
+.hidden{
+    visibility: hidden;
+}
+
 .user__info{
     max-width: 88px;
 }

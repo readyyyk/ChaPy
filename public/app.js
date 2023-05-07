@@ -1,33 +1,60 @@
 const
-    host = "ws://localhost:3000",
-    currentUser = prompt("Ur name")
+    host = "<UR IP>:3000",
+    currentChat = document.location.pathname.slice(1),
+    socket = io(host)
+
+let currentUser = "test"
+
+socket.emit("trying-to-connect", currentChat)
+
+const toast = bootstrap.Toast.getOrCreateInstance(document.querySelector("#toast"))
+const modal = bootstrap.Modal.getOrCreateInstance(document.querySelector('#modal'))
+modal.show()
+
+socket.on("client-trying-to-connect", () => {
+    bootstrap.Toast.getOrCreateInstance(document.querySelector("#toast")).show()
+})
+
+const form = document.forms[0]
+form.addEventListener("submit", (e)=>{
+    e.preventDefault()
+    fetch(document.location+`/check?name=${encodeURIComponent(form.uname.value)}`)
+        .then(data => {
+            if(data.ok){
+                currentUser = form.uname.value
+                socket.emit("user-connect", [document.location.pathname.slice(1), currentUser])
+                modal.hide()
+            } else {
+                document.querySelector("#form-tooltip").classList.remove("hidden")
+            }
+        })
+})
 
 const
     msgContainer = document.querySelector("#msg-container"),
     sbmBtn = document.querySelector("#submit"),
     msgInput = document.querySelector("#text-input")
 
-const
-    socket = io(host)
-
 class Message {
-    constructor(text, owner) {
+    constructor(text, owner, type) {
+        this.type = type || "msg"
         this.text = text
         this.owner = owner
     }
     render(){
         const el = document.createElement("div")
         const isThisUser = this.owner === currentUser
-        el.classList.add("container-fluid", "d-flex", `justify-content-${isThisUser?"end":"start"}`, "px-0", "message",
+        el.classList.add("container-fluid", "d-flex", `justify-content-${this.type==="msg"?isThisUser?"end":"start":"center"}`, "px-0", "message",
             isThisUser?"message-y":"message-ny")
         el.innerHTML = `
             <div style="max-width: 90%;" class="d-flex align-items-center flex-row${isThisUser?"-reverse":""}">
-                <div class="d-flex flex-column align-items-center user__info">
+                ${this.type==="msg" ?
+                `<div class="d-flex flex-column align-items-center user__info">
                     <img src="${this.owner.imageSrc}" alt=""
                          class="rounded mx-2 mx-md-4">
                     <span> ${this.owner} </span>
-                </div>
-                <div class="${isThisUser?"bg-primary":"bg-secondary"} p-3 rounded" style="--bs-bg-opacity: 0.4">
+                </div>` : ""}
+                <div class="${isThisUser?"bg-primary":"bg-secondary"} rounded p-3 py-2 ${this.type!=="msg"?"py-1 rounded-pill":""}" style="--bs-bg-opacity: 0.4">
                     ${this.text}
                 </div>
             </div>
@@ -44,15 +71,21 @@ window.addEventListener("keydown", (e)=>{
 sbmBtn.addEventListener("click", () => {
     if(!msgInput.value)
         return false
-    socket.emit("message-send", JSON.stringify({text: msgInput.value, owner: currentUser}))
+    socket.emit("message", [msgInput.value, currentUser, currentChat])
     msgInput.value = ""
     return true
 })
 
-socket.on("connection", e=>{
-    console.log("connected, e")
-})
-socket.on("message", e => {
-    const {text, owner} = JSON.parse(e)
+socket.on("client-message", ([text, owner]) => {
     new Message(text, owner).render()
+})
+socket.on("user-disconnect", (e)=>{
+    new Message(`<u><b>${e}</b></u> disconnected`, null, "connection").render()
+})
+socket.on("client-user-connect", (e)=>{
+    toast.hide()
+    new Message(`<u><b>${e}</b></u> connected`, null, "connection").render()
+})
+socket.on("client-user-already-exists", e=>{
+    modal.show()
 })
