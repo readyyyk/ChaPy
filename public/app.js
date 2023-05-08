@@ -50,7 +50,7 @@ class Message {
             <div style="max-width: 90%;" class="d-flex align-items-center flex-row${isThisUser?"-reverse":""}">
                 ${this.type==="msg" ?
                 `<div class="d-flex flex-column align-items-center user__info">
-                    <img src="${this.owner.imageSrc}" alt=""
+                    <img src="http://167.172.179.35:3001/render?seed=${encodeURIComponent(this.owner)}" alt=""
                          class="rounded mx-2 mx-md-4">
                     <span> ${this.owner} </span>
                 </div>` : ""}
@@ -80,11 +80,15 @@ socket.on("client-message", ([text, owner]) => {
     new Message(text, owner).render()
 })
 socket.on("user-disconnect", (e)=>{
-    new Message(`<u><b>${e}</b></u> disconnected`, null, "connection").render()
+    new Message(`<u><b>${e}</b></u>
+    <img src="http://167.172.179.35:3001/render?seed=${encodeURIComponent(e)}" alt="" class="mx-2" height="24px" width="24px"> disconnected`,
+        null, "connection").render()
 })
 socket.on("client-user-connect", (e)=>{
     toast.hide()
-    new Message(`<u><b>${e}</b></u> connected`, null, "connection").render()
+    new Message(`<u><b>${e}</b></u>
+    <img src="http://167.172.179.35:3001/render?seed=${encodeURIComponent(e)}" alt="" class="mx-2" height="24px" width="24px"> connected`,
+        null, "connection").render()
 })
 socket.on("client-user-already-exists", e=>{
     modal.show()
