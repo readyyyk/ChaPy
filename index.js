@@ -28,7 +28,7 @@ expApp.get("/newchat", (req, res) => {
 })
 expApp.get("/:chat", (req, res) => {
     if(!chats.has(req.params.chat)){
-        res.redirect("/")
+        res.sendFile(path.join(__dirname, 'public', '404.html'))
         return
     }
 
