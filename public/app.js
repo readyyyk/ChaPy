@@ -1,5 +1,5 @@
 const
-    host = "<UR IP>:3000",
+    host = "localhost:3000",
     currentChat = document.location.pathname.slice(1),
     socket = io(host)
 
@@ -54,7 +54,7 @@ class Message {
                          class="rounded mx-2 mx-md-4">
                     <span> ${this.owner} </span>
                 </div>` : ""}
-                <div class="${isThisUser?"bg-primary":"bg-secondary"} rounded p-3 py-2 ${this.type!=="msg"?"py-1 rounded-pill":""}" style="--bs-bg-opacity: 0.4">
+                <div class="text-brake ${isThisUser?"bg-primary":"bg-secondary"} rounded p-3 py-2 ${this.type!=="msg"?"py-1 rounded-pill":""}" style="--bs-bg-opacity: 0.4">
                     ${this.text}
                 </div>
             </div>
