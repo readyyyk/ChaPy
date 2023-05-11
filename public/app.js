@@ -7,8 +7,8 @@ let currentUser = "test"
 
 socket.emit("trying-to-connect", currentChat)
 
-const toast = bootstrap.Toast.getOrCreateInstance(document.querySelector("#toast"))
-const modal = bootstrap.Modal.getOrCreateInstance(document.querySelector('#modal'))
+const toast = new bootstrap.Toast(document.querySelector("#toast"))
+const modal = new bootstrap.Modal(document.querySelector('#modal'))
 modal.show()
 
 socket.on("client-trying-to-connect", () => {
@@ -22,7 +22,16 @@ form.addEventListener("submit", (e)=>{
         .then(data => {
             if(data.ok){
                 currentUser = form.uname.value
-                socket.emit("user-connect", [document.location.pathname.slice(1), currentUser])
+                fetch(document.location+`/users`)
+                    .then(res => {
+                        console.log(res)
+                        return res.json()
+                    })
+                    .then(data => {
+                        console.log(data)
+                        data?.forEach(el=>new UserListEl(el).render())
+                    })
+                socket.emit("user-connect", currentUser)
                 modal.hide()
             } else {
                 document.querySelector("#form-tooltip").classList.remove("hidden")
@@ -63,6 +72,30 @@ class Message {
     }
 }
 
+const uListContainer = document.querySelector("#user-list")
+let currentListState = "none"
+class UserListEl {
+    constructor(name) {
+        this.name = name
+    }
+    render(){
+        const el = document.createElement("div")
+        el.id = `${this.name}`
+        el.classList.add("d-flex", "justify-content-end", "align-items-center")
+        el.innerHTML = `
+        <span class="pe-2" style="display: ${currentListState}"> ${this.name} </span>
+        <img src="http://167.172.179.35:3001/render?seed=${encodeURIComponent(this.name)}"
+            alt="${this.name}"
+            class="rounded rounded-circle bg-light my-1">
+        `
+        uListContainer.append(el)
+    }
+}
+document.querySelector("#user-list").addEventListener("click", ()=>{
+    currentListState = currentListState==="none"?"inline":"none"
+    document.querySelectorAll("#user-list span").forEach(el => el.style.display=currentListState)
+})
+
 window.addEventListener("keydown", (e)=>{
     if(e.key==="Enter")
         sbmBtn.click()
@@ -71,7 +104,7 @@ window.addEventListener("keydown", (e)=>{
 sbmBtn.addEventListener("click", () => {
     if(!msgInput.value)
         return false
-    socket.emit("message", [msgInput.value, currentUser, currentChat])
+    socket.emit("message", [msgInput.value, currentUser])
     msgInput.value = ""
     return true
 })
@@ -83,13 +116,17 @@ socket.on("user-disconnect", (e)=>{
     new Message(`<u><b>${e}</b></u>
     <img src="http://167.172.179.35:3001/render?seed=${encodeURIComponent(e)}" alt="" class="mx-2" height="24px" width="24px"> disconnected`,
         null, "connection").render()
+
+    document.querySelector(`#user-list #${e}`).remove()
 })
 socket.on("client-user-connect", (e)=>{
     toast.hide()
     new Message(`<u><b>${e}</b></u>
     <img src="http://167.172.179.35:3001/render?seed=${encodeURIComponent(e)}" alt="" class="mx-2" height="24px" width="24px"> connected`,
         null, "connection").render()
+    if(e!==currentUser)
+        new UserListEl(e).render()
 })
-socket.on("client-user-already-exists", e=>{
+socket.on("client-user-already-exists", e => {
     modal.show()
 })

@@ -34,6 +34,11 @@ expApp.get("/:chat", (req, res) => {
 
     res.sendFile(path.join(__dirname, 'public', 'chat.html'))
 })
+expApp.get("/:chat/users", (req, res) => {
+    // console.log(JSON.stringify([...chats.get(req.params.chat)]))
+    res.write(JSON.stringify([...chats.get(req.params.chat)]))
+    res.end()
+})
 expApp.get("/:chat/check", (req, res) => {
     const absUrl = new URL(`${req.protocol}://${req.get('host')}${req.originalUrl}`)
     res.statusCode = chats.get(req.params.chat).has(absUrl.searchParams.get("name"))?401:200
@@ -41,39 +46,44 @@ expApp.get("/:chat/check", (req, res) => {
 })
 
 io.on("connection", (socket) => {
-    console.log(`\ns ->\tconnecting to socket`);
+    console.log(`\ns ->\tcreating socket(${socket.id}) - ${new Date().toUTCString()}`);
 
     let clientName = ""
+    let clientChat = ""
+
     socket.on("trying-to-connect", (chat) => {
         socket.join(chat)
         socket.to(chat).emit("client-trying-to-connect")
+        clientChat = chat
     })
 
-    socket.on("user-connect", ([chat, user]) => {
-        if(chats.get(chat).has(user)){
+    socket.on("user-connect", (user) => {
+        if(chats.get(clientChat).has(user)){
             socket.emit("client-user-already-exists")
             return
         }
         clientName = user
-        chats.set(chat, chats.get(chat).add(user))
-        socket.to(chat).emit("client-user-connect", user)
-        socket.emit("client-user-connect", user)
+        chats.set(clientChat, chats.get(clientChat).add(clientName))
+        socket.to(clientChat).emit("client-user-connect", clientName)
+        socket.emit("client-user-connect", clientName)
     })
 
-    socket.on("message", ([text, owner, chat]) => {
-        socket.to(chat).emit("client-message", [text, owner])
+    socket.on("message", ([text, owner]) => {
+        socket.to(clientChat).emit("client-message", [text, owner])
         socket.emit("client-message", [text, owner])
     })
 
     socket.on("disconnecting", () => {
-        const chat = [...socket.rooms].pop()
-        if(io.sockets.adapter.rooms.get(chat)?.size === 1) {
-            console.log(`\n -x-> removed chat chats[${chat}]`)
-            chats.delete(chat)
+        if(io.sockets.adapter.rooms.get(clientChat)?.size === 1) {
+            console.log(`\n -x-> removed chat chats[${clientChat}]`)
+            chats.delete(clientChat)
             return
         }
 
-        socket.to(chat).emit("user-disconnect", clientName)
+        chats.get(clientChat)?.delete(clientName)
+
+        socket.to(clientChat).emit("user-disconnect", clientName)
+        console.log(`\n -x-> discocnnecting socket(${socket.id}) - ${new Date().toUTCString()}`)
     })
 })
 

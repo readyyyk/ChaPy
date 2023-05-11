@@ -30,7 +30,7 @@
         </a>
         <span>
             <button type="button" class="btn btn-secondary" onclick="themeToggle()"> <i class="fa-solid fa-sun"></i> </button>
-            <button type="button" class="btn btn-secondary" onclick="toggleQr()"> <i class="fa-solid fa-qrcode"></i> </button>
+            <button type="button" class="btn btn-secondary" onclick="toggleQr()"> <i class="fa-solid fa-share"></i> </button>
         </span>
     </div>
 </nav>
@@ -47,6 +47,12 @@
         </button>
     </div>
 </main>
+
+<div id="user-list"
+     style="position:fixed;right: .37rem;top: 50%;transform: translate(0, -50%); border-radius: 24px; transition: .3s all ease-in-out"
+     class="d-flex flex-column bg-secondary p-1 px-2">
+<!--    <img src="http://167.172.179.35:3001/render" alt="" class="rounded rounded-circle bg-light my-1">-->
+</div>
 
 <div class="toast-container position-fixed top-0 end-0 p-3">
     <div id="toast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
@@ -85,8 +91,14 @@
                 <h1 class="modal-title fs-5"><img src="favicon.svg" alt="CB" height="32"> ChatBin - Share chat </h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body d-flex justify-content-center" style="background: #dee2e6">
+            <div class="modal-body d-flex justify-content-center flex-wrap" style="background: #dee2e6">
                 <div class="m-3 my-2 border border-3 rounded" id="qr"></div>
+                <div class="">
+                    <button class="btn btn-secondary rounded rounded-circle d-flex justify-content-center p-0"
+                         onclick="navigator.clipboard.writeText(document.location)">
+                        <i class="fa-solid fa-link p-3"></i>
+                    </button>
+                </div>
             </div>
         </div>
     </div>

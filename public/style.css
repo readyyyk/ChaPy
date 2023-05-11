@@ -39,6 +39,11 @@
     line-height: 1;
 }
 
+#user-list img {
+    width: 2rem;
+    height: 2rem;
+}
+
 @media (max-width: 768px) {
     .user__info > img{
         width: 32px;
