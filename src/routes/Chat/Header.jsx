@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-    AppBar,
+    AppBar, Container,
     IconButton,
     Link,
     Toolbar,
@@ -18,25 +18,27 @@ const Header = ({ToggleMode, ToggleQr}) => {
     });
     return (
         <AppBar position="fixed" elevation={trigger?4:0}>
-            <Toolbar variant="regular" sx={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                p: 3
-            }}>
-                <Link variant="h5" href="/" underline={"hover"} color={"inherit"} sx={{display:'flex', alignItems: 'center'}}>
-                    <img src="./favicon.svg"  alt="icon" height="40px"/>
-                    <span>Chat<i>Bin</i></span>
-                </Link>
-                <div>
-                    <IconButton sx={{ ml: 1 }} onClick={ToggleMode} color="inherit">
-                        {theme.palette.mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
-                    </IconButton>
-                    <IconButton sx={{ ml: 1 }} onClick={ToggleQr} color="inherit">
-                        <IosShareIcon />
-                    </IconButton>
-                </div>
-            </Toolbar>
+            <Container sx={{width: 'md'}}>
+                <Toolbar variant="regular" sx={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    p: 3
+                }}>
+                    <Link variant="h5" href="/" underline={"hover"} color={"inherit"} sx={{display:'flex', alignItems: 'center'}}>
+                        <img src="./favicon.svg"  alt="icon" height="40px"/>
+                        <span>Chat<i>Bin</i></span>
+                    </Link>
+                    <div>
+                        <IconButton sx={{ ml: 1 }} onClick={ToggleMode} color="inherit" disabled>
+                            {theme.palette.mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
+                        </IconButton>
+                        <IconButton sx={{ ml: 1 }} onClick={ToggleQr} color="inherit" disabled>
+                            <IosShareIcon />
+                        </IconButton>
+                    </div>
+                </Toolbar>
+            </Container>
         </AppBar>
     );
 };

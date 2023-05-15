@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {
     Box,
     TextField,
@@ -17,12 +17,42 @@ import ServerMessage from "./serverMessage.jsx";
 import UserMessage from "./userMessage.jsx";
 
 const Chat = ({ToggleMode, ToggleQr}) => {
-    const theme = useTheme()
+    const theme = useTheme();
 
-    const [isLoaded, setIsLoaded] = useState(false)
-    setTimeout(()=>setIsLoaded(true), 2300)
+    const [isLoaded, setIsLoaded] = useState(false);
+    setTimeout(()=>setIsLoaded(true), 2300);
 
     const { chat } = useParams();
+
+    const [msgs, setMsgs] = useState([
+        {text: 'test connected', owner:'test', type: 'server'},
+        {text: 'testasd as da sdsda ', owner: 'test'},
+        {text: 'test', owner: 'test'},
+        {text: 'testasd sa dsa d sadsadsas adsddsadsdaa sdsda ', owner: 'smb'},
+        {text: 'testasd jansjd sanjks dnkjd sanjkkjanskdjn akns d ajsndk jansk jdnkaj sndkj a', owner: 'smb'},
+        {text: 'testasd as da uja sd', owner: 'smb'},
+        {text: 'test disconnected', owner:'test', type: 'server'},
+        {text: 'testasd jansjd sanjks dnkjd sanjkkjanskdjn akns d ajsndk jansk jdnkaj sndkj a', owner: 'undefined'},
+        {text: 'saldmasdalskmd masmlm;las d;lm;lm as;lm;lmasmda', owner: 'undefined'},
+        {text: 'testasd sa dsa d sadsadsas adsddsadsdaa sdsda ', owner: 'test'},
+        {text: 'sadsadsas adsddsadsdaa sdsda asd as ddsas da sdasdasd asd as da', owner: 'test'},
+        {text: 'testasd as da uja sd', owner: 'yess'},
+    ])
+    const addMsg = (newMessage) => setMsgs([...msgs, newMessage])
+
+    const msgStack = useRef();
+    useEffect(() => {
+        msgStack.current?.lastElementChild?.scrollIntoView({behavior:'smooth'})
+    }, [msgs]);
+
+    let [inputText, setInputText] = useState('')
+    const newMessage = () => {
+        if(inputText) {
+            addMsg({text: inputText, owner: 'smb'})
+            setInputText('')
+        }
+    }
+
     return (
         <>
             <Header ToggleMode={ToggleMode} />
@@ -46,27 +76,35 @@ const Chat = ({ToggleMode, ToggleQr}) => {
                     justifyContent="flex-start"
                     alignItems="stretch"
                     spacing={1}
-                    sx={{width: 1}}
+                    sx={{width: 1, overflowY: 'scroll', mt: '3rem', pb: '1rem'}}
+                    id='messageContainer'
+                    ref={msgStack}
                 >
-                    <ServerMessage text={'test'} />
-                    <ServerMessage text={'test'} />
-                    <ServerMessage text={'test'} />
-                    <UserMessage text={"tsetinsadamsd asmd kasm dkam skdk a"} owner={"test"} />
-                    <UserMessage text={"tsetinsadamsd asmd kasm dkam sdas dad sasda  sda skdk a"} owner={"test"} />
-                    <UserMessage text={"tsetinsass d asd asda sda s sadadamsd asmd kasm dkam skdk a"} owner={"test"} />
-                    <UserMessage text={"Lorem ipsum dolor sit amet, consectetur adipisicing elit. At aut, deleniti dolorum ducimus eaque enim eos ex explicabo fugiat itaque iure libero molestiae natus nesciunt numquam sapiente vel velit voluptatem."} owner={null} />
-                    <UserMessage text={"tsetinsadamsd asmd kasm dkam skdk a"} owner={"test"} />
-                    <UserMessage text={"tsetinsadamsd asmd kasm dkam asdsadsa sasdad sasda skdk a"} owner={"test"} />
-                    <UserMessage text={"Lorem ipsum dolor sit amet, consectetur adipisicing elit. At aut, deleniti dolorum "} owner={null} />
+                    {
+                        msgs.map((el, i) => {
+                            // console.log(i<msgs.length-1 && el.owner === msgs[i+1].owner)
+                            return <> {el.type === 'server'
+                                ? <ServerMessage text={el.text} owner={el.owner}/>
+                                : i<msgs.length-1 && el.owner === msgs[i+1].owner
+                                    ? <UserMessage text={el.text} owner={el.owner}/>
+                                    : <UserMessage text={el.text} owner={el.owner} mb/> }
+                            </>
+                        })
+                    }
                 </Stack>
+
+                {/*input*/}
                 <Container sx={{
-                    // position: 'fixed',
-                    // bottom: '0',
                     p: 2,
                 }}>
                     <Box sx={{display: 'flex', alignItems: 'center'}}>
-                        <TextField label="Message" sx={{width: 1}} tabIndex={1}/>
-                        <IconButton sx={{ ml: 1 }} onClick={ToggleQr} color="primary">
+                        <TextField label="Message"
+                                   sx={{width: 1}}
+                                   tabIndex={1}
+                                   value={inputText}
+                                   onChange={e => setInputText(e.target.value)}
+                        />
+                        <IconButton sx={{ ml: 1 }} onClick={newMessage} color="primary">
                             <SendIcon />
                         </IconButton>
                     </Box>

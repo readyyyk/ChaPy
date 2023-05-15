@@ -1,23 +1,25 @@
 import React from 'react';
 import {Avatar, Container, Paper, Typography, useTheme} from "@mui/material";
+import hashMapsApi from "./hashMapsApi.js";
 
-const UserMessage = ({owner, text}) => {
+const UserMessage = ({owner, text, mb}) => {
     const theme = useTheme();
 
-    const isThisUser = owner === null
+    const isThisUser = owner === 'smb'
     return (
         <Container sx={{
             display: 'flex',
             flexDirection: isThisUser ? 'row-reverse' : 'row',
             justifyContent: isThisUser ? 'end' : 'start',
             width: 1,
+            pb: mb?'.5rem':'',
         }}>
-            <Avatar variant="soft" size={'lg'} sx={{m: isThisUser?'0 0 0 .5rem':'0 .5rem 0 0'}}/>
+            <Avatar src={hashMapsApi.link(owner)} variant="soft" size={'lg'} sx={{m: isThisUser?'0 0 0 .5rem':'0 .5rem 0 0'}}/>
             <Paper elevation={2} sx={{
                 alignItems: 'center',
                 background: isThisUser
                     ? 'primary'
-                    : theme.palette.mode=="dark"
+                    : theme.palette.mode==="dark"
                         ? theme.palette.info.dark
                         : theme.palette.info.light,
                 display: 'flex',

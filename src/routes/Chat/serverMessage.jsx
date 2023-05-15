@@ -1,11 +1,13 @@
 import React from 'react';
 import {Avatar, Chip, Container} from "@mui/material";
+import hashMapsApi from "./hashMapsApi.js";
 
-const ServerMessage = ({text}) => {
+const ServerMessage = ({text, owner}) => {
     return (
-        <Container sx={{width:1, display:'flex', justifyContent: 'center'}}>
-            <Chip avatar={<Avatar alt="Test" src="/static/images/avatar/1.jpg" />}
-              label={text} />
+        <Container sx={{width:1, display:'flex', justifyContent: 'center', p: '.5rem'}}>
+            <Chip avatar={<Avatar alt="Test" src={hashMapsApi.link(owner)}/>}
+                  color={text.includes('dis') ? 'warning' : 'success'}
+                  label={text}/>
         </Container>
     );
 };
