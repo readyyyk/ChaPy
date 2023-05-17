@@ -1,5 +1,11 @@
 import React from 'react';
-import {Box, Button, Link, Typography} from "@mui/material";
+import {
+    Box,
+    Button,
+    Link,
+    Typography,
+} from '@mui/material';
+
 const Home = () => {
     return (
         <Box
@@ -7,7 +13,7 @@ const Home = () => {
                 display: 'flex',
                 flexDirection: 'column',
                 width: '100%',
-                height: "100dvh",
+                height: '100dvh',
                 alignItems: 'center',
                 justifyContent: 'center',
                 bgcolor: 'background.default',
@@ -18,9 +24,14 @@ const Home = () => {
         >
             <Typography variant="h1"> Home </Typography>
             <Link href='/newChat' color='inherit'>
-                <Button variant="outlined" size="large"> New chat </Button>
+                <Button
+                    variant="outlined"
+                    size="large"
+                >
+                    New chat
+                </Button>
             </Link>
         </Box>
     );
 };
-export default Home
+export default Home;

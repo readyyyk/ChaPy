@@ -5,11 +5,12 @@ import {
     Link,
     Toolbar,
     useScrollTrigger,
-    useTheme
-} from "@mui/material";
+    useTheme,
+} from '@mui/material';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
 import IosShareIcon from '@mui/icons-material/IosShare';
+
 const Header = ({ToggleMode, ToggleQr}) => {
     const theme = useTheme();
     const trigger = useScrollTrigger({
@@ -17,23 +18,48 @@ const Header = ({ToggleMode, ToggleQr}) => {
         threshold: 0,
     });
     return (
-        <AppBar position="fixed" elevation={trigger?4:0}>
+        <AppBar
+            position="fixed"
+            elevation={trigger?4:0}
+        >
             <Container sx={{width: 'md'}}>
-                <Toolbar variant="regular" sx={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    p: 3
-                }}>
-                    <Link variant="h5" href="/" underline={"hover"} color={"inherit"} sx={{display:'flex', alignItems: 'center'}}>
-                        <img src="./favicon.svg"  alt="icon" height="40px"/>
+                <Toolbar
+                    variant="regular"
+                    sx={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        p: 3,
+                    }}
+                >
+                    <Link
+                        variant="h5"
+                        href="/"
+                        underline={'hover'}
+                        color={'inherit'}
+                        sx={{
+                            display: 'flex',
+                            alignItems: 'center',
+                        }}
+                    >
+                        <img src="./favicon.svg" alt="icon" height="40px"/>
                         <span>Chat<i>Bin</i></span>
                     </Link>
                     <div>
-                        <IconButton sx={{ ml: 1 }} onClick={ToggleMode} color="inherit" disabled>
-                            {theme.palette.mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
+                        <IconButton
+                            sx={{ml: 1}}
+                            onClick={ToggleMode}
+                            color="inherit"
+                        >
+                            {theme.palette.mode === 'dark' ?
+                                <Brightness7Icon /> : <Brightness4Icon />}
                         </IconButton>
-                        <IconButton sx={{ ml: 1 }} onClick={ToggleQr} color="inherit" disabled>
+                        <IconButton
+                            sx={{ml: 1}}
+                            onClick={ToggleQr}
+                            color="inherit"
+                            disabled
+                        >
                             <IosShareIcon />
                         </IconButton>
                     </div>
@@ -41,6 +67,11 @@ const Header = ({ToggleMode, ToggleQr}) => {
             </Container>
         </AppBar>
     );
+};
+
+Header.propTypes = {
+    ToggleMode: function() {},
+    ToggleQr: function() {},
 };
 
 export default Header;
