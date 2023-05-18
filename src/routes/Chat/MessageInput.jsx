@@ -7,6 +7,7 @@ import {
 } from '@mui/material';
 
 import SendIcon from '@mui/icons-material/Send';
+import PropTypes from 'prop-types';
 
 const MessageInput = ({addMsg}) => {
     const [inputValue, setInputValue] = useState('');
@@ -16,7 +17,7 @@ const MessageInput = ({addMsg}) => {
             setInputValue('');
         }
     };
-    return <Container sx={{p: 2}}>
+    return <Container sx={{py: 1}}>
         <Box sx={{display: 'flex', alignItems: 'center'}}>
             <TextField label='Message'
                 sx={{width: 1}}
@@ -37,7 +38,7 @@ const MessageInput = ({addMsg}) => {
 };
 
 MessageInput.propTypes = {
-    addMsg: function() {},
+    addMsg: PropTypes.func,
 };
 
 export default MessageInput;

@@ -10,19 +10,25 @@ import Header from './Header.jsx';
 
 import MessageInput from './MessageInput.jsx';
 import MessageStack from './MessageStack.jsx';
+import PropTypes from 'prop-types';
+import IntroModal from './IntroModal.jsx';
+import ShareModal from './ShareModal.jsx';
 
-const Chat = ({ToggleMode, ToggleQr}) => {
+const Chat = ({ToggleMode}) => {
+    const {chat} = useParams();
     const theme = useTheme();
 
     const [isLoaded, setIsLoaded] = useState(false);
     setTimeout(()=>setIsLoaded(true), 2300);
 
-    const {chat} = useParams();
+    const [isConnected, setIsConnected] = useState(false);
+
+    const [isShareModalOpen, setIsShareModalOpen] = useState(false);
 
     const [msgs, setMsgs] = useState([
         {text: 'test connected', owner: 'test', type: 'server'},
         {text: 'testasd as da sdsda ', owner: 'test'},
-        {text: 'test', owner: 'test'},
+        {text: 'test', owner: 'lorem'},
         {text: 'testasd sa dsa d sadsadsas adsddsadsdaa sdsda ', owner: 'smb'},
         {text: 'testasd jansjd sanjks dndk jansk jdnkaj sndkj a', owner: 'smb'},
         {text: 'testasd as da uja sd', owner: 'smb'},
@@ -37,9 +43,12 @@ const Chat = ({ToggleMode, ToggleQr}) => {
 
     return (
         <>
-            <Header ToggleMode={ToggleMode} />
+            <Header
+                ToggleMode={ToggleMode}
+                setIsShareModalOpen={setIsShareModalOpen}
+            />
             {
-                isLoaded ?
+                isConnected ?
                     <Container sx={{
                         display: 'flex',
                         flexDirection: 'column',
@@ -48,11 +57,10 @@ const Chat = ({ToggleMode, ToggleQr}) => {
                         overflow: 'hidden',
                         justifyContent: 'end',
                         alignItems: 'center',
-                        pt: '5.5rem',
+                        p: '4.5rem 0 0 0',
                     }}
                     >
                         <MessageStack msgs={msgs} />
-                        {/* input */}
                         <MessageInput addMsg={addMsg}/>
                     </Container> : <></>
             }
@@ -62,26 +70,35 @@ const Chat = ({ToggleMode, ToggleQr}) => {
                     color: '#fff',
                     flexDirection: 'column',
                 }}
-                open={!isLoaded}>
+                open={!isLoaded}
+            >
                 <Typography
                     variant='h1'
                     align='center'
-                    gutterBottom> Entering <b><i>{chat}</i></b>
+                    gutterBottom
+                >
+                    Entering <b><i>{chat}</i></b>
                 </Typography>
                 <LinearProgress
                     color={'info'}
                     sx={{
                         width: .9,
                         borderRadius: 1,
-                    }}/>
+                    }}
+                />
             </Backdrop>
+            <IntroModal
+                open={isLoaded?!isConnected:false}
+                setIsConnected={setIsConnected}
+                chat={chat}
+            />
+            <ShareModal open={isShareModalOpen} setOpen={setIsShareModalOpen}/>
         </>
     );
 };
 
 Chat.propTypes = {
-    ToggleQr: function() {},
-    ToggleMode: function() {},
+    ToggleMode: PropTypes.func,
 };
 
 export default Chat;

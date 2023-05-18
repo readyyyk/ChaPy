@@ -20,10 +20,7 @@ import Chat from './routes/Chat/Chat.jsx';
 import NotFound from './routes/NotFound.jsx';
 
 const App = () => {
-    const [showQr, setShowQr] = useState(false);
-    const ToggleQr = () => setShowQr(!showQr);
-
-
+    const isPreferDark = useMediaQuery('(prefers-color-scheme: dark)');
     const [isDarkMode, setIsDarkMode] = useState(true);
     const ToggleMode = () => {
         localStorage.setItem('theme', !isDarkMode?'dark':'light');
@@ -43,7 +40,7 @@ const App = () => {
             setIsDarkMode(true);
             localStorage.setItem(
                 'theme',
-                useMediaQuery('(prefers-color-scheme: dark)') ?
+                isPreferDark ?
                     'dark' : 'light');
             return;
         }
@@ -62,10 +59,7 @@ const App = () => {
                     <Route
                         path="/:chat"
                         element={
-                            <Chat
-                                ToggleMode={ToggleMode}
-                                ToggleQr={ToggleQr}
-                            />
+                            <Chat ToggleMode={ToggleMode}/>
                         }
                     />
                     <Route

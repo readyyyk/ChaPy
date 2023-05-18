@@ -10,8 +10,9 @@ import {
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
 import IosShareIcon from '@mui/icons-material/IosShare';
+import PropTypes from 'prop-types';
 
-const Header = ({ToggleMode, ToggleQr}) => {
+const Header = ({ToggleMode, setIsShareModalOpen}) => {
     const theme = useTheme();
     const trigger = useScrollTrigger({
         disableHysteresis: true,
@@ -22,14 +23,14 @@ const Header = ({ToggleMode, ToggleQr}) => {
             position="fixed"
             elevation={trigger?4:0}
         >
-            <Container sx={{width: 'md'}}>
+            <Container sx={{width: 'md', p: 0}}>
                 <Toolbar
                     variant="regular"
                     sx={{
                         display: 'flex',
                         justifyContent: 'space-between',
                         alignItems: 'center',
-                        p: 3,
+                        p: 2,
                     }}
                 >
                     <Link
@@ -56,9 +57,8 @@ const Header = ({ToggleMode, ToggleQr}) => {
                         </IconButton>
                         <IconButton
                             sx={{ml: 1}}
-                            onClick={ToggleQr}
+                            onClick={()=>setIsShareModalOpen(true)}
                             color="inherit"
-                            disabled
                         >
                             <IosShareIcon />
                         </IconButton>
@@ -70,8 +70,8 @@ const Header = ({ToggleMode, ToggleQr}) => {
 };
 
 Header.propTypes = {
-    ToggleMode: function() {},
-    ToggleQr: function() {},
+    ToggleMode: PropTypes.func,
+    setIsShareModalOpen: PropTypes.func,
 };
 
 export default Header;

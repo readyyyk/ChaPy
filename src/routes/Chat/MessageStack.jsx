@@ -1,7 +1,8 @@
 import React, {useEffect, useRef} from 'react';
-import ServerMessage from './serverMessage.jsx';
-import UserMessage from './userMessage.jsx';
+import ServerMessage from './ServerMessage.jsx';
+import UserMessage from './UserMessage.jsx';
 import {Stack} from '@mui/material';
+import PropTypes from 'prop-types';
 
 const MessageStack = ({msgs}) => {
     const msgStack = useRef();
@@ -35,7 +36,7 @@ const MessageStack = ({msgs}) => {
 };
 
 MessageStack.propTypes = {
-    msgs: Array,
+    msgs: PropTypes.array,
 };
 
 export default MessageStack;

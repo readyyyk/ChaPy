@@ -2,6 +2,8 @@ import React from 'react';
 import {Avatar, Chip, Container} from '@mui/material';
 import hashMapsApi from './hashMapsApi.js';
 
+import PropTypes from 'prop-types';
+
 const ServerMessage = ({text, owner}) => {
     return (
         <Container
@@ -26,8 +28,8 @@ const ServerMessage = ({text, owner}) => {
 };
 
 ServerMessage.propTypes = {
-    text: String,
-    owner: String,
+    text: PropTypes.string,
+    owner: PropTypes.string,
 };
 
 export default ServerMessage;

@@ -1,6 +1,7 @@
 import React from 'react';
 import {Avatar, Container, Paper, Typography, useTheme} from '@mui/material';
 import hashMapsApi from './hashMapsApi.js';
+import PropTypes from 'prop-types';
 
 const UserMessage = ({owner, text, mb}) => {
     const theme = useTheme();
@@ -14,14 +15,16 @@ const UserMessage = ({owner, text, mb}) => {
             width: 1,
             pb: mb?'.5rem':'',
         }}>
-            <Avatar
-                src={hashMapsApi.link(owner)}
-                variant="soft"
-                size={'lg'}
-                sx={{
-                    m: isThisUser?'0 0 0 .5rem':'0 .5rem 0 0',
-                }}
-            />
+            { !isThisUser ?
+                <Avatar
+                    src={hashMapsApi.link(owner)}
+                    variant="soft"
+                    size={'lg'}
+                    sx={{
+                        m: isThisUser ? '0 0 0 .5rem' : '0 .5rem 0 0',
+                    }}
+                /> : <></>
+            }
             <Paper
                 elevation={2}
                 sx={{
@@ -32,8 +35,8 @@ const UserMessage = ({owner, text, mb}) => {
                             theme.palette.info.dark :
                             theme.palette.info.light,
                     display: 'flex',
-                    maxWidth: .85,
-                    p: 2,
+                    p: '.5rem 1rem',
+                    maxWidth: isThisUser?'87%':'73%',
                 }}
             >
                 <Typography variant={'body1'}>{text}</Typography>
@@ -43,9 +46,9 @@ const UserMessage = ({owner, text, mb}) => {
 };
 
 UserMessage.propTypes = {
-    text: String,
-    owner: String,
-    mb: Boolean,
+    text: PropTypes.string,
+    owner: PropTypes.string,
+    mb: PropTypes.bool,
 };
 
 export default UserMessage;
