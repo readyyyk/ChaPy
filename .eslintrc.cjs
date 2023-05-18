@@ -19,4 +19,10 @@ module.exports = {
   'rules': {
       "indent": ["error", 4],
   },
+  "settings": {
+    "react": {
+      "version": "detect"
+    },
+  },
+  "ignorePatterns": ["old/"],
 };
