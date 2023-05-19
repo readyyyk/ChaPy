@@ -19,6 +19,7 @@ const MessageInput = ({addMsg}) => {
     };
     return <Container sx={{py: 1}}>
         <Box sx={{display: 'flex', alignItems: 'center'}}>
+            {/* TODO: form element for submission with Enter */}
             <TextField label='Message'
                 sx={{width: 1}}
                 tabIndex={1}
