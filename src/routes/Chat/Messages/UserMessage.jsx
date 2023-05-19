@@ -1,11 +1,10 @@
 import React from 'react';
 import {Avatar, Container, Paper, Typography, useTheme} from '@mui/material';
-import hashMapsApi from './hashMapsApi.js';
+import hashMapsApi from '../hashMapsApi.js';
 import PropTypes from 'prop-types';
 
-const UserMessage = ({owner, text, mb}) => {
+const UserMessage = ({owner, text, l, f}) => {
     const theme = useTheme();
-
     const isThisUser = owner === 'smb';
     return (
         <Container sx={{
@@ -13,20 +12,26 @@ const UserMessage = ({owner, text, mb}) => {
             flexDirection: isThisUser ? 'row-reverse' : 'row',
             justifyContent: isThisUser ? 'end' : 'start',
             width: 1,
-            pb: mb?'.5rem':'',
+            pb: l?'.5rem':'',
         }}>
             { !isThisUser ?
-                <Avatar
-                    src={hashMapsApi.link(owner)}
-                    variant="soft"
-                    size={'lg'}
-                    sx={{
-                        m: isThisUser ? '0 0 0 .5rem' : '0 .5rem 0 0',
-                    }}
-                /> : <></>
+                l ?
+                    <Avatar
+                        src={hashMapsApi.link(owner)}
+                        variant="soft"
+                        size={'lg'}
+                        sx={{
+                            mr: '.5rem',
+                        }}
+                    /> :
+                    <div style={{
+                        width: '40px',
+                        marginInlineEnd: '.5rem',
+                    }}></div> :
+                <></>
             }
             <Paper
-                elevation={2}
+                elevation={12}
                 sx={{
                     alignItems: 'center',
                     background: isThisUser ?
@@ -37,6 +42,10 @@ const UserMessage = ({owner, text, mb}) => {
                     display: 'flex',
                     p: '.5rem 1rem',
                     maxWidth: isThisUser?'87%':'73%',
+                    borderRadius: l && f ?
+                        '13px 13px 13px 13px' :
+                        l ? '2px 2px 13px 13px' :
+                            f ? '13px 13px 2px 2px' : '',
                 }}
             >
                 <Typography variant={'body1'}>{text}</Typography>
@@ -48,7 +57,8 @@ const UserMessage = ({owner, text, mb}) => {
 UserMessage.propTypes = {
     text: PropTypes.string,
     owner: PropTypes.string,
-    mb: PropTypes.bool,
+    f: PropTypes.bool,
+    l: PropTypes.bool,
 };
 
 export default UserMessage;

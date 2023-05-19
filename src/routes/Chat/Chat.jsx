@@ -9,10 +9,10 @@ import {useParams} from 'react-router-dom';
 import Header from './Header.jsx';
 
 import MessageInput from './MessageInput.jsx';
-import MessageStack from './MessageStack.jsx';
+import MessageStack from './Messages/MessageStack.jsx';
 import PropTypes from 'prop-types';
-import IntroModal from './IntroModal.jsx';
-import ShareModal from './ShareModal.jsx';
+import IntroModal from './Modals/IntroModal.jsx';
+import ShareModal from './Modals/ShareModal.jsx';
 
 const Chat = ({ToggleMode}) => {
     const {chat} = useParams();
@@ -21,22 +21,23 @@ const Chat = ({ToggleMode}) => {
     const [isLoaded, setIsLoaded] = useState(false);
     setTimeout(()=>setIsLoaded(true), 2300);
 
-    const [isConnected, setIsConnected] = useState(false);
+    const [user, setUser] = useState({connected: false, name: ''});
 
     const [isShareModalOpen, setIsShareModalOpen] = useState(false);
 
     const [msgs, setMsgs] = useState([
-        {text: 'test connected', owner: 'test', type: 'server'},
+        {text: 'test connected', owner: '', type: 'server'},
         {text: 'testasd as da sdsda ', owner: 'test'},
         {text: 'test', owner: 'lorem'},
         {text: 'testasd sa dsa d sadsadsas adsddsadsdaa sdsda ', owner: 'smb'},
         {text: 'testasd jansjd sanjks dndk jansk jdnkaj sndkj a', owner: 'smb'},
         {text: 'testasd as da uja sd', owner: 'smb'},
-        {text: 'test disconnected', owner: 'test', type: 'server'},
+        {text: 'test disconnected', owner: '', type: 'server'},
         {text: 'nskdjn akns d ajsndk jansk jdnkaj sndkj a', owner: 'undefined'},
         {text: 'saldmasdalsk d;lm;lm as;lm;lmasmda', owner: 'undefined'},
-        {text: 'testasd sa dsa d sadsadsas adsddsadsdaa sdsda ', owner: 'test'},
-        {text: 'sadsadsas adasd as ddsas da sdasdasd asd as da', owner: 'test'},
+        {text: 'testasd sa dsa d sadsadsas adsddsadsdaa sdsda', owner: 'test'},
+        {text: 'sadsadsas adsddsadsdaa sdsda testasd sa dsa d', owner: 'test'},
+        {text: 'sadsadsas adasd as ddsas da dasdasd asd as da', owner: 'test'},
         {text: 'testasd as da uja sd', owner: 'yess'},
     ]);
     const addMsg = (newMessage) => setMsgs([...msgs, newMessage]);
@@ -48,7 +49,7 @@ const Chat = ({ToggleMode}) => {
                 setIsShareModalOpen={setIsShareModalOpen}
             />
             {
-                isConnected ?
+                user.connected ?
                     <Container sx={{
                         display: 'flex',
                         flexDirection: 'column',
@@ -73,7 +74,7 @@ const Chat = ({ToggleMode}) => {
                 open={!isLoaded}
             >
                 <Typography
-                    variant='h1'
+                    variant='h2'
                     align='center'
                     gutterBottom
                 >
@@ -88,8 +89,8 @@ const Chat = ({ToggleMode}) => {
                 />
             </Backdrop>
             <IntroModal
-                open={isLoaded?!isConnected:false}
-                setIsConnected={setIsConnected}
+                open={isLoaded?!user.connected:false}
+                setUser={setUser}
                 chat={chat}
             />
             <ShareModal open={isShareModalOpen} setOpen={setIsShareModalOpen}/>
