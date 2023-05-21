@@ -6,12 +6,20 @@ import PropTypes from 'prop-types';
 const UserMessage = ({owner, text, l, f}) => {
     const theme = useTheme();
     const isThisUser = owner === 'smb';
+    const borderRadiusValue = isThisUser ?
+        `13px ${f?'13px':'2px'} ${l?'13px':'2px'} 13px` :
+        `${f?'13px':'2px'} 13px 13px ${l?'13px':'2px'}`;
     return (
         <Container sx={{
             display: 'flex',
             flexDirection: isThisUser ? 'row-reverse' : 'row',
             justifyContent: isThisUser ? 'end' : 'start',
+            alignItems: 'end',
             width: 1,
+            [theme.breakpoints.down('md')]: {
+                width: .96,
+            },
+            p: 0,
             pb: l?'.5rem':'',
         }}>
             { !isThisUser ?
@@ -42,10 +50,7 @@ const UserMessage = ({owner, text, l, f}) => {
                     display: 'flex',
                     p: '.5rem 1rem',
                     maxWidth: isThisUser?'87%':'73%',
-                    borderRadius: l && f ?
-                        '13px 13px 13px 13px' :
-                        l ? '2px 2px 13px 13px' :
-                            f ? '13px 13px 2px 2px' : '',
+                    borderRadius: borderRadiusValue,
                 }}
             >
                 <Typography variant={'body1'}>{text}</Typography>

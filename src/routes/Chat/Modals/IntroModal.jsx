@@ -12,7 +12,8 @@ import PropTypes from 'prop-types';
 const IntroModal = ({open, setUser, chat}) => {
     const [isLoading, setIsLoading] = useState(false);
     const [inputValue, setInputValue] = useState('');
-    const handleClick = () => {
+    const handleClick = (e) => {
+        e.preventDefault();
         if (inputValue.length>1) {
             setIsLoading(true);
             setTimeout(()=>{

@@ -1,0 +1,12 @@
+input{
+    padding: .75rem 1.25rem !important;
+}
+fieldset {
+    top: -2px !important;
+    bottom: -2px !important;
+    border-radius: 10rem !important;
+}
+fieldset > legend {
+    position: relative;
+    left: 2rem;
+}

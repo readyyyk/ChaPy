@@ -1,7 +1,6 @@
 import React, {useState} from 'react';
 import {
     Container,
-    Box,
     TextField,
     IconButton,
 } from '@mui/material';
@@ -11,30 +10,37 @@ import PropTypes from 'prop-types';
 
 const MessageInput = ({addMsg}) => {
     const [inputValue, setInputValue] = useState('');
-    const newMessage = () => {
+    const newMessage = (e) => {
+        e.preventDefault();
         if (inputValue) {
             addMsg({text: inputValue, owner: 'smb'});
             setInputValue('');
         }
     };
-    return <Container sx={{py: 1}}>
-        <Box sx={{display: 'flex', alignItems: 'center'}}>
-            {/* TODO: form element for submission with Enter */}
+    return <Container sx={{py: 1, backgroundColor: 'transparent'}}>
+        <form
+            style={{display: 'flex', alignItems: 'center'}}
+            onSubmit={newMessage}
+        >
             <TextField label='Message'
-                sx={{width: 1}}
-                tabIndex={1}
+                sx={{
+                    width: 1,
+                    borderRadius: '10rem',
+                }}
+                autoFocus
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
             />
             <IconButton
                 sx={{ml: 1}}
+                type={'submit'}
                 onClick={newMessage}
                 color='primary'
                 tabIndex={2}
             >
                 <SendIcon/>
             </IconButton>
-        </Box>
+        </form>
     </Container>;
 };
 

@@ -3,7 +3,8 @@ import {
     Typography,
     Container,
     LinearProgress,
-    Backdrop, useTheme,
+    Backdrop,
+    useTheme,
 } from '@mui/material';
 import {useParams} from 'react-router-dom';
 import Header from './Header.jsx';
@@ -13,6 +14,8 @@ import MessageStack from './Messages/MessageStack.jsx';
 import PropTypes from 'prop-types';
 import IntroModal from './Modals/IntroModal.jsx';
 import ShareModal from './Modals/ShareModal.jsx';
+
+import './InputStyles.css';
 
 const Chat = ({ToggleMode}) => {
     const {chat} = useParams();
@@ -50,16 +53,17 @@ const Chat = ({ToggleMode}) => {
             />
             {
                 user.connected ?
-                    <Container sx={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        width: '100%',
-                        height: '100svh',
-                        overflow: 'hidden',
-                        justifyContent: 'end',
-                        alignItems: 'center',
-                        p: '4.5rem 0 0 0',
-                    }}
+                    <Container
+                        sx={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            width: '100%',
+                            height: '100svh',
+                            overflow: 'hidden',
+                            justifyContent: 'end',
+                            alignItems: 'center',
+                            p: '4.5rem 0 0 0',
+                        }}
                     >
                         <MessageStack msgs={msgs} />
                         <MessageInput addMsg={addMsg}/>

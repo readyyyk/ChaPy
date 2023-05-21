@@ -30,7 +30,7 @@ const MessageStack = ({msgs}) => {
         <Paper
             elevation={3}
             sx={{
-                width: 1,
+                width: .95,
                 overflowY: 'scroll',
                 py: '1rem',
             }}
@@ -39,7 +39,7 @@ const MessageStack = ({msgs}) => {
                 direction='column'
                 justifyContent='flex-start'
                 alignItems='stretch'
-                spacing={1}
+                spacing={.5}
                 ref={msgStack}
             >
                 {messageElements}
