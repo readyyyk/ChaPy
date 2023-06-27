@@ -43,7 +43,7 @@ const Header = ({ToggleMode, setIsShareModalOpen}) => {
                             alignItems: 'center',
                         }}
                     >
-                        <img src="./favicon.svg" alt="icon" height="40px"/>
+                        <img src="./favicon.png" alt="icon" height="40px"/>
                         <span>Chat<i>Bin</i></span>
                     </Link>
                     <div>

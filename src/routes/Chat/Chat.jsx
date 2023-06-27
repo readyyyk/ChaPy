@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
     Typography,
     Container,
@@ -17,33 +17,58 @@ import ShareModal from './Modals/ShareModal.jsx';
 
 import './InputStyles.css';
 
+import ChatBinApi from './ChatbinApi.js';
+import SocketApi from '@raedyk/socketapi';
+
 const Chat = ({ToggleMode}) => {
     const {chat} = useParams();
     const theme = useTheme();
+
+    const [chatbinApi, setChatbinApi] = useState(null);
+    const [ws, setWs] = useState(null);
+    useEffect(()=>{
+        const newChatbinApi = new ChatBinApi(
+            chat,
+            new URL(import.meta.env.VITE_CHATBIN_API_LINK),
+        );
+        setChatbinApi(newChatbinApi);
+
+        const newWs = new SocketApi(newChatbinApi.wsLink);
+        setWs(newWs);
+        newWs.on('connection', (e)=>console.log(e));
+        newWs.addDataChecker('connection', ()=>true);
+        newWs.addDataChecker('message', ()=>true);
+        // TODO: if some API is not connected - abort to some 500 page
+    }, []);
 
     const [isLoaded, setIsLoaded] = useState(false);
     setTimeout(()=>setIsLoaded(true), 2300);
 
     const [user, setUser] = useState({connected: false, name: ''});
+    useEffect(()=>{
+        ws?.emit('connection', {detail: 'connected', name: user.name});
+        ws?.on('message', (data)=>{
+            addMsg({
+                text: data.text,
+                sender: data.sender || user.name,
+            });
+        });
+    }, [user.name]);
 
     const [isShareModalOpen, setIsShareModalOpen] = useState(false);
 
-    const [msgs, setMsgs] = useState([
-        {text: 'test connected', owner: '', type: 'server'},
-        {text: 'testasd as da sdsda ', owner: 'test'},
-        {text: 'test', owner: 'lorem'},
-        {text: 'testasd sa dsa d sadsadsas adsddsadsdaa sdsda ', owner: 'smb'},
-        {text: 'testasd jansjd sanjks dndk jansk jdnkaj sndkj a', owner: 'smb'},
-        {text: 'testasd as da uja sd', owner: 'smb'},
-        {text: 'test disconnected', owner: '', type: 'server'},
-        {text: 'nskdjn akns d ajsndk jansk jdnkaj sndkj a', owner: 'undefined'},
-        {text: 'saldmasdalsk d;lm;lm as;lm;lmasmda', owner: 'undefined'},
-        {text: 'testasd sa dsa d sadsadsas adsddsadsdaa sdsda', owner: 'test'},
-        {text: 'sadsadsas adsddsadsdaa sdsda testasd sa dsa d', owner: 'test'},
-        {text: 'sadsadsas adasd as ddsas da dasdasd asd as da', owner: 'test'},
-        {text: 'testasd as da uja sd', owner: 'yess'},
-    ]);
-    const addMsg = (newMessage) => setMsgs([...msgs, newMessage]);
+    const [msgs, setMsgs] = useState([]);
+    const addMsg = (newMessage) => {
+        setMsgs([...msgs, newMessage]);
+    };
+    useEffect(()=>{
+        ws?.on('message', (data)=>{
+            addMsg({
+                text: data.text,
+                sender: data.sender || user.name,
+            });
+        });
+    }, [msgs]);
 
     return (
         <>
@@ -51,6 +76,7 @@ const Chat = ({ToggleMode}) => {
                 ToggleMode={ToggleMode}
                 setIsShareModalOpen={setIsShareModalOpen}
             />
+            {/* TODO: scrollable user list */}
             {
                 user.connected ?
                     <Container
@@ -65,8 +91,8 @@ const Chat = ({ToggleMode}) => {
                             p: '4.5rem 0 0 0',
                         }}
                     >
-                        <MessageStack msgs={msgs} />
-                        <MessageInput addMsg={addMsg}/>
+                        <MessageStack msgs={msgs} currentUserName={user.name}/>
+                        <MessageInput ws={ws}/>
                     </Container> : <></>
             }
             <Backdrop
@@ -82,7 +108,7 @@ const Chat = ({ToggleMode}) => {
                     align='center'
                     gutterBottom
                 >
-                    Entering <b><i>{chat}</i></b>
+                Entering <b><i>{chat}</i></b>
                 </Typography>
                 <LinearProgress
                     color={'info'}
@@ -96,6 +122,7 @@ const Chat = ({ToggleMode}) => {
                 open={isLoaded?!user.connected:false}
                 setUser={setUser}
                 chat={chat}
+                chatbinApi={chatbinApi}
             />
             <ShareModal open={isShareModalOpen} setOpen={setIsShareModalOpen}/>
         </>

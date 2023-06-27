@@ -4,7 +4,7 @@ import UserMessage from './UserMessage.jsx';
 import {Paper, Stack} from '@mui/material';
 import PropTypes from 'prop-types';
 
-const MessageStack = ({msgs}) => {
+const MessageStack = ({msgs, currentUserName}) => {
     const msgStack = useRef();
     useEffect(() => {
         msgStack
@@ -16,12 +16,13 @@ const MessageStack = ({msgs}) => {
         return <div key={`m-${i}`}>
             {
                 el.type === 'server' ?
-                    <ServerMessage text={el.text} owner={el.owner}/> :
+                    <ServerMessage text={el.text} sender={el.sender}/> :
                     <UserMessage
+                        isThisUser={el.sender===currentUserName}
                         text={el.text}
-                        owner={el.owner}
-                        l={i===msgs.length-1 || el.owner!==msgs[i + 1].owner}
-                        f={i > 0 && el.owner !== msgs[i - 1].owner}
+                        sender={el.sender}
+                        l={i===msgs.length-1 || el.sender!==msgs[i + 1].sender}
+                        f={i > 0 && el.sender !== msgs[i - 1].sender}
                     />
             }
         </div>;
@@ -50,6 +51,7 @@ const MessageStack = ({msgs}) => {
 
 MessageStack.propTypes = {
     msgs: PropTypes.array,
+    currentUserName: PropTypes.string,
 };
 
 export default MessageStack;

@@ -9,20 +9,29 @@ import {
 import LoadingButton from '@mui/lab/LoadingButton';
 import PropTypes from 'prop-types';
 
-const IntroModal = ({open, setUser, chat}) => {
+const IntroModal = ({open, setUser, chat, chatbinApi}) => {
     const [isLoading, setIsLoading] = useState(false);
     const [inputValue, setInputValue] = useState('');
-    const handleClick = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        if (inputValue.length>1) {
+        if (inputValue.length>2) {
             setIsLoading(true);
-            setTimeout(()=>{
+            const isValidName = await chatbinApi?.checkName(inputValue);
+            if (isValidName) {
                 setUser({
                     connected: true,
                     name: inputValue,
                 });
-                setIsLoading(false);
-            }, 1400);
+            }
+            // TODO: add ux sign of already used username
+            setIsLoading(false);
+            // setTimeout(()=>{
+            //     setUser({
+            //         connected: true,
+            //         name: inputValue,
+            //     });
+            //     setIsLoading(false);
+            // }, 1400);
         }
     };
     return (
@@ -48,7 +57,7 @@ const IntroModal = ({open, setUser, chat}) => {
                     Entering <b>{chat}</b>
                 </Typography>
                 <form
-                    onSubmit={handleClick}
+                    onSubmit={handleSubmit}
                     style={{
                         display: 'flex',
                         flexDirection: 'column',
@@ -68,7 +77,6 @@ const IntroModal = ({open, setUser, chat}) => {
                         color={'success'}
                         type={'submit'}
                         loading={isLoading}
-                        onClick={handleClick}
                         disabled={inputValue.length===0}
                     >
                         Enter
@@ -83,6 +91,7 @@ IntroModal.propTypes = {
     open: PropTypes.bool,
     chat: PropTypes.string,
     setUser: PropTypes.func,
+    chatBinApi: PropTypes.object,
 };
 
 export default IntroModal;

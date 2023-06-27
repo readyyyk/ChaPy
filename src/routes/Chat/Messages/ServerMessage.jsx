@@ -1,10 +1,10 @@
 import React from 'react';
 import {Avatar, Chip, Container} from '@mui/material';
-import hashMapsApi from '../hashMapsApi.js';
+import hashMapsApi from '../HashMapsApi.js';
 
 import PropTypes from 'prop-types';
 
-const ServerMessage = ({text, owner}) => {
+const ServerMessage = ({text, sender}) => {
     return (
         <Container
             sx={{
@@ -18,7 +18,7 @@ const ServerMessage = ({text, owner}) => {
                 avatar={
                     <Avatar
                         alt="Test"
-                        src={hashMapsApi.link(owner)}
+                        src={hashMapsApi.link(sender)}
                     />
                 }
                 color={text.includes('dis') ? 'warning' : 'success'}
@@ -29,7 +29,7 @@ const ServerMessage = ({text, owner}) => {
 
 ServerMessage.propTypes = {
     text: PropTypes.string,
-    owner: PropTypes.string,
+    sender: PropTypes.string,
 };
 
 export default ServerMessage;

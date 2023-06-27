@@ -2,11 +2,16 @@ import React from 'react';
 import {
     Box,
     Button,
-    Link,
     Typography,
 } from '@mui/material';
 
 const Home = () => {
+    const letters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    const redirectToNewChat = () => location.replace(
+        Array(5).fill('').reduce((acc)=>
+            acc+letters[Math.floor(Math.random()*letters.length)], ''),
+    );
+
     return (
         <Box
             sx={{
@@ -23,14 +28,13 @@ const Home = () => {
             }}
         >
             <Typography variant="h1"> Home </Typography>
-            <Link href='/newChat' color='inherit'>
-                <Button
-                    variant="outlined"
-                    size="large"
-                >
-                    New chat
-                </Button>
-            </Link>
+            <Button
+                onClick={redirectToNewChat}
+                variant="outlined"
+                size="large"
+            >
+                New chat
+            </Button>
         </Box>
     );
 };

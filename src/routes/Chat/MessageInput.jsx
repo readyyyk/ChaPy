@@ -8,12 +8,12 @@ import {
 import SendIcon from '@mui/icons-material/Send';
 import PropTypes from 'prop-types';
 
-const MessageInput = ({addMsg}) => {
+const MessageInput = ({ws}) => {
     const [inputValue, setInputValue] = useState('');
     const newMessage = (e) => {
         e.preventDefault();
         if (inputValue) {
-            addMsg({text: inputValue, owner: 'smb'});
+            ws.emit('message', {text: inputValue});
             setInputValue('');
         }
     };
@@ -46,6 +46,7 @@ const MessageInput = ({addMsg}) => {
 
 MessageInput.propTypes = {
     addMsg: PropTypes.func,
+    ws: PropTypes.object,
 };
 
 export default MessageInput;
