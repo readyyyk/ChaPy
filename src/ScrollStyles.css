@@ -1,0 +1,21 @@
+:root{
+    --scrollColor: 127.5, 127.5, 127.5;
+}
+
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+    transition: background-color .13s ease-in-out;
+}
+::-webkit-scrollbar-track {
+    border-radius: 10px;
+    background: rgba(var(--scrollColor), 0.13);
+ }
+::-webkit-scrollbar-thumb{
+    border-radius: 10px;
+    background: rgba(var(--scrollColor), 0.23);
+}
+::-webkit-scrollbar-thumb:hover,
+::-webkit-scrollbar-thumb:active {
+    background: rgba(var(--scrollColor), .53);
+}

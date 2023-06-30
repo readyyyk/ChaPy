@@ -15,14 +15,17 @@ import PropTypes from 'prop-types';
 import IntroModal from './Modals/IntroModal.jsx';
 import ShareModal from './Modals/ShareModal.jsx';
 
-import './InputStyles.css';
-
 import ChatBinApi from './ChatbinApi.js';
 import SocketApi from '@raedyk/socketapi';
 
 const Chat = ({ToggleMode}) => {
     const {chat} = useParams();
     const theme = useTheme();
+
+    if (!/^[a-zA-Z]{5}$/.test(chat)) {
+        console.log('smth');
+        location.replace('/error/400');
+    }
 
     const [chatbinApi, setChatbinApi] = useState(null);
     const [ws, setWs] = useState(null);
@@ -35,6 +38,11 @@ const Chat = ({ToggleMode}) => {
 
         const newWs = new SocketApi(newChatbinApi.wsLink);
         setWs(newWs);
+
+        if (!newWs && !newChatbinApi) {
+            location.replace('/error/500');
+        }
+
         newWs.on('connection', (e)=>console.log(e));
         newWs.addDataChecker('connection', ()=>true);
         newWs.addDataChecker('message', ()=>true);

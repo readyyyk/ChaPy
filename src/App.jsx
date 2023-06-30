@@ -17,7 +17,10 @@ import {
 
 import Home from './routes/Home.jsx';
 import Chat from './routes/Chat/Chat.jsx';
-import NotFound from './routes/NotFound.jsx';
+import Error from './routes/Error.jsx';
+
+import './InputStyles.css';
+import './ScrollStyles.css';
 
 const App = () => {
     const isPreferDark = useMediaQuery('(prefers-color-scheme: dark)');
@@ -46,25 +49,31 @@ const App = () => {
         }
         setIsDarkMode(localStorage.getItem('theme')==='dark');
     }, []);
+
     return (
         <ThemeProvider theme={theme}>
             <CssBaseline />
             <BrowserRouter>
                 <Routes>
                     <Route
-                        path="/"
                         index
                         element={<Home />}
                     />
                     <Route
-                        path="/:chat"
+                        path='/error/:errorCode'
+                        element={<Error />}
+                    />
+                    <Route
+                        caseSensitive
+                        path=":chat"
                         element={
                             <Chat ToggleMode={ToggleMode}/>
                         }
+                        errorElement={<Error />}
                     />
                     <Route
                         path="*"
-                        element={<NotFound />}
+                        element={<Error manualError={404}/>}
                     />
                 </Routes>
             </BrowserRouter>

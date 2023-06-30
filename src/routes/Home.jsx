@@ -4,10 +4,14 @@ import {
     Button,
     Typography,
 } from '@mui/material';
+import {useNavigate} from 'react-router-dom';
 
 const Home = () => {
+    const navigate = useNavigate();
+
     const letters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    const redirectToNewChat = () => location.replace(
+    const redirectToNewChat = () => navigate(
+        // 'chat/' +
         Array(5).fill('').reduce((acc)=>
             acc+letters[Math.floor(Math.random()*letters.length)], ''),
     );
