@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {
     AppBar, Container,
     IconButton,
@@ -12,8 +12,11 @@ import Brightness7Icon from '@mui/icons-material/Brightness7';
 import IosShareIcon from '@mui/icons-material/IosShare';
 import PropTypes from 'prop-types';
 
-const Header = ({ToggleMode, setIsShareModalOpen}) => {
+import {DarkModeContext} from '../../hooks/DarkModeContext.js';
+
+const Header = ({setIsShareModalOpen}) => {
     const theme = useTheme();
+    const {toggleMode} = useContext(DarkModeContext);
     const trigger = useScrollTrigger({
         disableHysteresis: true,
         threshold: 0,
@@ -49,7 +52,7 @@ const Header = ({ToggleMode, setIsShareModalOpen}) => {
                     <div>
                         <IconButton
                             sx={{ml: 1}}
-                            onClick={ToggleMode}
+                            onClick={toggleMode}
                             color="inherit"
                         >
                             {theme.palette.mode === 'dark' ?

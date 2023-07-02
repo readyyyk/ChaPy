@@ -1,4 +1,8 @@
-import React, {useEffect, useState} from 'react';
+import React, {
+    useEffect,
+    useState,
+} from 'react';
+
 import {
     Typography,
     Container,
@@ -6,71 +10,49 @@ import {
     Backdrop,
     useTheme,
 } from '@mui/material';
-import {useParams} from 'react-router-dom';
-import Header from './Header.jsx';
 
+import {
+    useLoaderData,
+    useParams,
+} from 'react-router-dom';
+
+import Header from './Header.jsx';
 import MessageInput from './MessageInput.jsx';
 import MessageStack from './Messages/MessageStack.jsx';
-import PropTypes from 'prop-types';
 import IntroModal from './Modals/IntroModal.jsx';
 import ShareModal from './Modals/ShareModal.jsx';
 
-import ChatBinApi from './ChatbinApi.js';
-import SocketApi from '@raedyk/socketapi';
+import PropTypes from 'prop-types';
 
-const Chat = ({ToggleMode}) => {
+const Chat = () => {
     const {chat} = useParams();
     const theme = useTheme();
+    const {chatbinApi, wsApi} = useLoaderData();
 
-    if (!/^[a-zA-Z]{5}$/.test(chat)) {
-        console.log('smth');
-        location.replace('/error/400');
-    }
-
-    const [chatbinApi, setChatbinApi] = useState(null);
-    const [ws, setWs] = useState(null);
-    useEffect(()=>{
-        const newChatbinApi = new ChatBinApi(
-            chat,
-            new URL(import.meta.env.VITE_CHATBIN_API_LINK),
-        );
-        setChatbinApi(newChatbinApi);
-
-        const newWs = new SocketApi(newChatbinApi.wsLink);
-        setWs(newWs);
-
-        if (!newWs && !newChatbinApi) {
-            location.replace('/error/500');
-        }
-
-        newWs.on('connection', (e)=>console.log(e));
-        newWs.addDataChecker('connection', ()=>true);
-        newWs.addDataChecker('message', ()=>true);
-        // TODO: if some API is not connected - abort to some 500 page
-    }, []);
-
+    const [isShareModalOpen, setIsShareModalOpen] = useState(false);
     const [isLoaded, setIsLoaded] = useState(false);
     setTimeout(()=>setIsLoaded(true), 2300);
 
+    wsApi.on('connection', (e)=>console.log(e));
+    wsApi.addDataChecker('connection', ()=>true);
+    wsApi.addDataChecker('message', ()=>true);
+
     const [user, setUser] = useState({connected: false, name: ''});
     useEffect(()=>{
-        ws?.emit('connection', {detail: 'connected', name: user.name});
-        ws?.on('message', (data)=>{
-            addMsg({
-                text: data.text,
-                sender: data.sender || user.name,
-            });
-        });
+        wsApi.emit('connection',
+            {
+                detail: user.name? 'connected' : 'trying to connect',
+                name: user.name,
+            },
+        );
     }, [user.name]);
-
-    const [isShareModalOpen, setIsShareModalOpen] = useState(false);
 
     const [msgs, setMsgs] = useState([]);
     const addMsg = (newMessage) => {
         setMsgs([...msgs, newMessage]);
     };
     useEffect(()=>{
-        ws?.on('message', (data)=>{
+        wsApi.on('message', (data)=>{
             addMsg({
                 text: data.text,
                 sender: data.sender || user.name,
@@ -81,7 +63,6 @@ const Chat = ({ToggleMode}) => {
     return (
         <>
             <Header
-                ToggleMode={ToggleMode}
                 setIsShareModalOpen={setIsShareModalOpen}
             />
             {/* TODO: scrollable user list */}
@@ -100,7 +81,7 @@ const Chat = ({ToggleMode}) => {
                         }}
                     >
                         <MessageStack msgs={msgs} currentUserName={user.name}/>
-                        <MessageInput ws={ws}/>
+                        <MessageInput ws={wsApi}/>
                     </Container> : <></>
             }
             <Backdrop
