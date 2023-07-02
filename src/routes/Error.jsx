@@ -4,12 +4,12 @@ import {useParams} from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 const Error = ({manualError}) => {
-    // eslint-disable-next-line max-len
     const errors = {
         400: ['Bad request.', 'Probably you entered invalid chat id'],
         404: ['Not found.', 'Probably you entered invalid URL'],
         4: ['Request error.', 'Unhandled 4xx error'],
-        500: ['Internal server error.', 'Probably API isn\'t set up correctly. Contact https://t.me/Ready_k'],
+        500: ['Internal server error.', 'Probably API isn\'t set up' +
+            'correctly. Contact https://t.me/Ready_k'],
         5: ['Internal server error.', 'Unhandled 5xx error. Contact https://t.me/Ready_k'],
     };
 

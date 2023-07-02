@@ -1,5 +1,5 @@
 import React from 'react';
-import ChatBinApi from './routes/Chat/ChatbinApi.js';
+import ChatBinApi from './routes/Chat/APIs/ChatbinApi.js';
 import {createBrowserRouter} from 'react-router-dom';
 import Home from './routes/Home.jsx';
 import Error from './routes/Error.jsx';

@@ -12,7 +12,7 @@ import Brightness7Icon from '@mui/icons-material/Brightness7';
 import IosShareIcon from '@mui/icons-material/IosShare';
 import PropTypes from 'prop-types';
 
-import {DarkModeContext} from '../../hooks/DarkModeContext.js';
+import {DarkModeContext} from '../../../hooks/DarkModeContext.js';
 
 const Header = ({setIsShareModalOpen}) => {
     const theme = useTheme();

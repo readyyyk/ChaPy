@@ -16,7 +16,7 @@ const IntroModal = ({open, setUser, chat, chatbinApi}) => {
         e.preventDefault();
         if (inputValue.length>2) {
             setIsLoading(true);
-            const isValidName = await chatbinApi?.checkName(inputValue);
+            const isValidName = await chatbinApi.checkName(inputValue);
             if (isValidName) {
                 setUser({
                     connected: true,
@@ -25,13 +25,6 @@ const IntroModal = ({open, setUser, chat, chatbinApi}) => {
             }
             // TODO: add ux sign of already used username
             setIsLoading(false);
-            // setTimeout(()=>{
-            //     setUser({
-            //         connected: true,
-            //         name: inputValue,
-            //     });
-            //     setIsLoading(false);
-            // }, 1400);
         }
     };
     return (
@@ -91,7 +84,7 @@ IntroModal.propTypes = {
     open: PropTypes.bool,
     chat: PropTypes.string,
     setUser: PropTypes.func,
-    chatBinApi: PropTypes.object,
+    chatbinApi: PropTypes.object,
 };
 
 export default IntroModal;

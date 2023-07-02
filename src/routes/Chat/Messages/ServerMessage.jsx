@@ -1,6 +1,6 @@
 import React from 'react';
 import {Avatar, Chip, Container} from '@mui/material';
-import hashMapsApi from '../HashMapsApi.js';
+import hashMapsApi from '../APIs/HashMapsApi.js';
 
 import PropTypes from 'prop-types';
 
@@ -18,7 +18,7 @@ const ServerMessage = ({text, sender}) => {
                 avatar={
                     <Avatar
                         alt="Test"
-                        src={hashMapsApi.link(sender)}
+                        src={hashMapsApi.link(sender, 'hashmap')}
                     />
                 }
                 color={text.includes('dis') ? 'warning' : 'success'}
