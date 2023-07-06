@@ -3,7 +3,7 @@ import {Box, Button, TextField, Typography} from '@mui/material';
 
 const EmptyChat = () => {
     const [inputValue, setInputValue] = useState('');
-    const redirectToChat = () => location.replace('/');
+    const redirectToChat = () => location.replace(`/${inputValue}`);
     return (
         <Box
             sx={{
@@ -13,8 +13,6 @@ const EmptyChat = () => {
                 height: '100dvh',
                 alignItems: 'center',
                 justifyContent: 'center',
-                bgcolor: 'background.default',
-                color: 'text.primary',
                 borderRadius: 1,
                 p: 3,
             }}
@@ -22,7 +20,7 @@ const EmptyChat = () => {
             <Typography variant="h3"> Chat: </Typography>
             <TextField
                 inputProps={{
-                    maxLength: 5,
+                    pattern: '[a-zA-Z]{5}',
                     sx: {
                         fontSize: '2rem',
                         width: '2.7em',

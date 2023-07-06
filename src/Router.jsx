@@ -5,6 +5,7 @@ import Home from './routes/Home.jsx';
 import Error from './routes/Error.jsx';
 import Chat from './routes/Chat/Chat.jsx';
 import SocketApi from '@raedyk/socketapi';
+import EmptyChat from './routes/EmptyChat.jsx';
 
 const chatLoader = ({params})=>{
     if (!/^[a-zA-Z]{5}$/.test(params.chat)) {
@@ -28,6 +29,10 @@ export const router = createBrowserRouter([
     {
         path: '/',
         element: <Home />,
+    },
+    {
+        path: '/chat',
+        element: <EmptyChat />,
     },
     {
         path: '/error/:errorCode',

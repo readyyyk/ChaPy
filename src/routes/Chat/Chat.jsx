@@ -1,4 +1,5 @@
 import React, {
+    useCallback,
     useEffect,
     useState,
 } from 'react';
@@ -13,11 +14,13 @@ import Header from './Header/Header.jsx';
 import MessageContainer from './Messages/MessageContainer.jsx';
 import IntroModal from './Modals/IntroModal.jsx';
 import ShareModal from './Modals/ShareModal.jsx';
+import ConnectionToast from './Toasts/ConnectionToast.jsx';
 
 const Chat = () => {
     const {chat} = useParams();
     const {chatbinApi, wsApi} = useLoaderData();
 
+    const [isConnectionToastOpen, setIsConnectionToastOpen] = useState(false);
     const [isShareModalOpen, setIsShareModalOpen] = useState(false);
 
     const [isLoaded, setIsLoaded] = useState(false);
@@ -38,14 +41,30 @@ const Chat = () => {
     }, [user.connected]);
 
     const [msgs, setMsgs] = useState([]);
-    useEffect(()=>{
-        wsApi.on('message', (data) => {
+    const addMsg = {
+        message: useCallback(() => (data) => {
             setMsgs([...msgs, {
                 text: data.text,
                 sender: data.sender || user.name,
             }]);
-        });
-    }, [msgs, user.name]);
+        }, [msgs, user.name])(),
+        connection: useCallback(() => (data) => {
+            console.log(data);
+            if (data.detail === 'trying to connect') {
+                setIsConnectionToastOpen(true);
+            } else {
+                setMsgs([...msgs, {
+                    text: data.name + ' ' + data.detail,
+                    sender: data.name,
+                    type: 'server',
+                }]);
+            }
+        }, [msgs])(),
+    };
+    wsApi.on('message', addMsg.message);
+    wsApi.on('connection', (data)=>{
+        console.log(data); addMsg.connection(data);
+    });
 
     return (
         <>
@@ -55,11 +74,17 @@ const Chat = () => {
             {/* TODO: scrollable user list */}
             {
                 user.connected &&
-                    <MessageContainer
-                        msgs={msgs}
-                        userName={user.name}
-                        wsApi={wsApi}
-                    />
+                    <>
+                        <MessageContainer
+                            msgs={msgs}
+                            userName={user.name}
+                            wsApi={wsApi}
+                        />
+                        <ConnectionToast
+                            isOpen={isConnectionToastOpen}
+                            setIsOpen={setIsConnectionToastOpen}
+                        />
+                    </>
             }
             <ChatBackdrop
                 isLoaded={isLoaded}
