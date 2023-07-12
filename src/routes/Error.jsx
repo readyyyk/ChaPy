@@ -7,8 +7,9 @@ const Error = ({manualError}) => {
     const errors = {
         400: ['Bad request.', 'Probably you entered invalid chat id'],
         404: ['Not found.', 'Probably you entered invalid URL'],
+        408: ['Request Timeout', 'Probably you was idle too long.'],
         4: ['Request error.', 'Unhandled 4xx error'],
-        500: ['Internal server error.', 'Probably API isn\'t set up' +
+        500: ['Internal server error.', 'Probably API isn\'t set up ' +
             'correctly. Contact https://t.me/Ready_k'],
         5: ['Internal server error.', 'Unhandled 5xx error. Contact https://t.me/Ready_k'],
     };

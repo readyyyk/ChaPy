@@ -17,7 +17,7 @@ const MessageContainer = ({msgs, userName, wsApi}) => {
             overflow: 'hidden',
             justifyContent: 'end',
             alignItems: 'center',
-            p: '4.5rem 0 0 0',
+            p: '9rem 0 0 0',
         }}
     >
         <MessageStack msgs={msgs} currentUserName={userName}/>

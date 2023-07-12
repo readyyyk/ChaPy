@@ -28,6 +28,7 @@ const Chat = () => {
 
     wsApi.addDataChecker('connection', ()=> true);
     wsApi.addDataChecker('message', ()=> true);
+    wsApi.socket.onclose = () => location.replace('/error/408');
 
     const [userList, setUserList] = useState([]);
     const addUserToList = (name) => setUserList([...userList, name]);

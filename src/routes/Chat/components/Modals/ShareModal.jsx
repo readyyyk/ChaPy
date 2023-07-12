@@ -16,7 +16,7 @@ const ShareModal = ({open, setOpen}) => {
     const qrContainer = useRef(null);
     useEffect(()=>{
         QRCode.toString(
-            document.location.toString(),
+            location.href+'/',
             {correctLevel: 'H'},
         ).then((data)=>{
             qrContainer.current.innerHTML = data;
