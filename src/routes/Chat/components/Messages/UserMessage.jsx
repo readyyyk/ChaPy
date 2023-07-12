@@ -1,6 +1,6 @@
 import React from 'react';
 import {Avatar, Container, Paper, Typography, useTheme} from '@mui/material';
-import hashMapsApi from '../APIs/HashMapsApi.js';
+import hashMapsApi from '../../APIs/HashMapsApi.js';
 import PropTypes from 'prop-types';
 
 const UserMessage = ({isThisUser, sender, text, l, f}) => {

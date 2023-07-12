@@ -9,12 +9,12 @@ import {
     useParams,
 } from 'react-router-dom';
 
-import ChatBackdrop from './Backdrop/ChatBackdrop.jsx';
-import Header from './Header/Header.jsx';
-import MessageContainer from './Messages/MessageContainer.jsx';
-import IntroModal from './Modals/IntroModal.jsx';
-import ShareModal from './Modals/ShareModal.jsx';
-import ConnectionToast from './Toasts/ConnectionToast.jsx';
+import ChatBackdrop from './components/Backdrop/ChatBackdrop.jsx';
+import Header from './components/Header/Header.jsx';
+import MessageContainer from './components/Messages/MessageContainer.jsx';
+import IntroModal from './components/Modals/IntroModal.jsx';
+import ShareModal from './components/Modals/ShareModal.jsx';
+import ConnectionToast from './components/Toasts/ConnectionToast.jsx';
 
 const Chat = () => {
     const {chat} = useParams();
@@ -24,11 +24,16 @@ const Chat = () => {
     const [isShareModalOpen, setIsShareModalOpen] = useState(false);
 
     const [isLoaded, setIsLoaded] = useState(false);
-    setTimeout(()=>setIsLoaded(true), 2300);
+    setTimeout(()=>setIsLoaded(true), 100);
 
     wsApi.on('connection', (e)=>console.log(e));
     wsApi.addDataChecker('connection', ()=> true);
     wsApi.addDataChecker('message', ()=> true);
+
+    const [userList, setUserList] = useState([]);
+    const addUserToList = (name) => setUserList([...userList, name]);
+    const removeUserFromList = (name) => setUserList(
+        userList.filter((el)=>el!==name));
 
     const [user, setUser] = useState({connected: false, name: ''});
     useEffect(()=>{
@@ -41,15 +46,14 @@ const Chat = () => {
     }, [user.connected]);
 
     const [msgs, setMsgs] = useState([]);
-    const addMsg = {
+    const actions = {
         message: useCallback(() => (data) => {
             setMsgs([...msgs, {
                 text: data.text,
                 sender: data.sender || user.name,
             }]);
-        }, [msgs, user.name])(),
+        }, [msgs, user.connected])(),
         connection: useCallback(() => (data) => {
-            console.log(data);
             if (data.detail === 'trying to connect') {
                 setIsConnectionToastOpen(true);
             } else {
@@ -61,15 +65,21 @@ const Chat = () => {
             }
         }, [msgs])(),
     };
-    wsApi.on('message', addMsg.message);
+    wsApi.on('message', actions.message);
     wsApi.on('connection', (data)=>{
-        console.log(data); addMsg.connection(data);
+        if (data.detail === 'connected') {
+            addUserToList(data.name);
+        } else if (data.detail === 'disconnected') {
+            removeUserFromList(data.name);
+        }
+        actions.connection(data);
     });
 
     return (
         <>
             <Header
                 setIsShareModalOpen={setIsShareModalOpen}
+                userList={userList}
             />
             {/* TODO: scrollable user list */}
             {
@@ -95,6 +105,7 @@ const Chat = () => {
                 setUser={setUser}
                 chat={chat}
                 chatbinApi={chatbinApi}
+                setUserList={setUserList}
             />
             <ShareModal
                 open={isShareModalOpen}

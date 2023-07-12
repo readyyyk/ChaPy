@@ -16,8 +16,9 @@ const Error = ({manualError}) => {
     let {errorCode} = useParams();
     if (manualError) {
         errorCode = manualError;
-    } else if (!Number(errorCode) || errorCode.length > 3) {
-        location.replace('/error/400');
+    }
+    if (!Number(errorCode) || String(errorCode).length > 3) {
+        location.replace('/error/500');
     } else {
         errorCode = Number(errorCode);
     }

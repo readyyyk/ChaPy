@@ -40,9 +40,21 @@ class ChatBinApi {
             return;
         }
         let isValid = false;
-        await fetch(this.httpLink+this.room+'/names?name='+name)
+        await fetch(this.httpLink+this.room+'/check?name='+name)
             .then((res)=> isValid=res.ok);
         return isValid;
+    }
+
+    /**
+     * @constructor
+     * @return {Promise<array>} list of existing names
+     * */
+    async getNames() {
+        let nameList = [];
+        await fetch(this.httpLink+this.room+'/names')
+            .then((res) => res.json())
+            .then((res) => nameList = res);
+        return nameList;
     }
 }
 

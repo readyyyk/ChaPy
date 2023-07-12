@@ -1,6 +1,6 @@
 import React from 'react';
 import {Avatar, Chip, Container} from '@mui/material';
-import hashMapsApi from '../APIs/HashMapsApi.js';
+import hashMapsApi from '../../APIs/HashMapsApi.js';
 
 import PropTypes from 'prop-types';
 

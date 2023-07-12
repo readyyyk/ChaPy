@@ -12,19 +12,17 @@ import Brightness7Icon from '@mui/icons-material/Brightness7';
 import IosShareIcon from '@mui/icons-material/IosShare';
 import PropTypes from 'prop-types';
 
-import {DarkModeContext} from '../../../hooks/DarkModeContext.js';
+import {DarkModeContext} from '../../../../hooks/DarkModeContext.js';
+import UserList from './UserList/UserList.jsx';
 
-const Header = ({setIsShareModalOpen}) => {
+const Header = ({setIsShareModalOpen, userList}) => {
     const theme = useTheme();
     const {toggleMode} = useContext(DarkModeContext);
-    const trigger = useScrollTrigger({
-        disableHysteresis: true,
-        threshold: 0,
-    });
+
     return (
         <AppBar
             position="fixed"
-            elevation={trigger?4:0}
+            elevation={4}
         >
             <Container sx={{width: 'md', p: 0}}>
                 <Toolbar
@@ -68,13 +66,14 @@ const Header = ({setIsShareModalOpen}) => {
                     </div>
                 </Toolbar>
             </Container>
+            <UserList userList={userList}/>
         </AppBar>
     );
 };
 
 Header.propTypes = {
-    ToggleMode: PropTypes.func,
     setIsShareModalOpen: PropTypes.func,
+    userList: PropTypes.arrayOf(PropTypes.string),
 };
 
 export default Header;

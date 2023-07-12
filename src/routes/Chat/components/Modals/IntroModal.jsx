@@ -9,7 +9,7 @@ import {
 import LoadingButton from '@mui/lab/LoadingButton';
 import PropTypes from 'prop-types';
 
-const IntroModal = ({open, setUser, chat, chatbinApi}) => {
+const IntroModal = ({open, setUser, chat, chatbinApi, setUserList}) => {
     const [isLoading, setIsLoading] = useState(false);
     const [inputValue, setInputValue] = useState('');
     const handleSubmit = async (e) => {
@@ -22,6 +22,9 @@ const IntroModal = ({open, setUser, chat, chatbinApi}) => {
                     connected: true,
                     name: inputValue,
                 });
+                const currentNames = await chatbinApi.getNames();
+                console.log(currentNames);
+                setUserList([...currentNames, inputValue]);
             }
             // TODO: add ux sign of already used username
             setIsLoading(false);
@@ -85,6 +88,7 @@ IntroModal.propTypes = {
     chat: PropTypes.string,
     setUser: PropTypes.func,
     chatbinApi: PropTypes.object,
+    setUserList: PropTypes.func,
 };
 
 export default IntroModal;
