@@ -1,11 +1,12 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {
-    Paper,
-    Modal,
-    Typography,
+    Box,
     IconButton,
+    Modal,
+    Paper,
     Stack,
-    Tooltip, Box,
+    Tooltip,
+    Typography,
 } from '@mui/material';
 import PropTypes from 'prop-types';
 import LinkIcon from '@mui/icons-material/Link';
@@ -19,14 +20,17 @@ const ShareModal = ({open, setOpen}) => {
             location.href+'/',
             {correctLevel: 'H'},
         ).then((data)=>{
-            qrContainer.current.innerHTML = data;
+            qrContainer.current.insertAdjacentHTML(
+                'afterend',
+                data,
+            );
         });
     }, []);
     const [isLinkCopied, setIsLinkCopied] = useState(false);
     const copyLink = () => {
         setIsLinkCopied(true);
         setTimeout(()=>setIsLinkCopied(false), 10000);
-        navigator.clipboard.writeText(document.location);
+        navigator.clipboard.writeText(location.href);
     };
     return (
         <Modal
@@ -55,7 +59,7 @@ const ShareModal = ({open, setOpen}) => {
                     direction={'row'}
                     justifyContent='center'
                     spacing={1}
-                    sx={{width: 1, overflowX: 'scroll'}}
+                    sx={{width: 1}}
                 >
                     <Tooltip
                         title={isLinkCopied ? 'Link copied!' : 'Copy link!'}

@@ -1,9 +1,11 @@
 import React, {useState} from 'react';
 import {Box, Button, TextField, Typography} from '@mui/material';
+import {useNavigate} from 'react-router-dom';
 
 const EmptyChat = () => {
+    const navigate = useNavigate();
     const [inputValue, setInputValue] = useState('');
-    const redirectToChat = () => location.replace(`/${inputValue}`);
+    const redirectToChat = () => navigate(`/${inputValue}`);
     return (
         <Box
             sx={{

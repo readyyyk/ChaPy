@@ -17,12 +17,13 @@ module.exports = {
     'react',
   ],
   'rules': {
-      "indent": ["error", 4],
+    "indent": ["error", 4],
+    "max-len": ["error", { "code": 90 }],
   },
   "settings": {
     "react": {
       "version": "detect"
     },
   },
-  "ignorePatterns": ["old/"],
+  "ignorePatterns": ["APIs/"],
 };

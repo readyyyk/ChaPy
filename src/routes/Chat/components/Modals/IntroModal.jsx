@@ -1,17 +1,25 @@
 import React, {useState} from 'react';
+
 import {
     FormControl,
     Modal,
     Paper,
-    TextField,
+    TextField, Tooltip,
     Typography,
 } from '@mui/material';
 import LoadingButton from '@mui/lab/LoadingButton';
+
 import PropTypes from 'prop-types';
 
 const IntroModal = ({open, setUser, chat, chatbinApi, setUserList}) => {
+    // eslint-disable-next-line max-len
+    const inputErrorText = 'Name should be unique in chat and can contain less than 30 symbols of English alphabet';
+
     const [isLoading, setIsLoading] = useState(false);
+    const [isError, setIsError] = useState(false);
+
     const [inputValue, setInputValue] = useState('');
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (inputValue.length>2) {
@@ -25,10 +33,11 @@ const IntroModal = ({open, setUser, chat, chatbinApi, setUserList}) => {
                     name: inputValue,
                 });
             }
-            // TODO: add ux sign of already used username
+            setIsError(!isValidName);
             setIsLoading(false);
         }
     };
+
     return (
         <Modal
             open={open}
@@ -59,20 +68,31 @@ const IntroModal = ({open, setUser, chat, chatbinApi, setUserList}) => {
                     }}
                 >
                     <FormControl>
-                        <TextField
-                            label={'Name'}
-                            value={inputValue}
-                            sx={{mb: 3}}
-                            onChange={(e) => setInputValue(e.target.value)}
-                            autoFocus
-                        />
+                        <Tooltip
+                            arrow
+                            open={isError}
+                            placement={'top'}
+                            title={inputErrorText}
+                        >
+                            <TextField
+                                autoFocus
+                                sx={{mb: 3}}
+                                label={'Name'}
+                                error={isError}
+                                value={inputValue}
+                                onChange={(e) => {
+                                    setInputValue(e.target.value);
+                                    setIsError(false);
+                                }}
+                            />
+                        </Tooltip>
                     </FormControl>
                     <LoadingButton
                         variant={'contained'}
                         color={'success'}
                         type={'submit'}
                         loading={isLoading}
-                        disabled={inputValue.length===0}
+                        disabled={inputValue.length<3}
                     >
                         Enter
                     </LoadingButton>

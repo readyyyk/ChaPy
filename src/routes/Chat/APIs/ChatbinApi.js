@@ -35,11 +35,11 @@ class ChatBinApi {
      * @return {bool}
      * */
     async checkName(name='') {
-        if (name==='' || name.length>30 || !/^\w+$/.test(name)) {
-            console.error('Provide valid name (only word characters)');
-            return;
-        }
         let isValid = false;
+        if (name==='' || name.length>30 || name.length<3 || !/^\w+$/.test(name)) {
+            console.error('Provide valid name (only word characters)');
+            return isValid;
+        }
         await fetch(this.httpLink+this.room+'/check?name='+name)
             .then((res)=> isValid=res.ok);
         return isValid;

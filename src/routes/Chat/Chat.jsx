@@ -5,7 +5,7 @@ import React, {
 } from 'react';
 
 import {
-    useLoaderData,
+    useLoaderData, useNavigate,
     useParams,
 } from 'react-router-dom';
 
@@ -17,6 +17,7 @@ import ShareModal from './components/Modals/ShareModal.jsx';
 import ConnectionToast from './components/Toasts/ConnectionToast.jsx';
 
 const Chat = () => {
+    const navigate = useNavigate();
     const {chat} = useParams();
     const {chatbinApi, wsApi} = useLoaderData();
 
@@ -26,26 +27,21 @@ const Chat = () => {
     const [isLoaded, setIsLoaded] = useState(false);
     setTimeout(()=>setIsLoaded(true), 100);
 
-    wsApi.addDataChecker('connection', ()=> true);
-    wsApi.addDataChecker('message', ()=> true);
-    wsApi.socket.onclose = () => location.replace('/error/408');
+    const [user, setUser] = useState({connected: false, name: ''});
+    useEffect(()=>{
+        wsApi.emit('connection', {
+            detail: user.connected ? 'connected' : 'trying to connect',
+            name: user.name,
+        });
+    }, [user.connected]);
 
     const [userList, setUserList] = useState([]);
     const addUserToList = (name) => setUserList([...userList, name]);
     const removeUserFromList = (name) => setUserList(
         userList.filter((el)=>el!==name));
 
-    const [user, setUser] = useState({connected: false, name: ''});
-    useEffect(()=>{
-        wsApi.emit('connection',
-            {
-                detail: user.connected ? 'connected' : 'trying to connect',
-                name: user.name,
-            },
-        );
-    }, [user.connected]);
-
     const [msgs, setMsgs] = useState([]);
+
     const actions = {
         message: useCallback(() => (data) => {
             setMsgs([...msgs, {
@@ -65,6 +61,11 @@ const Chat = () => {
             }
         }, [msgs])(),
     };
+
+    wsApi.addDataChecker('connection', ()=> true);
+    wsApi.addDataChecker('message', ()=> true);
+    wsApi.socket.onclose = () => navigate('/error/408');
+
     wsApi.on('message', actions.message);
     wsApi.on('connection', (data)=>{
         if (data.detail === 'connected') {
@@ -81,7 +82,6 @@ const Chat = () => {
                 setIsShareModalOpen={setIsShareModalOpen}
                 userList={userList}
             />
-            {/* TODO: scrollable user list */}
             {
                 user.connected &&
                     <>
@@ -101,7 +101,7 @@ const Chat = () => {
                 chatId={chat}
             />
             <IntroModal
-                open={isLoaded ? !user.connected : false}
+                open={isLoaded && !user.connected}
                 setUser={setUser}
                 chat={chat}
                 chatbinApi={chatbinApi}
