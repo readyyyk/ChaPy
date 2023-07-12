@@ -18,13 +18,12 @@ const IntroModal = ({open, setUser, chat, chatbinApi, setUserList}) => {
             setIsLoading(true);
             const isValidName = await chatbinApi.checkName(inputValue);
             if (isValidName) {
+                const currentNames = await chatbinApi.getNames();
+                setUserList(currentNames || []);
                 setUser({
                     connected: true,
                     name: inputValue,
                 });
-                const currentNames = await chatbinApi.getNames();
-                console.log(currentNames);
-                setUserList([...currentNames, inputValue]);
             }
             // TODO: add ux sign of already used username
             setIsLoading(false);

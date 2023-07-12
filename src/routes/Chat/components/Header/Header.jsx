@@ -4,7 +4,6 @@ import {
     IconButton,
     Link,
     Toolbar,
-    useScrollTrigger,
     useTheme,
 } from '@mui/material';
 import Brightness4Icon from '@mui/icons-material/Brightness4';

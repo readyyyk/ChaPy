@@ -26,7 +26,6 @@ const Chat = () => {
     const [isLoaded, setIsLoaded] = useState(false);
     setTimeout(()=>setIsLoaded(true), 100);
 
-    wsApi.on('connection', (e)=>console.log(e));
     wsApi.addDataChecker('connection', ()=> true);
     wsApi.addDataChecker('message', ()=> true);
 
