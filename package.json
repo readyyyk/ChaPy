@@ -16,8 +16,10 @@
     "@mui/material": "^5.13.7",
     "@mui/styled-engine-sc": "^5.12.0",
     "@raedyk/socketapi": "^1.0.2",
+    "chatbinapi": "^1.0.0",
     "prop-types": "^15.8.1",
     "qrcode": "^1.5.3",
+    "randimg": "^1.0.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "styled-components": "^5.3.10"

@@ -1,18 +1,26 @@
-import React, {useContext} from 'react';
+import React, {
+    Suspense,
+    useContext,
+} from 'react';
 import {
-    AppBar, Container,
-    IconButton,
     Link,
+    AppBar,
     Toolbar,
     useTheme,
+    Container,
+    IconButton,
+    CircularProgress,
 } from '@mui/material';
+import IosShareIcon from '@mui/icons-material/IosShare';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
-import IosShareIcon from '@mui/icons-material/IosShare';
+
 import PropTypes from 'prop-types';
 
 import {DarkModeContext} from '../../../../hooks/DarkModeContext.js';
 import UserList from './UserList/UserList.jsx';
+
+import icon from '../../../../assets/favicon.png';
 
 const Header = ({setIsShareModalOpen, userList}) => {
     const theme = useTheme();
@@ -43,7 +51,9 @@ const Header = ({setIsShareModalOpen, userList}) => {
                             alignItems: 'center',
                         }}
                     >
-                        <img src="./favicon.png" alt="icon" height="40px"/>
+                        <Suspense fallback={<CircularProgress size={40}/>}>
+                            <img src={icon} alt="icon" height="40px"/>
+                        </Suspense>
                         <span>Chat<i>Bin</i></span>
                     </Link>
                     <div>

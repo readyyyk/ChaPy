@@ -2,15 +2,17 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {Avatar, Chip} from '@mui/material';
 
-import hashMapsApi from '../../../APIs/HashMapsApi.js';
+import {useLoaderData} from 'react-router-dom';
 
 const UserListItem = ({userName}) => {
+    const {randImgApi} = useLoaderData();
+
     return (
         <Chip
             label={userName}
             avatar={
                 <Avatar
-                    src={hashMapsApi.link(userName, 'hashmap')}
+                    src={randImgApi.getLink('hashmap', userName )}
                 />}
         />
     );

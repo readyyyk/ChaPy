@@ -1,10 +1,12 @@
 import React from 'react';
 import {Avatar, Chip, Container} from '@mui/material';
-import hashMapsApi from '../../APIs/HashMapsApi.js';
 
 import PropTypes from 'prop-types';
+import {useLoaderData} from 'react-router-dom';
 
 const ServerMessage = ({text, sender}) => {
+    const {randImgApi} = useLoaderData();
+
     return (
         <Container
             sx={{
@@ -18,7 +20,7 @@ const ServerMessage = ({text, sender}) => {
                 avatar={
                     <Avatar
                         alt="Test"
-                        src={hashMapsApi.link(sender, 'hashmap')}
+                        src={randImgApi.getLink('hashmap', sender)}
                     />
                 }
                 color={text.includes('dis') ? 'warning' : 'success'}

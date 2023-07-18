@@ -9,9 +9,17 @@ import {
 } from '@mui/material';
 import LoadingButton from '@mui/lab/LoadingButton';
 
+import {
+    useLoaderData,
+    useParams,
+} from 'react-router-dom';
+
 import PropTypes from 'prop-types';
 
-const IntroModal = ({open, setUser, chat, chatbinApi, setUserList}) => {
+const IntroModal = ({open, setUser, setUserList}) => {
+    const {chat} = useParams();
+    const {chatbinApi} = useLoaderData();
+
     // eslint-disable-next-line max-len
     const inputErrorText = 'Name should be unique in chat and can contain less than 30 symbols of English alphabet';
 

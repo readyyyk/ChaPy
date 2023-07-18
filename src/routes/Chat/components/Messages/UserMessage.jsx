@@ -1,9 +1,11 @@
 import React from 'react';
 import {Avatar, Container, Paper, Typography, useTheme} from '@mui/material';
-import hashMapsApi from '../../APIs/HashMapsApi.js';
 import PropTypes from 'prop-types';
+import {useLoaderData} from 'react-router-dom';
 
 const UserMessage = ({isThisUser, sender, text, l, f}) => {
+    const {randImgApi} = useLoaderData();
+
     const theme = useTheme();
     const borderRadiusValue = isThisUser ?
         `13px ${f?'13px':'2px'} ${l?'13px':'2px'} 13px` :
@@ -24,7 +26,7 @@ const UserMessage = ({isThisUser, sender, text, l, f}) => {
             { !isThisUser ?
                 l ?
                     <Avatar
-                        src={hashMapsApi.link(sender, 'hashmap')}
+                        src={randImgApi.getLink('hashmap', sender)}
                         variant="soft"
                         size={'lg'}
                         sx={{

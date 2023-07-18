@@ -1,31 +1,30 @@
 import React, {
+    lazy,
+    Suspense,
     useCallback,
     useEffect,
     useState,
 } from 'react';
 
 import {
-    useLoaderData, useNavigate,
-    useParams,
+    useLoaderData,
+    useNavigate,
 } from 'react-router-dom';
 
-import ChatBackdrop from './components/Backdrop/ChatBackdrop.jsx';
 import Header from './components/Header/Header.jsx';
 import MessageContainer from './components/Messages/MessageContainer.jsx';
 import IntroModal from './components/Modals/IntroModal.jsx';
-import ShareModal from './components/Modals/ShareModal.jsx';
+const ShareModal = lazy(()=>import('./components/Modals/ShareModal.jsx'));
 import ConnectionToast from './components/Toasts/ConnectionToast.jsx';
+
+import {LinearProgress} from '@mui/material';
 
 const Chat = () => {
     const navigate = useNavigate();
-    const {chat} = useParams();
-    const {chatbinApi, wsApi} = useLoaderData();
+    const {wsApi} = useLoaderData();
 
     const [isConnectionToastOpen, setIsConnectionToastOpen] = useState(false);
     const [isShareModalOpen, setIsShareModalOpen] = useState(false);
-
-    const [isLoaded, setIsLoaded] = useState(false);
-    setTimeout(()=>setIsLoaded(true), 100);
 
     const [user, setUser] = useState({connected: false, name: ''});
     useEffect(()=>{
@@ -96,21 +95,17 @@ const Chat = () => {
                         />
                     </>
             }
-            <ChatBackdrop
-                isLoaded={isLoaded}
-                chatId={chat}
-            />
             <IntroModal
-                open={isLoaded && !user.connected}
+                open={!user.connected}
                 setUser={setUser}
-                chat={chat}
-                chatbinApi={chatbinApi}
                 setUserList={setUserList}
             />
-            <ShareModal
-                open={isShareModalOpen}
-                setOpen={setIsShareModalOpen}
-            />
+            <Suspense fallback={<LinearProgress />}>
+                <ShareModal
+                    open={isShareModalOpen}
+                    setOpen={setIsShareModalOpen}
+                />
+            </Suspense>
         </>
     );
 };

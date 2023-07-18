@@ -8,9 +8,12 @@ import {
 } from '@mui/material';
 
 import PropTypes from 'prop-types';
+import {useParams} from 'react-router-dom';
 
-const ChatBackdrop = ({isLoaded, chatId}) => {
+const ChatBackdrop = ({isLoaded}) => {
+    const {chat} = useParams();
     const theme = useTheme();
+
     return <Backdrop
         sx={{
             zIndex: theme.zIndex.drawer + 1,
@@ -24,7 +27,7 @@ const ChatBackdrop = ({isLoaded, chatId}) => {
             align="center"
             gutterBottom
         >
-            Entering <b><i>{chatId}</i></b>
+            Entering <b><i>{chat}</i></b>
         </Typography>
         <LinearProgress
             color={'info'}
