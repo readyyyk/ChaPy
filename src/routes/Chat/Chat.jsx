@@ -1,13 +1,11 @@
 import React, {
     lazy,
     Suspense,
-    useCallback,
     useEffect,
     useState,
 } from 'react';
 
 import {
-    useLoaderData,
     useNavigate,
 } from 'react-router-dom';
 
@@ -21,59 +19,47 @@ import {LinearProgress} from '@mui/material';
 
 const Chat = () => {
     const navigate = useNavigate();
-    const {wsApi} = useLoaderData();
+
+    const [msgs, setMsgs] = useState([]);
+    self.addMessage = (text, sender, type="") => setMsgs([...msgs, {
+        text: text,
+        sender: sender,
+        type: type
+    }]);
 
     const [isConnectionToastOpen, setIsConnectionToastOpen] = useState(false);
     const [isShareModalOpen, setIsShareModalOpen] = useState(false);
 
     const [user, setUser] = useState({connected: false, name: ''});
-    useEffect(()=>{
-        wsApi.emit('connection', {
-            detail: user.connected ? 'connected' : 'trying to connect',
-            name: user.name,
-        });
-    }, [user.connected]);
 
+    const [wsApi, setWsApi] = useState(null)
     const [userList, setUserList] = useState([]);
-    const addUserToList = (name) => setUserList([...userList, name]);
-    const removeUserFromList = (name) => setUserList(
+    self.addUserToList = (name) => setUserList([...userList, name]);
+    self.removeUserFromList = (name) => setUserList(
         userList.filter((el)=>el!==name));
 
-    const [msgs, setMsgs] = useState([]);
-
     const actions = {
-        message: useCallback(() => (data) => {
-            setMsgs([...msgs, {
-                text: data.text,
-                sender: data.sender || user.name,
-            }]);
-        }, [msgs, user.connected])(),
-        connection: useCallback(() => (data) => {
-            if (data.detail === 'trying to connect') {
-                setIsConnectionToastOpen(true);
-            } else {
-                setMsgs([...msgs, {
-                    text: data.name + ' ' + data.detail,
-                    sender: data.name,
-                    type: 'server',
-                }]);
-            }
-        }, [msgs])(),
+        message: (data) => self.addMessage(data.text, data.sender || user.name),
+        connection: (data) => {
+            if (data.detail === 'connected')
+                self.addUserToList(data.name);
+            else if (data.detail === 'disconnected')
+                self.removeUserFromList(data.name);
+            self.addMessage(data.name + ' ' + data.detail, data.name, 'server')
+        }
     };
 
-    wsApi.addDataChecker('connection', ()=> true);
-    wsApi.addDataChecker('message', ()=> true);
-    wsApi.socket.onclose = () => navigate('/error/408');
+    useEffect(()=> {
+        if (!wsApi)
+            return
 
-    wsApi.on('message', actions.message);
-    wsApi.on('connection', (data)=>{
-        if (data.detail === 'connected') {
-            addUserToList(data.name);
-        } else if (data.detail === 'disconnected') {
-            removeUserFromList(data.name);
-        }
-        actions.connection(data);
-    });
+        wsApi.addDataChecker('connection', ()=> true);
+        wsApi.addDataChecker('message', ()=> true);
+        wsApi.socket.onclose = () => navigate('/error/408');
+
+        wsApi.on('message', actions.message);
+        wsApi.on('connection', actions.connection);
+    }, [wsApi]);
 
     return (
         <>
@@ -98,6 +84,7 @@ const Chat = () => {
             <IntroModal
                 open={!user.connected}
                 setUser={setUser}
+                setWsApi={setWsApi}
                 setUserList={setUserList}
             />
             <Suspense fallback={<LinearProgress />}>

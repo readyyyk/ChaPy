@@ -10,7 +10,7 @@ import {
     useRouteError,
 } from 'react-router-dom';
 
-import logo from '../assets/chatbin.png';
+import logo from '../assets/chapy.png';
 
 import PropTypes from 'prop-types';
 

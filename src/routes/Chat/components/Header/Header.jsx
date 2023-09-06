@@ -20,7 +20,7 @@ import PropTypes from 'prop-types';
 import {DarkModeContext} from '../../../../hooks/DarkModeContext.js';
 import UserList from './UserList/UserList.jsx';
 
-import icon from '../../../../assets/favicon.png';
+import icon from '../../../../assets/favicon.ico';
 
 const Header = ({setIsShareModalOpen, userList}) => {
     const theme = useTheme();
@@ -54,7 +54,7 @@ const Header = ({setIsShareModalOpen, userList}) => {
                         <Suspense fallback={<CircularProgress size={40}/>}>
                             <img src={icon} alt="icon" height="40px"/>
                         </Suspense>
-                        <span>Chat<i>Bin</i></span>
+                        <span style={{marginLeft: ".5rem"}}>Cha<i>Py</i></span>
                     </Link>
                     <div>
                         <IconButton

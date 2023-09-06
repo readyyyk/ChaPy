@@ -13,7 +13,7 @@ const MessageStack = ({msgs, currentUserName}) => {
             ?.scrollIntoView({behavior: 'smooth'});
     }, [msgs]);
     const messageElements = msgs.map((el, i) => {
-        return <div key={`m-${i}`}>
+        return <div key={`msg-${i}`}>
             {
                 el.type === 'server' ?
                     <ServerMessage text={el.text} sender={el.sender}/> :

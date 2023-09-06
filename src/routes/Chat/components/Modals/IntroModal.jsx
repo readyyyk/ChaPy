@@ -15,10 +15,11 @@ import {
 } from 'react-router-dom';
 
 import PropTypes from 'prop-types';
+import SocketApi from "@raedyk/socketapi";
 
-const IntroModal = ({open, setUser, setUserList}) => {
+const IntroModal = ({open, setUser, setWsApi, setUserList}) => {
     const {chat} = useParams();
-    const {chatbinApi} = useLoaderData();
+    const {chapyApi} = useLoaderData();
 
     // eslint-disable-next-line max-len
     const inputErrorText = 'Name should be unique in chat and can contain less than 30 symbols of English alphabet';
@@ -30,20 +31,23 @@ const IntroModal = ({open, setUser, setUserList}) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (inputValue.length>2) {
-            setIsLoading(true);
-            const isValidName = await chatbinApi.checkName(inputValue);
-            if (isValidName) {
-                const currentNames = await chatbinApi.getNames();
-                setUserList(currentNames || []);
-                setUser({
-                    connected: true,
-                    name: inputValue,
-                });
-            }
-            setIsError(!isValidName);
-            setIsLoading(false);
+        if (inputValue.length<=2)
+            return;
+
+        setIsLoading(true);
+        const res = await chapyApi.connect(inputValue);
+
+        if (res.connected) {
+            const currentNames = await chapyApi.names();
+            setUserList(currentNames);
+            setUser({
+                connected: true,
+                name: inputValue,
+            });
+            setWsApi(new SocketApi(res.wsLink));
         }
+        setIsError(!res.connected);
+        setIsLoading(false);
     };
 
     return (
@@ -114,7 +118,6 @@ IntroModal.propTypes = {
     open: PropTypes.bool,
     chat: PropTypes.string,
     setUser: PropTypes.func,
-    chatbinApi: PropTypes.object,
     setUserList: PropTypes.func,
 };
 

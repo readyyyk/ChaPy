@@ -12,24 +12,19 @@ const EmptyChat = lazy(()=>import('./routes/EmptyChat.jsx'));
 
 import Loading from './Loading.jsx';
 
-import SocketApi from '@raedyk/socketapi';
+import ChapyAPI from './routes/Chat/APIs/chapyAPI.js';
 import RandImgApi from 'randimg';
-import ChatBinApi from 'chatbinapi';
 
 const chatLoader = ({params})=>{
     if (!/^[a-zA-Z]{5}$/.test(params.chat)) {
         location.replace('/error/400');
     }
-    const chatbinApi = new ChatBinApi(
-        params.chat,
-        new URL(import.meta.env.VITE_CHATBIN_API_LINK),
-    );
-    if (!chatbinApi) {
-        location.replace('/error/500');
-    }
 
-    const wsApi = new SocketApi(chatbinApi.wsLink);
-    if (!wsApi) {
+    const chapyApi = new ChapyAPI(
+        new URL(import.meta.env.VITE_CHAPY_API_LINK),
+        params.chat,
+    );
+    if (!chapyApi) {
         location.replace('/error/500');
     }
 
@@ -38,7 +33,7 @@ const chatLoader = ({params})=>{
         location.replace('/error/500');
     }
 
-    return {chatbinApi, wsApi, randImgApi};
+    return {chapyApi, randImgApi};
 };
 
 export const router = createBrowserRouter([
