@@ -54,7 +54,7 @@ const Header = ({setIsShareModalOpen, userList}) => {
                         <Suspense fallback={<CircularProgress size={40}/>}>
                             <img src={icon} alt="icon" height="40px"/>
                         </Suspense>
-                        <span style={{marginLeft: ".5rem"}}>Cha<i>Py</i></span>
+                        <span style={{marginLeft: '.5rem'}}>Cha<i>Py</i></span>
                     </Link>
                     <div>
                         <IconButton

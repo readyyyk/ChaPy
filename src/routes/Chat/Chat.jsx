@@ -5,9 +5,7 @@ import React, {
     useState,
 } from 'react';
 
-import {
-    useNavigate,
-} from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
 
 import Header from './components/Header/Header.jsx';
 import MessageContainer from './components/Messages/MessageContainer.jsx';
@@ -17,14 +15,15 @@ import ConnectionToast from './components/Toasts/ConnectionToast.jsx';
 
 import {LinearProgress} from '@mui/material';
 
+
 const Chat = () => {
     const navigate = useNavigate();
 
     const [msgs, setMsgs] = useState([]);
-    self.addMessage = (text, sender, type="") => setMsgs([...msgs, {
+    self.addMessage = (text, sender, type='') => setMsgs([...msgs, {
         text: text,
         sender: sender,
-        type: type
+        type: type,
     }]);
 
     const [isConnectionToastOpen, setIsConnectionToastOpen] = useState(false);
@@ -32,7 +31,7 @@ const Chat = () => {
 
     const [user, setUser] = useState({connected: false, name: ''});
 
-    const [wsApi, setWsApi] = useState(null)
+    const [wsApi, setWsApi] = useState(null);
     const [userList, setUserList] = useState([]);
     self.addUserToList = (name) => setUserList([...userList, name]);
     self.removeUserFromList = (name) => setUserList(
@@ -41,17 +40,20 @@ const Chat = () => {
     const actions = {
         message: (data) => self.addMessage(data.text, data.sender || user.name),
         connection: (data) => {
-            if (data.detail === 'connected')
+            if (data.detail === 'connected') {
                 self.addUserToList(data.name);
-            else if (data.detail === 'disconnected')
+            }
+            else if (data.detail === 'disconnected') {
                 self.removeUserFromList(data.name);
-            self.addMessage(data.name + ' ' + data.detail, data.name, 'server')
+            }
+            self.addMessage(data.name + ' ' + data.detail, data.name, 'server');
         }
     };
 
     useEffect(()=> {
-        if (!wsApi)
-            return
+        if (!wsApi) {
+            return;
+        }
 
         wsApi.addDataChecker('connection', ()=> true);
         wsApi.addDataChecker('message', ()=> true);

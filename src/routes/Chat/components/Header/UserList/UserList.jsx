@@ -6,7 +6,7 @@ import UserListItem from './UserListItem.jsx';
 const UserList = ({userList}) => {
     return (
         <Paper elevation={1} sx={{px: 2, py: 1, overflowX: 'scroll'}}>
-            <Stack spacing={{xs: 1, sm: 2}} direction="row" useFlexGap>
+            <Stack spacing={{xs: 1, sm: 2}} direction="row" useFlexGap justifyContent='center'>
                 {userList.map(
                     (el)=>
                         (<UserListItem

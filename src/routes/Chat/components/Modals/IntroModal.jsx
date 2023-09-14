@@ -15,7 +15,7 @@ import {
 } from 'react-router-dom';
 
 import PropTypes from 'prop-types';
-import SocketApi from "@raedyk/socketapi";
+import sSocketApi from '../../APIs/sSocketAPI.js';
 
 const IntroModal = ({open, setUser, setWsApi, setUserList}) => {
     const {chat} = useParams();
@@ -31,20 +31,23 @@ const IntroModal = ({open, setUser, setWsApi, setUserList}) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (inputValue.length<=2)
+        if (inputValue.length<=2) {
             return;
+        }
 
         setIsLoading(true);
         const res = await chapyApi.connect(inputValue);
 
         if (res.connected) {
+            const parseJWT = (token) => JSON.parse(atob(token.split('.')[1]))
+            let key = parseJWT(res.wsLink.substr(res.wsLink.search("token=")+6))["key"]
             const currentNames = await chapyApi.names();
             setUserList(currentNames);
             setUser({
                 connected: true,
                 name: inputValue,
             });
-            setWsApi(new SocketApi(res.wsLink));
+            setWsApi(new sSocketApi(res.wsLink, key));
         }
         setIsError(!res.connected);
         setIsLoading(false);
@@ -116,8 +119,8 @@ const IntroModal = ({open, setUser, setWsApi, setUserList}) => {
 
 IntroModal.propTypes = {
     open: PropTypes.bool,
-    chat: PropTypes.string,
     setUser: PropTypes.func,
+    setWsApi: PropTypes.func,
     setUserList: PropTypes.func,
 };
 
