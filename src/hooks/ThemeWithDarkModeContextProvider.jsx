@@ -8,7 +8,7 @@ import {
     createTheme,
     CssBaseline,
     ThemeProvider,
-    //useMediaQuery,
+    // useMediaQuery,
 } from '@mui/material';
 
 import {DarkModeContext} from './DarkModeContext.js';
@@ -27,7 +27,7 @@ const ThemeWithDarkModeContextProvider = ({children}) => {
         if (!currentIsDarkMode) {
             localStorage.setItem(
                 'theme',
-                'dark', //true ? 'dark' : 'light'
+                'dark', // true ? 'dark' : 'light'
             );
             return;
         }

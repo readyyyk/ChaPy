@@ -15,7 +15,7 @@ const Loading = () => {
             }}
             open={true}
         >
-            <Typography variant="h2"> Chat<i>Bin</i> </Typography>
+            <Typography variant="h2"> Cha<i>Py</i> </Typography>
             <LinearProgress
                 color={'info'}
                 sx={{

@@ -24,7 +24,7 @@ const IntroModal = ({open, setUser, setWsApi, setUserList}) => {
     const {chapyApi} = useLoaderData();
 
     // eslint-disable-next-line max-len
-    const inputErrorText = 'Name should be unique in chat and can contain less than 30 symbols of English alphabet';
+    const inputErrorText= 'Name should be unique in chat and can contain less than 30 letters, numbers, or underscores';
 
     const [isLoading, setIsLoading] = useState(false);
     const [isError, setIsError] = useState(false);
