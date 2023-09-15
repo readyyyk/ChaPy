@@ -21,7 +21,7 @@ const ServerMessage = ({text, sender}) => {
                     <Avatar
                         alt="Test"
                         src={randImgApi.getLink(
-                            import.meta.env.VITE_RANDIMG_API_MODEL, sender
+                            import.meta.env.VITE_RANDIMG_API_MODEL, sender,
                         )}
                     />
                 }

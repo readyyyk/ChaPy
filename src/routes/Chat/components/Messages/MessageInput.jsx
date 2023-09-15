@@ -1,4 +1,7 @@
 import React, {useState} from 'react';
+
+import '../../../../InputStyles.css';
+
 import {
     Container,
     TextField,
@@ -30,7 +33,7 @@ const MessageInput = ({ws}) => {
                 }}
                 autoFocus
                 value={inputValue}
-                inputProps={{maxlength: 800}}
+                inputProps={{maxLength: 800}}
                 onChange={(e) => setInputValue(e.target.value)}
             />
             <IconButton

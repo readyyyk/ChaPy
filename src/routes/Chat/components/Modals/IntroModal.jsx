@@ -1,5 +1,7 @@
 import React, {useState} from 'react';
 
+import '../../../../InputStyles.css';
+
 import {
     FormControl,
     Modal,
@@ -18,7 +20,7 @@ import PropTypes from 'prop-types';
 import SSocketApi from '../../APIs/sSocketAPI.js';
 
 const IntroModal = ({open, setUser, setWsApi, setUserList}) => {
-    const {chat} = useParams();
+        const {chat} = useParams();
     const {chapyApi} = useLoaderData();
 
     // eslint-disable-next-line max-len

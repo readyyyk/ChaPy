@@ -1,6 +1,5 @@
 import React from 'react';
 
-import './InputStyles.css';
 import './ScrollStyles.css';
 
 import {RouterProvider} from 'react-router-dom';

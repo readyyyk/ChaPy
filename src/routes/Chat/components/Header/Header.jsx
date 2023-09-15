@@ -10,6 +10,7 @@ import {
     Container,
     IconButton,
     CircularProgress,
+    Typography,
 } from '@mui/material';
 import IosShareIcon from '@mui/icons-material/IosShare';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
@@ -21,8 +22,10 @@ import {DarkModeContext} from '../../../../hooks/DarkModeContext.js';
 import UserList from './UserList/UserList.jsx';
 
 import icon from '../../../../assets/favicon.ico';
+import {useParams} from "react-router-dom";
 
 const Header = ({setIsShareModalOpen, userList}) => {
+    const {chat} = useParams();
     const theme = useTheme();
     const {toggleMode} = useContext(DarkModeContext);
 
@@ -41,21 +44,35 @@ const Header = ({setIsShareModalOpen, userList}) => {
                         p: 2,
                     }}
                 >
-                    <Link
+                    <Typography
                         variant="h5"
-                        href="/"
-                        underline={'hover'}
-                        color={'inherit'}
                         sx={{
                             display: 'flex',
                             alignItems: 'center',
                         }}
                     >
-                        <Suspense fallback={<CircularProgress size={40}/>}>
-                            <img src={icon} alt="icon" height="40px"/>
-                        </Suspense>
-                        <span style={{marginLeft: '.5rem'}}>Cha<i>Py</i></span>
-                    </Link>
+                        <Link
+                            variant="h5"
+                            href="/"
+                            underline={'hover'}
+                            color={'inherit'}
+                            sx={{
+                                display: 'flex',
+                                alignItems: 'center',
+                            }}
+                        >
+                            <Suspense fallback={<CircularProgress size={40}/>}>
+                                <img src={icon} alt="icon" height="40px"/>
+                            </Suspense>
+                            <span style={{marginLeft: '.5rem'}}>Cha<i>Py</i> - </span>
+                        </Link>
+                        <span style={{
+                            marginLeft: '.5rem',
+                            opacity: .7,
+                        }}>
+                            {chat}
+                        </span>
+                    </Typography>
                     <div>
                         <IconButton
                             sx={{ml: 1}}

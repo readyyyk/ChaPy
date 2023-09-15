@@ -27,7 +27,7 @@ const UserMessage = ({isThisUser, sender, text, l, f}) => {
                 l ?
                     <Avatar
                         src={randImgApi.getLink(
-                            import.meta.env.VITE_RANDIMG_API_MODEL, sender
+                            import.meta.env.VITE_RANDIMG_API_MODEL, sender,
                         )}
                         variant="soft"
                         size={'lg'}
