@@ -12,7 +12,7 @@ const UserListItem = ({userName}) => {
             label={userName}
             avatar={
                 <Avatar
-                    src={randImgApi.getLink('hashmap', userName )}
+                    src={randImgApi.getLink(import.meta.env.VITE_RANDIMG_API_MODEL, userName)}
                 />}
         />
     );

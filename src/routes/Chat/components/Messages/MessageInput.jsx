@@ -12,8 +12,9 @@ const MessageInput = ({ws}) => {
     const [inputValue, setInputValue] = useState('');
     const newMessage = (e) => {
         e.preventDefault();
-        if (inputValue) {
-            ws.emit('message', {text: inputValue});
+        const inputValue_ = inputValue.trim();
+        if (inputValue_) {
+            ws.emit('message', {text: inputValue_});
             setInputValue('');
         }
     };

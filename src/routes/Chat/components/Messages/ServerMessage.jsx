@@ -20,7 +20,7 @@ const ServerMessage = ({text, sender}) => {
                 avatar={
                     <Avatar
                         alt="Test"
-                        src={randImgApi.getLink('hashmap', sender)}
+                        src={randImgApi.getLink(import.meta.env.VITE_RANDIMG_API_MODEL, sender)}
                     />
                 }
                 color={text.includes('dis') ? 'warning' : 'success'}
