@@ -5,9 +5,10 @@ import React, {
 } from 'react';
 
 import {
-    createTheme, CssBaseline,
+    createTheme,
+    CssBaseline,
     ThemeProvider,
-    useMediaQuery,
+    //useMediaQuery,
 } from '@mui/material';
 
 import {DarkModeContext} from './DarkModeContext.js';
@@ -20,13 +21,14 @@ const ThemeWithDarkModeContextProvider = ({children}) => {
         setIsDarkMode(!isDarkMode);
     };
 
-    const isPreferDark = useMediaQuery('(prefers-color-scheme: dark)');
+    // const isPreferDark = useMediaQuery('(prefers-color-scheme: dark)');
     useEffect(()=>{
         const currentIsDarkMode = localStorage.getItem('theme');
         if (!currentIsDarkMode) {
             localStorage.setItem(
                 'theme',
-                isPreferDark ? 'dark' : 'light');
+                'dark', //true ? 'dark' : 'light'
+            );
             return;
         }
         setIsDarkMode(localStorage.getItem('theme')==='dark');

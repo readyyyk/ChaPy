@@ -9,7 +9,7 @@ import {
 import {useNavigate} from 'react-router-dom';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 
-import "./home.css"
+import "./home.css";
 
 const Home = () => {
     const navigate = useNavigate();
@@ -67,8 +67,9 @@ const Home = () => {
                         label={'Chat ID'}
                         value={inputValue}
                         variant={"outlined"}
+                        className={"home-input"}
                         sx={{
-                            width: '5em',
+                            width: "5em",
                         }}
                         inputProps={{
                             maxLength: 5,
