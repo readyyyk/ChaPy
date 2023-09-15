@@ -9,6 +9,8 @@ import {
 import {useNavigate} from 'react-router-dom';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 
+import "./home.css"
+
 const Home = () => {
     const navigate = useNavigate();
 
@@ -19,11 +21,11 @@ const Home = () => {
             acc+letters[Math.floor(Math.random()*letters.length)], ''),
     );
 
-    const [inputValue, setInputValue] = useState("")
+    const [inputValue, setInputValue] = useState("");
     const handleSubmit = (e) => {
         e.preventDefault();
         navigate(`/${inputValue}`);
-    }
+    };
 
     return (
         <Box
