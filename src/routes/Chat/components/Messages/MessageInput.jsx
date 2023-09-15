@@ -30,6 +30,7 @@ const MessageInput = ({ws}) => {
                 }}
                 autoFocus
                 value={inputValue}
+                inputProps={{maxlength: 800}}
                 onChange={(e) => setInputValue(e.target.value)}
             />
             <IconButton

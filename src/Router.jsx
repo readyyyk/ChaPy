@@ -48,7 +48,7 @@ export const router = createBrowserRouter([
     {
         path: '/error/:errorCode',
         element: <Suspense fallback={<Loading />}><Error/></Suspense>,
-        errorElement: <Error routerError/>
+        errorElement: <Error routerError/>,
     },
     {
         path: '/:chat',

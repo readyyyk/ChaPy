@@ -26,7 +26,9 @@ const UserMessage = ({isThisUser, sender, text, l, f}) => {
             { !isThisUser ?
                 l ?
                     <Avatar
-                        src={randImgApi.getLink(import.meta.env.VITE_RANDIMG_API_MODEL, sender)}
+                        src={randImgApi.getLink(
+                            import.meta.env.VITE_RANDIMG_API_MODEL, sender
+                        )}
                         variant="soft"
                         size={'lg'}
                         sx={{
@@ -55,7 +57,10 @@ const UserMessage = ({isThisUser, sender, text, l, f}) => {
                     objectFit: 'contain',
                 }}
             >
-                <Typography variant={'body1'}>{text}</Typography>
+                <Typography
+                    variant={'body1'}
+                    sx={{lineBreak: "anywhere"}}
+                >{text}</Typography>
             </Paper>
         </Container>
     );

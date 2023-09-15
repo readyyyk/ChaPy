@@ -42,12 +42,11 @@ const Chat = () => {
         connection: (data) => {
             if (data.detail === 'connected') {
                 self.addUserToList(data.name);
-            }
-            else if (data.detail === 'disconnected') {
+            } else if (data.detail === 'disconnected') {
                 self.removeUserFromList(data.name);
             }
             self.addMessage(data.name + ' ' + data.detail, data.name, 'server');
-        }
+        },
     };
 
     useEffect(()=> {

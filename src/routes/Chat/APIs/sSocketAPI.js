@@ -4,7 +4,7 @@ import Utf8 from 'crypto-js/enc-utf8.js';
 import AES from 'crypto-js/aes.js'
 
 
-export default class sSocketApi {
+export default class SSocketApi {
     link = "";
     dataCheckers = new Map(); // string func
     eventListeners = new Map(); // string func
