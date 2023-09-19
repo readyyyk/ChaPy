@@ -6,7 +6,7 @@ import React, {
 import {createBrowserRouter} from 'react-router-dom';
 
 import Home from './routes/Home.jsx';
-const Error = lazy(()=>import('./routes/Error.jsx'));
+import Error from'./routes/Error.jsx';
 const Chat = lazy(()=>import('./routes/Chat/Chat.jsx'));
 const EmptyChat = lazy(()=>import('./routes/EmptyChat.jsx'));
 
@@ -47,17 +47,17 @@ export const router = createBrowserRouter([
     },
     {
         path: '/error/:errorCode',
-        element: <Suspense fallback={<Loading />}><Error/></Suspense>,
+        element: <Error/>,
         errorElement: <Error routerError/>,
     },
     {
         path: '/:chat',
         element: <Suspense fallback={<Loading />}><Chat /></Suspense>,
         loader: chatLoader,
-        errorElement: <Suspense fallback={<Loading />}><Error routerError/></Suspense>,
+        errorElement: <Error routerError/>,
     },
     {
         path: '/*',
-        element: <Suspense fallback={<Loading />}><Error manualError={404}/></Suspense>,
+        element: <Error manualError={404}/>,
     },
 ]);

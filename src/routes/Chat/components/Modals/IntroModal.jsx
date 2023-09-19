@@ -75,7 +75,7 @@ const IntroModal = ({open, setUser, setWsApi, setUserList}) => {
                 }}
             >
                 <Typography variant="h5" mb={1} align={'center'}>
-                    Entering <b>{chat}</b>
+                    Entering chat #<b>{chat}</b>
                 </Typography>
                 <form
                     onSubmit={handleSubmit}
@@ -94,7 +94,7 @@ const IntroModal = ({open, setUser, setWsApi, setUserList}) => {
                             <TextField
                                 autoFocus
                                 sx={{mb: 3}}
-                                label={'Name'}
+                                label={'Your name'}
                                 error={isError}
                                 value={inputValue}
                                 onChange={(e) => {

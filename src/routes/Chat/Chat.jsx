@@ -5,7 +5,7 @@ import React, {
     useState,
 } from 'react';
 
-import {useNavigate} from 'react-router-dom';
+import {useNavigate, useParams} from 'react-router-dom';
 
 import Header from './components/Header/Header.jsx';
 import MessageContainer from './components/Messages/MessageContainer.jsx';
@@ -18,6 +18,8 @@ import {LinearProgress} from '@mui/material';
 
 const Chat = () => {
     const navigate = useNavigate();
+    const {chat} = useParams();
+    document.title = `ChaPy - ${chat}`;
 
     const [msgs, setMsgs] = useState([]);
     self.addMessage = (text, sender, type='') => setMsgs([...msgs, {

@@ -8,6 +8,8 @@ import {router} from './Router.jsx';
 import ThemeWithDarkModeContextProvider
     from './hooks/ThemeWithDarkModeContextProvider.jsx';
 
+import './selection.css';
+
 
 const App = () => {
     return (
