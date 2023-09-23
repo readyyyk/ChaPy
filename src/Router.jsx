@@ -9,6 +9,7 @@ import Home from './routes/Home.jsx';
 import Error from './routes/Error.jsx';
 const Chat = lazy(()=>import('./routes/Chat/Chat.jsx'));
 const EmptyChat = lazy(()=>import('./routes/EmptyChat.jsx'));
+const QrScanner = lazy(()=>import('./routes/QrScanner.jsx'));
 
 import Loading from './Loading.jsx';
 
@@ -49,6 +50,10 @@ export const router = createBrowserRouter([
     {
         path: '/chat',
         element: <Suspense fallback={<Loading />}><EmptyChat/></Suspense>,
+    },
+    {
+        path: '/scanner',
+        element: <Suspense fallback={<Loading />}><QrScanner/></Suspense>,
     },
     {
         path: '/new_chat',

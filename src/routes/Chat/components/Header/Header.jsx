@@ -64,14 +64,17 @@ const Header = ({setIsShareModalOpen, userList}) => {
                             <Suspense fallback={<CircularProgress size={40}/>}>
                                 <img src={icon} alt='icon' height='40px'/>
                             </Suspense>
-                            <span style={{marginLeft: '.5rem'}}>Cha<i>Py</i> - </span>
+                            <span style={{marginLeft: '.5rem'}}>Cha<i>Py</i></span>
                         </Link>
-                        <span style={{
-                            marginLeft: '.5rem',
-                            opacity: .7,
-                        }}>
-                            {chat}
-                        </span>
+                        {
+                            chat ?
+                                <span style={{
+                                    marginLeft: '.5rem',
+                                    opacity: .7,
+                                }}>
+                                    - {chat}
+                                </span> : <></>
+                        }
                     </Typography>
                     <div>
                         <IconButton
@@ -82,17 +85,23 @@ const Header = ({setIsShareModalOpen, userList}) => {
                             {theme.palette.mode === 'dark' ?
                                 <Brightness7Icon /> : <Brightness4Icon />}
                         </IconButton>
-                        <IconButton
-                            sx={{ml: 1}}
-                            onClick={()=>setIsShareModalOpen(true)}
-                            color='inherit'
-                        >
-                            <IosShareIcon />
-                        </IconButton>
+                        {
+                            chat ?
+                                <IconButton
+                                    sx={{ml: 1}}
+                                    onClick={() => setIsShareModalOpen(true)}
+                                    color='inherit'
+                                >
+                                    <IosShareIcon/>
+                                </IconButton> : <></>
+                        }
                     </div>
                 </Toolbar>
             </Container>
-            <UserList userList={userList}/>
+            {
+                chat ?
+                    <UserList userList={userList}/> : <></>
+            }
         </AppBar>
     );
 };

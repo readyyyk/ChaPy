@@ -10,6 +10,7 @@ import {useNavigate} from 'react-router-dom';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import DownloadingIcon from '@mui/icons-material/Downloading';
+import QrCodeScannerIcon from '@mui/icons-material/QrCodeScanner';
 
 import './home.css';
 
@@ -60,12 +61,21 @@ const Home = () => {
                 Random chat
             </Button>
 
+            <Button
+                onClick={()=>navigate('/scanner')}
+                variant='outlined'
+                size='large'
+                sx={{p: 1, mt: '2rem'}}
+            >
+                <QrCodeScannerIcon fontSize={'large'}/>
+            </Button>
+
             <form
                 onSubmit={handleSubmit}
                 style={{
                     display: 'flex',
                     borderRadius: 7,
-                    marginTop: '4rem',
+                    marginTop: '2rem',
                     alignItems: 'center',
                     border: '1px solid rgba(144, 202, 249, 0.5)',
                     padding: '4px 16px',
