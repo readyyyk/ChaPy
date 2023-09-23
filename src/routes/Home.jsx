@@ -7,7 +7,9 @@ import {
     Typography,
 } from '@mui/material';
 import {useNavigate} from 'react-router-dom';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import DownloadingIcon from '@mui/icons-material/Downloading';
 
 import "./home.css";
 
@@ -35,6 +37,20 @@ const Home = () => {
                 p: 3,
             }}
         >
+            <Button
+                onClick={()=>window?.deferredPrompt.prompt()}
+                variant="outlined"
+                size="large"
+                sx={{
+                    position: 'fixed',
+                    right: '1rem',
+                    top: '1rem',
+                    display: useMediaQuery('(display-mode: browser)') ? 'flex' : 'none',
+                }}
+            >
+                Install app
+                <DownloadingIcon />
+            </Button>
             <Typography variant="h1"> Home </Typography>
             <Button
                 onClick={()=>navigate("/new_chat")}
