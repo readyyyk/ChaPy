@@ -4,10 +4,19 @@ export default {
         short_name: 'ChaPy',
         icons: [
             {
-                src: '/chapy.png',
+                src: '/chapy512.png',
                 sizes: '512x512',
                 type: 'image/png',
-                purpose: 'any maskable',
+            },
+            {
+                "src": "/chapy192.png",
+                "type": "image/png",
+                "sizes": "192x192"
+            },
+            {
+                "src": "/favicon.ico",
+                "type": "image/x-icon",
+                "sizes": "16x16"
             },
         ],
         start_url: '/',
@@ -17,10 +26,11 @@ export default {
         display: 'standalone',
         shortcuts: [
             {
-                'name': 'New random chat',
-                'short_name': 'New chat',
+                'name': 'Random chat',
+                'short_name': 'Random chat',
                 'description': 'Enter chat with random id',
                 'url': '/new_chat',
+                'icons': [{ 'src': '/plus.png', 'sizes': '96x96' }],
             },
         ],
     },

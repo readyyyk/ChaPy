@@ -53,7 +53,8 @@ export const router = createBrowserRouter([
     {
         path: '/new_chat',
         element: <Loading />,
-        loader: ()=>new Response("", {status: 302, headers: {Location: `/${randomChatId()}`}})
+        loader: ()=>new Response('',
+            {status: 302, headers: {Location: '/'+randomChatId()}}),
     },
     {
         path: '/error/:errorCode',
