@@ -6,7 +6,7 @@ import React, {
 import {createBrowserRouter} from 'react-router-dom';
 
 import Home from './routes/Home.jsx';
-import Error from'./routes/Error.jsx';
+import Error from './routes/Error.jsx';
 const Chat = lazy(()=>import('./routes/Chat/Chat.jsx'));
 const EmptyChat = lazy(()=>import('./routes/EmptyChat.jsx'));
 
@@ -14,6 +14,11 @@ import Loading from './Loading.jsx';
 
 import ChapyAPI from './routes/Chat/APIs/chapyAPI.js';
 import RandImgApi from 'randimg';
+
+const letters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+const randomChatId = () =>
+    Array(5).fill('').reduce((acc)=>
+        acc+letters[Math.floor(Math.random()*letters.length)], '');
 
 const chatLoader = ({params})=>{
     if (!/^[a-zA-Z]{5}$/.test(params.chat)) {
@@ -44,6 +49,11 @@ export const router = createBrowserRouter([
     {
         path: '/chat',
         element: <Suspense fallback={<Loading />}><EmptyChat/></Suspense>,
+    },
+    {
+        path: '/new_chat',
+        element: <Loading />,
+        loader: ()=>new Response("", {status: 302, headers: {Location: `/${randomChatId()}`}})
     },
     {
         path: '/error/:errorCode',

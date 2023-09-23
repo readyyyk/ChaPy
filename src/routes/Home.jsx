@@ -14,13 +14,6 @@ import "./home.css";
 const Home = () => {
     const navigate = useNavigate();
 
-    const letters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    const redirectToNewChat = () => navigate(
-        // 'chat/' +
-        Array(5).fill('').reduce((acc)=>
-            acc+letters[Math.floor(Math.random()*letters.length)], ''),
-    );
-
     const [inputValue, setInputValue] = useState("");
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -44,7 +37,7 @@ const Home = () => {
         >
             <Typography variant="h1"> Home </Typography>
             <Button
-                onClick={redirectToNewChat}
+                onClick={()=>navigate("/new_chat")}
                 variant="outlined"
                 size="large"
             >
