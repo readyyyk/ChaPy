@@ -22,7 +22,7 @@ import {DarkModeContext} from '../../../../hooks/DarkModeContext.js';
 import UserList from './UserList/UserList.jsx';
 
 import icon from '../../../../assets/favicon.ico';
-import {useParams} from "react-router-dom";
+import {useParams} from 'react-router-dom';
 
 const Header = ({setIsShareModalOpen, userList}) => {
     const {chat} = useParams();
@@ -31,12 +31,12 @@ const Header = ({setIsShareModalOpen, userList}) => {
 
     return (
         <AppBar
-            position="fixed"
+            position='fixed'
             elevation={4}
         >
             <Container sx={{width: 'md', p: 0}}>
                 <Toolbar
-                    variant="regular"
+                    variant='regular'
                     sx={{
                         display: 'flex',
                         justifyContent: 'space-between',
@@ -45,15 +45,15 @@ const Header = ({setIsShareModalOpen, userList}) => {
                     }}
                 >
                     <Typography
-                        variant="h5"
+                        variant='h5'
                         sx={{
                             display: 'flex',
                             alignItems: 'center',
                         }}
                     >
                         <Link
-                            variant="h5"
-                            href="/"
+                            variant='h5'
+                            href='/'
                             underline={'hover'}
                             color={'inherit'}
                             sx={{
@@ -62,7 +62,7 @@ const Header = ({setIsShareModalOpen, userList}) => {
                             }}
                         >
                             <Suspense fallback={<CircularProgress size={40}/>}>
-                                <img src={icon} alt="icon" height="40px"/>
+                                <img src={icon} alt='icon' height='40px'/>
                             </Suspense>
                             <span style={{marginLeft: '.5rem'}}>Cha<i>Py</i> - </span>
                         </Link>
@@ -77,7 +77,7 @@ const Header = ({setIsShareModalOpen, userList}) => {
                         <IconButton
                             sx={{ml: 1}}
                             onClick={toggleMode}
-                            color="inherit"
+                            color='inherit'
                         >
                             {theme.palette.mode === 'dark' ?
                                 <Brightness7Icon /> : <Brightness4Icon />}
@@ -85,7 +85,7 @@ const Header = ({setIsShareModalOpen, userList}) => {
                         <IconButton
                             sx={{ml: 1}}
                             onClick={()=>setIsShareModalOpen(true)}
-                            color="inherit"
+                            color='inherit'
                         >
                             <IosShareIcon />
                         </IconButton>
