@@ -29,7 +29,7 @@ const UserMessage = ({isThisUser, sender, text, l, f}) => {
                         src={randImgApi.getLink(
                             import.meta.env.VITE_RANDIMG_API_MODEL, sender,
                         )}
-                        variant="soft"
+                        variant='soft'
                         size={'lg'}
                         sx={{
                             mr: '.5rem',
@@ -59,7 +59,7 @@ const UserMessage = ({isThisUser, sender, text, l, f}) => {
             >
                 <Typography
                     variant={'body1'}
-                    sx={{lineBreak: "anywhere"}}
+                    sx={{lineBreak: 'anywhere'}}
                 >{text}</Typography>
             </Paper>
         </Container>

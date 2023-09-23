@@ -20,7 +20,7 @@ import PropTypes from 'prop-types';
 import SSocketApi from '../../APIs/sSocketAPI.js';
 
 const IntroModal = ({open, setUser, setWsApi, setUserList}) => {
-        const {chat} = useParams();
+    const {chat} = useParams();
     const {chapyApi} = useLoaderData();
 
     // eslint-disable-next-line max-len
@@ -42,7 +42,7 @@ const IntroModal = ({open, setUser, setWsApi, setUserList}) => {
 
         if (res.connected) {
             const parseJWT = (token) => JSON.parse(atob(token.split('.')[1]));
-            const key = parseJWT(res.wsLink.substr(res.wsLink.search("token=")+6))["key"];
+            const key = parseJWT(res.wsLink.substr(res.wsLink.search('token=')+6))['key'];
             const currentNames = await chapyApi.names();
             setUserList(currentNames);
             setUser({
@@ -74,7 +74,7 @@ const IntroModal = ({open, setUser, setWsApi, setUserList}) => {
                     p: 3,
                 }}
             >
-                <Typography variant="h5" mb={1} align={'center'}>
+                <Typography variant='h5' mb={1} align={'center'}>
                     Entering chat #<b>{chat}</b>
                 </Typography>
                 <form
