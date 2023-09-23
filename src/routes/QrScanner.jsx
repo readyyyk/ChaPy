@@ -15,14 +15,15 @@ const QrScanner = () => {
     const [text, setText] = useState('No data found!');
     const [isAbleToConnect, setIsAbleToConnect] = useState('');
 
-    const { ref } = useZxing({
+    const {ref} = useZxing({
         onDecodeResult(result) {
             setText(result.getText());
         },
     });
 
     useEffect(() => {
-        setIsAbleToConnect(/\/[a-zA-Z]{5}$/.test(text) ? /\/[a-zA-Z]{5}$/.exec(text)[0] : false);
+        setIsAbleToConnect(/\/[a-zA-Z]{5}$/.test(text) ?
+            /\/[a-zA-Z]{5}$/.exec(text)[0] : false);
     }, [text]);
 
     return (
@@ -41,7 +42,7 @@ const QrScanner = () => {
         >
             <Header
                 setIsShareModalOpen={()=>false}
-                userList={[""]}
+                userList={['']}
             />
 
             <video ref={ref} style={{
