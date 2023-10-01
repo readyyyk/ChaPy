@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 
 import '../../../../InputStyles.css';
 
 import {
-    Button,
     FormControl,
+    IconButton,
     Modal,
     Paper,
     Stack,
@@ -18,7 +18,7 @@ import FirstPageIcon from '@mui/icons-material/FirstPage';
 import {
     useLoaderData,
     useParams,
-    useNavigate
+    useNavigate,
 } from 'react-router-dom';
 
 import PropTypes from 'prop-types';
@@ -63,9 +63,9 @@ const IntroModal = ({open, setUser, setWsApi, setUserList}) => {
     };
 
     const handleClick = () => {
-        setIsOpen(!isOpen)
-        navigate('/')
-    }
+        setIsOpen(!isOpen);
+        navigate('/');
+    };
 
     return (
         <Modal
@@ -117,9 +117,9 @@ const IntroModal = ({open, setUser, setWsApi, setUserList}) => {
                         </Tooltip>
                     </FormControl>
                     <Stack spacing={{xs: 1, sm: 2}} direction="row" useFlexGap>
-                        <Button variant="contained" color='inherit' onClick={handleClick}>
+                        <IconButton variant="contained" color='inherit' onClick={handleClick}>
                             <FirstPageIcon />
-                        </Button>
+                        </IconButton>
                         <LoadingButton
                             variant={'contained'}
                             color={'success'}
