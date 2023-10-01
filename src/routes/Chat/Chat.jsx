@@ -14,6 +14,7 @@ const ShareModal = lazy(()=>import('./components/Modals/ShareModal.jsx'));
 import ConnectionToast from './components/Toasts/ConnectionToast.jsx';
 
 import {LinearProgress} from '@mui/material';
+import LocalData from './APIs/localData.js';
 
 
 const Chat = () => {
@@ -22,7 +23,14 @@ const Chat = () => {
     document.title = `ChaPy - ${chat}`;
 
     const [msgs, setMsgs] = useState([]);
-    self.addMessage = (text, sender, type='') => setMsgs([...msgs, {
+    /**
+     * global function to add messages to state
+     * @param {string} text - text of message
+     * @param {string} sender - sender of message or "" if u sent this
+     * @param {'server'|'message'} type - type of message
+     * @return {void}
+     * */
+    self.addMessage = (text, sender, type) => setMsgs([...msgs, {
         text: text,
         sender: sender,
         type: type,
@@ -40,14 +48,16 @@ const Chat = () => {
         userList.filter((el)=>el!==name));
 
     const actions = {
-        message: (data) => self.addMessage(data.text, data.sender || user.name),
+        message: (data) => {
+            self.addMessage(data.text, data.sender || user.name, 'message');
+        },
         connection: (data) => {
             if (data.detail === 'connected') {
                 self.addUserToList(data.name);
             } else if (data.detail === 'disconnected') {
                 self.removeUserFromList(data.name);
             }
-            self.addMessage(data.name + ' ' + data.detail, '', 'server');
+            self.addMessage(data.name + ' ' + data.detail, data.name, 'server');
         },
     };
 
@@ -55,6 +65,16 @@ const Chat = () => {
         if (!wsApi) {
             return;
         }
+
+        window.addEventListener('beforeunload', ()=>{
+            new LocalData(chat).save({
+                event: 'connection',
+                data: JSON.stringify({
+                    detail: 'disconnected',
+                    name: user.name,
+                }),
+            });
+        });
 
         wsApi.addDataChecker('connection', ()=> true);
         wsApi.addDataChecker('message', ()=> true);

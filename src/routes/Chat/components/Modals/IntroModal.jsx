@@ -18,10 +18,13 @@ import {
 
 import PropTypes from 'prop-types';
 import SSocketApi from '../../APIs/sSocketAPI.js';
+import LocalData from '../../APIs/localData.js';
 
 const IntroModal = ({open, setUser, setWsApi, setUserList}) => {
     const {chat} = useParams();
     const {chapyApi} = useLoaderData();
+
+    const localData = new LocalData(chat);
 
     // eslint-disable-next-line max-len
     const inputErrorText= 'Name should be unique in chat and can contain less than 30 letters, numbers, or underscores';
@@ -49,7 +52,7 @@ const IntroModal = ({open, setUser, setWsApi, setUserList}) => {
                 connected: true,
                 name: inputValue,
             });
-            setWsApi(new SSocketApi(res.wsLink, key));
+            setWsApi(new SSocketApi(res.wsLink, key, (s)=>localData.save(s)));
         }
         setIsError(!res.connected);
         setIsLoading(false);

@@ -41,7 +41,7 @@ const QrScanner = () => {
             }}
         >
             <Header
-                setIsShareModalOpen={()=>false}
+                setIsShareModalOpen={(_)=>{}}
                 userList={['']}
             />
 

@@ -19,7 +19,7 @@ const ServerMessage = ({text, sender}) => {
             <Chip
                 avatar={
                     <Avatar
-                        alt="Test"
+                        alt={sender}
                         src={randImgApi.getLink(
                             import.meta.env.VITE_RANDIMG_API_MODEL, sender,
                         )}

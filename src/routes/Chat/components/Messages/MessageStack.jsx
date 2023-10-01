@@ -21,8 +21,14 @@ const MessageStack = ({msgs, currentUserName}) => {
                         isThisUser={el.sender===currentUserName}
                         text={el.text}
                         sender={el.sender}
-                        isFirst={i > 0 && el.sender !== msgs[i - 1].sender}
-                        isLast={i===msgs.length-1 || el.sender!==msgs[i + 1].sender}
+                        isFirst={i === 0 || (i > 0 &&
+                            (msgs[i - 1].type === 'server' ||
+                            el.sender !== msgs[i - 1].sender))
+                        }
+                        isLast={i === msgs.length-1 ||
+                            msgs[i + 1].type === 'server' ||
+                            el.sender !== msgs[i + 1].sender
+                        }
                     />
             }
         </div>;

@@ -26,6 +26,7 @@ const UserMessage = ({isThisUser, sender, text, isLast, isFirst}) => {
             { !isThisUser ?
                 isLast ?
                     <Avatar
+                        alt={sender}
                         src={randImgApi.getLink(
                             import.meta.env.VITE_RANDIMG_API_MODEL, sender,
                         )}
