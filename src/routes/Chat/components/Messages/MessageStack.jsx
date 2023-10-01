@@ -21,8 +21,8 @@ const MessageStack = ({msgs, currentUserName}) => {
                         isThisUser={el.sender===currentUserName}
                         text={el.text}
                         sender={el.sender}
-                        l={i===msgs.length-1 || el.sender!==msgs[i + 1].sender}
-                        f={i > 0 && el.sender !== msgs[i - 1].sender}
+                        isFirst={i > 0 && el.sender !== msgs[i - 1].sender}
+                        isLast={i===msgs.length-1 || el.sender!==msgs[i + 1].sender}
                     />
             }
         </div>;

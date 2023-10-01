@@ -3,13 +3,13 @@ import {Avatar, Container, Paper, Typography, useTheme} from '@mui/material';
 import PropTypes from 'prop-types';
 import {useLoaderData} from 'react-router-dom';
 
-const UserMessage = ({isThisUser, sender, text, l, f}) => {
+const UserMessage = ({isThisUser, sender, text, isLast, isFirst}) => {
     const {randImgApi} = useLoaderData();
 
     const theme = useTheme();
     const borderRadiusValue = isThisUser ?
-        `13px ${f?'13px':'2px'} ${l?'13px':'2px'} 13px` :
-        `${f?'13px':'2px'} 13px 13px ${l?'13px':'2px'}`;
+        `13px ${isFirst?'13px':'2px'} ${isLast?'13px':'2px'} 13px` :
+        `${isFirst?'13px':'2px'} 13px 13px ${isLast?'13px':'2px'}`;
     return (
         <Container sx={{
             display: 'flex',
@@ -21,10 +21,10 @@ const UserMessage = ({isThisUser, sender, text, l, f}) => {
                 width: .96,
             },
             p: 0,
-            pb: l?'.5rem':'',
+            pb: isLast ? '.5rem' : '',
         }}>
             { !isThisUser ?
-                l ?
+                isLast ?
                     <Avatar
                         src={randImgApi.getLink(
                             import.meta.env.VITE_RANDIMG_API_MODEL, sender,
@@ -70,8 +70,8 @@ UserMessage.propTypes = {
     isThisUser: PropTypes.bool,
     text: PropTypes.string,
     sender: PropTypes.string,
-    f: PropTypes.bool,
-    l: PropTypes.bool,
+    isFirst: PropTypes.bool,
+    isLast: PropTypes.bool,
 };
 
 export default UserMessage;

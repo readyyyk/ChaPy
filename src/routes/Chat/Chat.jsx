@@ -47,7 +47,7 @@ const Chat = () => {
             } else if (data.detail === 'disconnected') {
                 self.removeUserFromList(data.name);
             }
-            self.addMessage(data.name + ' ' + data.detail, data.name, 'server');
+            self.addMessage(data.name + ' ' + data.detail, '', 'server');
         },
     };
 
