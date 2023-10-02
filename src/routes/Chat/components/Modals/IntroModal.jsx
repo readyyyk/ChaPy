@@ -3,8 +3,8 @@ import React, {useState} from 'react';
 import '../../../../InputStyles.css';
 
 import {
+    Button,
     FormControl,
-    IconButton,
     Modal,
     Paper,
     Stack,
@@ -24,6 +24,13 @@ import {
 import PropTypes from 'prop-types';
 import SSocketApi from '../../APIs/sSocketAPI.js';
 
+/**
+ * @param {boolean} open - is modal open
+ * @param {function} setUser - set new user when needed
+ * @param {function} setWsApi - set ws api instance when needed
+ * @param {function} setUserList  - set user list when fetched
+ * @return {Element}
+ * */
 const IntroModal = ({open, setUser, setWsApi, setUserList}) => {
     const {chat} = useParams();
     const {chapyApi} = useLoaderData();
@@ -34,7 +41,6 @@ const IntroModal = ({open, setUser, setWsApi, setUserList}) => {
 
     const [isLoading, setIsLoading] = useState(false);
     const [isError, setIsError] = useState(false);
-    const [isOpen, setIsOpen] = useState(open);
 
     const [inputValue, setInputValue] = useState('');
 
@@ -49,7 +55,8 @@ const IntroModal = ({open, setUser, setWsApi, setUserList}) => {
 
         if (res.connected) {
             const parseJWT = (token) => JSON.parse(atob(token.split('.')[1]));
-            const key = parseJWT(res.wsLink.substr(res.wsLink.search('token=')+6))['key'];
+            const key = parseJWT(res.wsLink.
+                substring(res.wsLink.search('token=')+6))['key'];
             const currentNames = await chapyApi.names();
             setUserList(currentNames);
             setUser({
@@ -62,14 +69,11 @@ const IntroModal = ({open, setUser, setWsApi, setUserList}) => {
         setIsLoading(false);
     };
 
-    const handleClick = () => {
-        setIsOpen(!isOpen);
-        navigate('/');
-    };
+    const handleClick = () => navigate('/');
 
     return (
         <Modal
-            open={isOpen}
+            open={open}
             sx={{
                 width: 1,
                 height: 1,
@@ -116,14 +120,19 @@ const IntroModal = ({open, setUser, setWsApi, setUserList}) => {
                             />
                         </Tooltip>
                     </FormControl>
-                    <Stack spacing={{xs: 1, sm: 2}} direction="row" useFlexGap>
-                        <IconButton
+                    <Stack spacing={1} direction="row" useFlexGap>
+                        <Button
                             variant={'contained'}
                             color={'inherit'}
                             onClick={handleClick}
+                            sx={{
+                                p: .75,
+                                minWidth: 'unset',
+                                minHeight: 'unset',
+                            }}
                         >
-                            <FirstPageIcon />
-                        </IconButton>
+                            <FirstPageIcon/>
+                        </Button>
                         <LoadingButton
                             variant={'contained'}
                             color={'success'}
