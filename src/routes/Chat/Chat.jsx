@@ -16,50 +16,58 @@ import ConnectionToast from './components/Toasts/ConnectionToast.jsx';
 import {LinearProgress} from '@mui/material';
 import LocalData from './APIs/localData.js';
 
-
 const Chat = () => {
     const navigate = useNavigate();
     const {chat} = useParams();
     document.title = `ChaPy - ${chat}`;
 
+    const [user, setUser] = useState({connected: false, name: ''});
+
+    const actions = {
+        message: (data) => {
+            return {
+                ...data,
+                text: data.text,
+                sender: data.sender || user.name,
+                type: 'message',
+            };
+        },
+        connection: (data) => {
+            return {
+                ...data,
+                text: data.name + ' ' + data.detail,
+                sender: data.name,
+                type: 'server',
+            };
+        },
+    };
+
     const [msgs, setMsgs] = useState([]);
     /**
      * global function to add messages to state
-     * @param {string} text - text of message
-     * @param {string} sender - sender of message or "" if u sent this
-     * @param {'server'|'message'} type - type of message
+     * @param {Array<{
+     *      text: string,
+     *      sender: string,
+     *      type: ('server'|'message'),
+     *      isOld: boolean,
+     * }|
+     * {
+     *      text: string,
+     *      sender: string,
+     *      type: ('server'|'message'),
+     * }>} data
      * @return {void}
      * */
-    self.addMessage = (text, sender, type) => setMsgs([...msgs, {
-        text: text,
-        sender: sender,
-        type: type,
-    }]);
+    self.addMessages = (data) => setMsgs([...msgs, ...data]);
 
     const [isConnectionToastOpen, setIsConnectionToastOpen] = useState(false);
     const [isShareModalOpen, setIsShareModalOpen] = useState(false);
-
-    const [user, setUser] = useState({connected: false, name: ''});
 
     const [wsApi, setWsApi] = useState(null);
     const [userList, setUserList] = useState([]);
     self.addUserToList = (name) => setUserList([...userList, name]);
     self.removeUserFromList = (name) => setUserList(
         userList.filter((el)=>el!==name));
-
-    const actions = {
-        message: (data) => {
-            self.addMessage(data.text, data.sender || user.name, 'message');
-        },
-        connection: (data) => {
-            if (data.detail === 'connected') {
-                self.addUserToList(data.name);
-            } else if (data.detail === 'disconnected') {
-                self.removeUserFromList(data.name);
-            }
-            self.addMessage(data.name + ' ' + data.detail, data.name, 'server');
-        },
-    };
 
     useEffect(()=> {
         if (!wsApi) {
@@ -76,12 +84,25 @@ const Chat = () => {
             });
         });
 
+        const historyMsgs = new LocalData(chat).get().map((el) => {
+            return actions[el.event](JSON.parse(el.data));
+        });
+
+        self.addMessages(historyMsgs);
+
         wsApi.addDataChecker('connection', ()=> true);
         wsApi.addDataChecker('message', ()=> true);
         wsApi.socket.onclose = () => navigate('/error/408');
 
-        wsApi.on('message', actions.message);
-        wsApi.on('connection', actions.connection);
+        wsApi.on('message', (data)=>self.addMessages([actions.message(data)]));
+        wsApi.on('connection', (data)=> {
+            self.addMessages([actions.connection(data)]);
+            if (data.detail === 'connected') {
+                self.addUserToList(data.name);
+            } else if (data.detail === 'disconnected') {
+                self.removeUserFromList(data.name);
+            }
+        });
     }, [wsApi]);
 
     return (

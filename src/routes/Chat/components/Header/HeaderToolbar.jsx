@@ -108,8 +108,7 @@ const HeaderToolbar = ({setIsShareModalOpen}) => {
 
                 {/* Share old messages button */}
                 {
-                    // !!! REMOVE ON REALISE
-                    false && chat ?
+                    chat ?
                         <IconButton
                             sx={{ml: 1}}
                             onClick={() => handleShare()}

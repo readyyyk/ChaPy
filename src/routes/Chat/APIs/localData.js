@@ -27,14 +27,18 @@ export default class LocalData {
         }
         currentData.push({
             time: new Date().getTime(),
-            ...data,
+            event: data.event,
+            data: JSON.stringify({
+                ...JSON.parse(data.data),
+                isOld: true,
+            }),
         });
         localStorage.setItem(this.chatId, JSON.stringify(currentData));
     }
 
     /**
      * Returns array of raw messages saved for this chat
-     * @return {[{text: string, sender:(string), type:('message'|'server')}]}
+     * @return {[{event: string, data: string}]}
      * */
     get() {
         const currentDataJSON = localStorage.getItem(this.chatId);

@@ -52,7 +52,14 @@ const IntroModal = ({open, setUser, setWsApi, setUserList}) => {
                 connected: true,
                 name: inputValue,
             });
-            setWsApi(new SSocketApi(res.wsLink, key, (s)=>localData.save(s)));
+            setWsApi(new SSocketApi(res.wsLink, key, (data)=> {
+                const currentData = JSON.parse(data.data);
+                if (!('sender' in currentData)) {
+                    currentData.sender = inputValue;
+                }
+                data.data = JSON.stringify(currentData);
+                localData.save(data);
+            }));
         }
         setIsError(!res.connected);
         setIsLoading(false);

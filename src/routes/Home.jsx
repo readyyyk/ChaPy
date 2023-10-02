@@ -15,6 +15,8 @@ import QrCodeScannerIcon from '@mui/icons-material/QrCodeScanner';
 import './home.css';
 
 const Home = () => {
+    document.title = `ChaPy`;
+
     const navigate = useNavigate();
 
     const [inputValue, setInputValue] = useState('');
@@ -52,7 +54,7 @@ const Home = () => {
                 Install app
                 <DownloadingIcon sx={{ml: .5}}/>
             </Button>
-            <Typography variant='h1'> Home </Typography>
+            <Typography variant='h1'> ChaPy </Typography>
             <Button
                 onClick={()=>navigate('/new_chat')}
                 variant='outlined'
