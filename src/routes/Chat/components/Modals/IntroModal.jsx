@@ -4,16 +4,21 @@ import '../../../../InputStyles.css';
 
 import {
     FormControl,
+    IconButton,
     Modal,
     Paper,
+    Stack,
     TextField, Tooltip,
     Typography,
 } from '@mui/material';
 import LoadingButton from '@mui/lab/LoadingButton';
 
+import FirstPageIcon from '@mui/icons-material/FirstPage';
+
 import {
     useLoaderData,
     useParams,
+    useNavigate,
 } from 'react-router-dom';
 
 import PropTypes from 'prop-types';
@@ -22,12 +27,14 @@ import SSocketApi from '../../APIs/sSocketAPI.js';
 const IntroModal = ({open, setUser, setWsApi, setUserList}) => {
     const {chat} = useParams();
     const {chapyApi} = useLoaderData();
+    const navigate = useNavigate();
 
     // eslint-disable-next-line max-len
     const inputErrorText= 'Name should be unique in chat and can contain less than 30 letters, numbers, or underscores';
 
     const [isLoading, setIsLoading] = useState(false);
     const [isError, setIsError] = useState(false);
+    const [isOpen, setIsOpen] = useState(open);
 
     const [inputValue, setInputValue] = useState('');
 
@@ -55,9 +62,14 @@ const IntroModal = ({open, setUser, setWsApi, setUserList}) => {
         setIsLoading(false);
     };
 
+    const handleClick = () => {
+        setIsOpen(!isOpen);
+        navigate('/');
+    };
+
     return (
         <Modal
-            open={open}
+            open={isOpen}
             sx={{
                 width: 1,
                 height: 1,
@@ -104,15 +116,25 @@ const IntroModal = ({open, setUser, setWsApi, setUserList}) => {
                             />
                         </Tooltip>
                     </FormControl>
-                    <LoadingButton
-                        variant={'contained'}
-                        color={'success'}
-                        type={'submit'}
-                        loading={isLoading}
-                        disabled={inputValue.length<3}
-                    >
-                        Enter
-                    </LoadingButton>
+                    <Stack spacing={{xs: 1, sm: 2}} direction="row" useFlexGap>
+                        <IconButton
+                            variant={'contained'}
+                            color={'inherit'}
+                            onClick={handleClick}
+                        >
+                            <FirstPageIcon />
+                        </IconButton>
+                        <LoadingButton
+                            variant={'contained'}
+                            color={'success'}
+                            type={'submit'}
+                            loading={isLoading}
+                            disabled={inputValue.length < 3}
+                            fullWidth
+                        >
+                            Enter
+                        </LoadingButton>
+                    </Stack>
                 </form>
             </Paper>
         </Modal>
