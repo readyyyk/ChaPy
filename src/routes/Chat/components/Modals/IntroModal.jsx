@@ -117,7 +117,11 @@ const IntroModal = ({open, setUser, setWsApi, setUserList}) => {
                         </Tooltip>
                     </FormControl>
                     <Stack spacing={{xs: 1, sm: 2}} direction="row" useFlexGap>
-                        <IconButton variant="contained" color='inherit' onClick={handleClick}>
+                        <IconButton
+                            variant={'contained'}
+                            color={'inherit'}
+                            onClick={handleClick}
+                        >
                             <FirstPageIcon />
                         </IconButton>
                         <LoadingButton
