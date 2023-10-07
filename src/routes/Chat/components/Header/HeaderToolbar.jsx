@@ -25,7 +25,7 @@ import {DarkModeContext} from '../../../../hooks/DarkModeContext.js';
 import LocalData from '../../APIs/localData.js';
 
 
-const HeaderToolbar = ({setIsShareModalOpen}) => {
+const HeaderToolbar = ({setIsShareModalOpen, wsApi}) => {
     const {chat} = useParams();
     const theme = useTheme();
     const {toggleMode} = useContext(DarkModeContext);
@@ -36,7 +36,7 @@ const HeaderToolbar = ({setIsShareModalOpen}) => {
         const localData = new LocalData(chat);
 
         handleShare = () => {
-            console.log(localData.get());
+            wsApi.emit('history', localData.get());
         };
     }
 
@@ -123,6 +123,7 @@ const HeaderToolbar = ({setIsShareModalOpen}) => {
 };
 
 HeaderToolbar.propTypes = {
+    wsApi: PropTypes.object,
     setIsShareModalOpen: PropTypes.func,
 };
 

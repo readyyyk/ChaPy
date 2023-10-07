@@ -53,6 +53,9 @@ const IntroModal = ({open, setUser, setWsApi, setUserList}) => {
                 name: inputValue,
             });
             setWsApi(new SSocketApi(res.wsLink, key, (data)=> {
+                if (data.event==='history') {
+                    return;
+                }
                 const currentData = JSON.parse(data.data);
                 if (!('sender' in currentData)) {
                     currentData.sender = inputValue;

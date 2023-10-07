@@ -18,8 +18,8 @@ const MessageStack = ({msgs, currentUserName}) => {
             (msgs[i - 1].type === 'server' ||
             el.sender !== msgs[i - 1].sender));
         const isLast= i === msgs.length-1 ||
-            msgs[i + 1].type === 'server' ||
-            el.sender !== msgs[i + 1].sender;
+            (msgs[i + 1].type === 'server' ||
+            el.sender !== msgs[i + 1].sender);
         let element = el.type === 'server' ?
             <ServerMessage
                 text={el.text}

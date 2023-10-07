@@ -43,6 +43,7 @@ const QrScanner = () => {
             <Header
                 setIsShareModalOpen={(_)=>{}}
                 userList={['']}
+                wsApi={{}}
             />
 
             <video ref={ref} style={{

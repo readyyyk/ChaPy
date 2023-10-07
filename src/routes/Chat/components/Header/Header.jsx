@@ -11,7 +11,7 @@ import UserList from './UserList/UserList.jsx';
 import HeaderToolbar from './HeaderToolbar.jsx';
 
 
-const Header = ({setIsShareModalOpen, userList}) => {
+const Header = ({setIsShareModalOpen, userList, wsApi}) => {
     const {chat} = useParams();
 
     return (
@@ -20,7 +20,10 @@ const Header = ({setIsShareModalOpen, userList}) => {
             elevation={4}
         >
             <Container sx={{width: 'md', p: 0}}>
-                <HeaderToolbar setIsShareModalOpen={setIsShareModalOpen}/>
+                <HeaderToolbar
+                    setIsShareModalOpen={setIsShareModalOpen}
+                    wsApi={wsApi}
+                />
             </Container>
             {
                 chat ?
@@ -31,6 +34,7 @@ const Header = ({setIsShareModalOpen, userList}) => {
 };
 
 Header.propTypes = {
+    wsApi: PropTypes.object,
     setIsShareModalOpen: PropTypes.func,
     userList: PropTypes.arrayOf(PropTypes.string),
 };

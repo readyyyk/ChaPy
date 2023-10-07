@@ -59,6 +59,37 @@ const Chat = () => {
      * @return {void}
      * */
     self.addMessages = (data) => setMsgs([...msgs, ...data]);
+    /**
+     * global function to add OLD messages to state
+     * @param {{name: string, data: {id: {event: string, data: string}}}} [data]
+     * @return {void}
+     * */
+    self.addOldMessages = (data) => {
+        const histCurrent = new LocalData(chat).get();
+        const histMerged = {
+            ...data?.data,
+            ...histCurrent,
+        };
+        let histMsgsList = [];
+
+        // eslint-disable-next-line max-len
+        const uuidRegex = /^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}$/;
+        const unixRegex = /^_[0-9]{13}$/;
+        for (const key in histMerged) {
+            if (!uuidRegex.test(key) && !unixRegex.test(key)) {
+                continue;
+            }
+            const el = histMerged[key];
+            histMsgsList.push(el);
+        }
+        histMsgsList = histMsgsList.sort((a, b) => a.time - b.time);
+        histMsgsList = histMsgsList.map((el)=> {
+            const parsed = JSON.parse(el.data);
+            return actions[el.event](parsed);
+        });
+        const onlyNew = msgs.filter((el)=>!el.isOld);
+        setMsgs([...histMsgsList, ...onlyNew]);
+    };
 
     const [isConnectionToastOpen, setIsConnectionToastOpen] = useState(false);
     const [isShareModalOpen, setIsShareModalOpen] = useState(false);
@@ -84,16 +115,17 @@ const Chat = () => {
             });
         });
 
-        const historyMsgs = new LocalData(chat).get().map((el) => {
-            return actions[el.event](JSON.parse(el.data));
-        });
-
-        self.addMessages(historyMsgs);
+        self.addOldMessages();// Messages(historyMsgs);
 
         wsApi.addDataChecker('connection', ()=> true);
         wsApi.addDataChecker('message', ()=> true);
+        wsApi.addDataChecker('history', ()=> true);
         wsApi.socket.onclose = () => navigate('/error/408');
 
+        wsApi.on('history', (data)=> {
+            console.log(data);
+            self.addOldMessages(data);
+        });
         wsApi.on('message', (data)=>self.addMessages([actions.message(data)]));
         wsApi.on('connection', (data)=> {
             self.addMessages([actions.connection(data)]);
@@ -110,6 +142,7 @@ const Chat = () => {
             <Header
                 setIsShareModalOpen={setIsShareModalOpen}
                 userList={userList}
+                wsApi={wsApi}
             />
             {
                 user.connected &&

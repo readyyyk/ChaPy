@@ -20,28 +20,32 @@ export default class LocalData {
      * */
     save(data) {
         const currentDataJSON = localStorage.getItem(this.chatId.toString());
-        const currentData = currentDataJSON === null ? [] : JSON.parse(currentDataJSON);
+        const currentData = currentDataJSON === null ? {} : JSON.parse(currentDataJSON);
         const maxLength = Number(localStorage.getItem("LD-MAXLEN-PER-CHAT")) || Infinity;
         while(currentData.length >= maxLength){
             currentData.shift();
         }
-        currentData.push({
+
+        const parsedData = JSON.parse(data.data);
+        const id = parsedData.id || "_"+new Date().getTime();
+
+        currentData[id] = {
             time: new Date().getTime(),
             event: data.event,
             data: JSON.stringify({
-                ...JSON.parse(data.data),
+                ...parsedData,
                 isOld: true,
             }),
-        });
+        };
         localStorage.setItem(this.chatId, JSON.stringify(currentData));
     }
 
     /**
-     * Returns array of raw messages saved for this chat
-     * @return {[{event: string, data: string}]}
+     * Returns object of raw messages saved for this chat
+     * @return {{[id]: {event: string, data: string}}} - {id->data} pairs
      * */
     get() {
         const currentDataJSON = localStorage.getItem(this.chatId);
-        return currentDataJSON === null ? [] : JSON.parse(currentDataJSON);
+        return currentDataJSON === null ? {} : JSON.parse(currentDataJSON);
     }
 }
