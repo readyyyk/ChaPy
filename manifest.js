@@ -4,17 +4,17 @@ export default {
         'short_name': 'ChaPy',
         'icons': [
             {
-                'src': '/chapy512.png',
+                'src': '/chapy512-beta.png',
                 'sizes': '512x512',
                 'type': 'image/png',
             },
             {
-                'src': '/chapy192.png',
+                'src': '/chapy192-beta.png',
                 'type': 'image/png',
                 'sizes': '192x192',
             },
             {
-                'src': '/favicon.ico',
+                'src': '/favicon-beta.ico',
                 'type': 'image/x-icon',
                 'sizes': '16x16',
             },

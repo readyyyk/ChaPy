@@ -15,7 +15,7 @@ import QrCodeScannerIcon from '@mui/icons-material/QrCodeScanner';
 import './home.css';
 
 const Home = () => {
-    document.title = `ChaPy`;
+    document.title = `B-ChaPy`;
 
     const navigate = useNavigate();
 

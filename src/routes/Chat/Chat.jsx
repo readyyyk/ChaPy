@@ -19,7 +19,7 @@ import LocalData from './APIs/localData.js';
 const Chat = () => {
     const navigate = useNavigate();
     const {chat} = useParams();
-    document.title = `ChaPy - ${chat}`;
+    document.title = `B-ChaPy - ${chat}`;
 
     const [user, setUser] = useState({connected: false, name: ''});
 
@@ -115,7 +115,7 @@ const Chat = () => {
             });
         });
 
-        self.addOldMessages();// Messages(historyMsgs);
+        self.addOldMessages();
 
         wsApi.addDataChecker('connection', ()=> true);
         wsApi.addDataChecker('message', ()=> true);
