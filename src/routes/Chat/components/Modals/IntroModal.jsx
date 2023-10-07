@@ -3,26 +3,39 @@ import React, {useState} from 'react';
 import '../../../../InputStyles.css';
 
 import {
+    Button,
     FormControl,
     Modal,
     Paper,
+    Stack,
     TextField, Tooltip,
     Typography,
 } from '@mui/material';
 import LoadingButton from '@mui/lab/LoadingButton';
 
+import FirstPageIcon from '@mui/icons-material/FirstPage';
+
 import {
     useLoaderData,
     useParams,
+    useNavigate,
 } from 'react-router-dom';
 
 import PropTypes from 'prop-types';
 import SSocketApi from '../../APIs/sSocketAPI.js';
 import LocalData from '../../APIs/localData.js';
 
+/**
+ * @param {boolean} open - is modal open
+ * @param {function} setUser - set new user when needed
+ * @param {function} setWsApi - set ws api instance when needed
+ * @param {function} setUserList  - set user list when fetched
+ * @return {Element}
+ * */
 const IntroModal = ({open, setUser, setWsApi, setUserList}) => {
     const {chat} = useParams();
     const {chapyApi} = useLoaderData();
+    const navigate = useNavigate();
 
     const localData = new LocalData(chat);
 
@@ -45,7 +58,8 @@ const IntroModal = ({open, setUser, setWsApi, setUserList}) => {
 
         if (res.connected) {
             const parseJWT = (token) => JSON.parse(atob(token.split('.')[1]));
-            const key = parseJWT(res.wsLink.substr(res.wsLink.search('token=')+6))['key'];
+            const key = parseJWT(res.wsLink.
+                substring(res.wsLink.search('token=')+6))['key'];
             const currentNames = await chapyApi.names();
             setUserList(currentNames);
             setUser({
@@ -67,6 +81,8 @@ const IntroModal = ({open, setUser, setWsApi, setUserList}) => {
         setIsError(!res.connected);
         setIsLoading(false);
     };
+
+    const handleClick = () => navigate('/');
 
     return (
         <Modal
@@ -117,15 +133,30 @@ const IntroModal = ({open, setUser, setWsApi, setUserList}) => {
                             />
                         </Tooltip>
                     </FormControl>
-                    <LoadingButton
-                        variant={'contained'}
-                        color={'success'}
-                        type={'submit'}
-                        loading={isLoading}
-                        disabled={inputValue.length<3}
-                    >
-                        Enter
-                    </LoadingButton>
+                    <Stack spacing={1} direction="row" useFlexGap>
+                        <Button
+                            variant={'contained'}
+                            color={'inherit'}
+                            onClick={handleClick}
+                            sx={{
+                                p: .75,
+                                minWidth: 'unset',
+                                minHeight: 'unset',
+                            }}
+                        >
+                            <FirstPageIcon/>
+                        </Button>
+                        <LoadingButton
+                            variant={'contained'}
+                            color={'success'}
+                            type={'submit'}
+                            loading={isLoading}
+                            disabled={inputValue.length < 3}
+                            fullWidth
+                        >
+                            Enter
+                        </LoadingButton>
+                    </Stack>
                 </form>
             </Paper>
         </Modal>
