@@ -20,10 +20,14 @@ export default class ChapyAPI {
     }
 
     async connect(name) {
-        const res = await fetch(this.baseUrl+this.room+'/connect?name='+name).then(a=>a.json())
+        const reqUrl = new URL(this.baseUrl+this.room+'/connect');
+        reqUrl.searchParams.append('name', name);
+        reqUrl.searchParams.append('nonce', String(new Date().getTime()));
+
+        const res = await fetch(reqUrl).then(a=>a.json());
         if ("message" in res)
-            return {connected: false, message: res["message"]}
-        return {connected: true, wsLink: res["wsLink"]}
+            return {connected: false, message: res["message"]};
+        return {connected: true, wsLink: res["wsLink"]};
     }
 
     async names() {

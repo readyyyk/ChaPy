@@ -120,7 +120,10 @@ const Chat = () => {
         wsApi.addDataChecker('connection', ()=> true);
         wsApi.addDataChecker('message', ()=> true);
         wsApi.addDataChecker('history', ()=> true);
-        wsApi.socket.onclose = () => navigate('/error/408');
+        wsApi.socket.onclose = (e) => {
+            console.log(e);
+            navigate('/error/408');
+        };
 
         wsApi.on('history', (data)=> {
             console.log(data);
