@@ -15,6 +15,7 @@ import Loading from './Loading.jsx';
 
 import ChapyAPI from './routes/Chat/APIs/chapyAPI.js';
 import RandImgApi from 'randimg';
+import Settings from './routes/Settings/Settings.jsx';
 
 const letters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
 const randomChatId = () =>
@@ -54,6 +55,10 @@ export const router = createBrowserRouter([
     {
         path: '/scanner',
         element: <Suspense fallback={<Loading />}><QrScanner/></Suspense>,
+    },
+    {
+        path: '/settings',
+        element: <Suspense fallback={<Loading />}><Settings/></Suspense>,
     },
     {
         path: '/new_chat',

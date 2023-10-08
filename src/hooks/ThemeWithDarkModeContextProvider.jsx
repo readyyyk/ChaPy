@@ -17,21 +17,21 @@ import {DarkModeContext} from './DarkModeContext.js';
 const ThemeWithDarkModeContextProvider = ({children}) => {
     const [isDarkMode, setIsDarkMode] = useState(true);
     const toggleMode = () => {
-        localStorage.setItem('theme', isDarkMode?'light':'dark');
+        localStorage.setItem('_theme', isDarkMode?'light':'dark');
         setIsDarkMode(!isDarkMode);
     };
 
     // const isPreferDark = useMediaQuery('(prefers-color-scheme: dark)');
     useEffect(()=>{
-        const currentIsDarkMode = localStorage.getItem('theme');
+        const currentIsDarkMode = localStorage.getItem('_theme');
         if (!currentIsDarkMode) {
             localStorage.setItem(
-                'theme',
+                '_theme',
                 'dark', // true ? 'dark' : 'light'
             );
             return;
         }
-        setIsDarkMode(localStorage.getItem('theme')==='dark');
+        setIsDarkMode(localStorage.getItem('_theme')==='dark');
     }, []);
 
     const theme = useMemo(
