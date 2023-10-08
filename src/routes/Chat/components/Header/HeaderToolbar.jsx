@@ -11,7 +11,7 @@ import {
     useTheme,
 } from '@mui/material';
 
-import icon from '../../../../assets/favicon.ico';
+import icon from '../../../../../public/favicon-beta.ico';
 import IosShareIcon from '@mui/icons-material/IosShare';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
