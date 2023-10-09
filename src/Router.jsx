@@ -5,6 +5,7 @@ import React, {
 
 import {createBrowserRouter} from 'react-router-dom';
 
+import App from './App.jsx';
 import Home from './routes/Home.jsx';
 import Error from './routes/Error.jsx';
 const Chat = lazy(()=>import('./routes/Chat/Chat.jsx'));
@@ -46,39 +47,45 @@ const chatLoader = ({params})=>{
 export const router = createBrowserRouter([
     {
         path: '/',
-        element: <Home />,
-    },
-    {
-        path: '/chat',
-        element: <Suspense fallback={<Loading />}><EmptyChat/></Suspense>,
-    },
-    {
-        path: '/scanner',
-        element: <Suspense fallback={<Loading />}><QrScanner/></Suspense>,
-    },
-    {
-        path: '/settings',
-        element: <Suspense fallback={<Loading />}><Settings/></Suspense>,
-    },
-    {
-        path: '/new_chat',
-        element: <Loading />,
-        loader: ()=>new Response('',
-            {status: 302, headers: {Location: '/'+randomChatId()}}),
-    },
-    {
-        path: '/error/:errorCode',
-        element: <Error/>,
-        errorElement: <Error routerError/>,
-    },
-    {
-        path: '/:chat',
-        element: <Suspense fallback={<Loading />}><Chat /></Suspense>,
-        loader: chatLoader,
-        errorElement: <Error routerError/>,
-    },
-    {
-        path: '/*',
-        element: <Error manualError={404}/>,
+        element: <App />,
+        children: [
+            {
+                path: '/',
+                element: <Home />,
+            },
+            {
+                path: 'chat',
+                element: <Suspense fallback={<Loading />}><EmptyChat/></Suspense>,
+            },
+            {
+                path: 'scanner',
+                element: <Suspense fallback={<Loading />}><QrScanner/></Suspense>,
+            },
+            {
+                path: 'settings',
+                element: <Suspense fallback={<Loading />}><Settings/></Suspense>,
+            },
+            {
+                path: 'new_chat',
+                element: <Loading />,
+                loader: ()=>new Response('',
+                    {status: 302, headers: {Location: '/'+randomChatId()}}),
+            },
+            {
+                path: 'error/:errorCode',
+                element: <Error/>,
+                errorElement: <Error routerError/>,
+            },
+            {
+                path: ':chat',
+                element: <Suspense fallback={<Loading />}><Chat /></Suspense>,
+                loader: chatLoader,
+                errorElement: <Error routerError/>,
+            },
+            {
+                path: '*',
+                element: <Error manualError={404}/>,
+            },
+        ],
     },
 ]);

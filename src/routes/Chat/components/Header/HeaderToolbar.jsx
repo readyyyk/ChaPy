@@ -17,7 +17,10 @@ import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
 import ScheduleSendIcon from '@mui/icons-material/ScheduleSend';
 
-import {useParams} from 'react-router-dom';
+import {
+    useParams,
+    Link as RouterLink,
+} from 'react-router-dom';
 
 import PropTypes from 'prop-types';
 
@@ -58,21 +61,23 @@ const HeaderToolbar = ({setIsShareModalOpen, wsApi}) => {
                     alignItems: 'center',
                 }}
             >
-                <Link
-                    variant='h5'
-                    href='/'
-                    underline={'hover'}
-                    color={'inherit'}
-                    sx={{
-                        display: 'flex',
-                        alignItems: 'center',
-                    }}
-                >
-                    <Suspense fallback={<CircularProgress size={40}/>}>
-                        <img src={icon} alt='icon' height='40px'/>
-                    </Suspense>
-                    <span style={{marginLeft: '.5rem'}}>Cha<i>Py</i></span>
-                </Link>
+                <RouterLink to={'/'} style={{textDecoration: 'none'}}>
+                    <Link
+                        component={'div'}
+                        variant='h5'
+                        underline={'hover'}
+                        color={'text.primary'}
+                        sx={{
+                            display: 'flex',
+                            alignItems: 'center',
+                        }}
+                    >
+                        <Suspense fallback={<CircularProgress size={40}/>}>
+                            <img src={icon} alt='icon' height='40px'/>
+                        </Suspense>
+                        <span style={{marginLeft: '.5rem'}}>Cha<i>Py</i></span>
+                    </Link>
+                </RouterLink>
                 {
                     chat ?
                         <span style={{

@@ -5,7 +5,10 @@ import React, {
     useState,
 } from 'react';
 
-import {useNavigate, useParams} from 'react-router-dom';
+import {
+    useNavigate,
+    useParams,
+} from 'react-router-dom';
 
 import Header from './components/Header/Header.jsx';
 import MessageContainer from './components/Messages/MessageContainer.jsx';
@@ -105,23 +108,15 @@ const Chat = () => {
             return;
         }
 
-        window.addEventListener('beforeunload', ()=>{
-            new LocalData(chat).save({
-                event: 'connection',
-                data: JSON.stringify({
-                    detail: 'disconnected',
-                    name: user.name,
-                }),
-            });
-        });
-
         self.addOldMessages();
 
         wsApi.addDataChecker('connection', ()=> true);
         wsApi.addDataChecker('message', ()=> true);
         wsApi.addDataChecker('history', ()=> true);
         wsApi.socket.onclose = (e) => {
-            console.log(e);
+            if (e.code===1000) {
+                return;
+            }
             navigate('/error/408');
         };
 
@@ -138,6 +133,16 @@ const Chat = () => {
                 self.removeUserFromList(data.name);
             }
         });
+        return () => {
+            new LocalData(chat).save({
+                event: 'connection',
+                data: JSON.stringify({
+                    detail: 'disconnected',
+                    name: user.name,
+                }),
+            });
+            wsApi.socket.close(1000);
+        };
     }, [wsApi]);
 
     return (

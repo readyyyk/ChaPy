@@ -1,20 +1,17 @@
 import React from 'react';
 
 import './ScrollStyles.css';
-
-import {RouterProvider} from 'react-router-dom';
-
-import {router} from './Router.jsx';
 import ThemeWithDarkModeContextProvider
     from './hooks/ThemeWithDarkModeContextProvider.jsx';
 
 import './selection.css';
+import {Outlet} from 'react-router-dom';
 
 
 const App = () => {
     return (
         <ThemeWithDarkModeContextProvider>
-            <RouterProvider router={router} />
+            <Outlet />
         </ThemeWithDarkModeContextProvider>
     );
 };
