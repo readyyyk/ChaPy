@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from 'react';
+import {useNavigate} from 'react-router-dom';
 import {
     IconButton,
     Paper,
@@ -18,6 +19,7 @@ import LocalData from '../Chat/APIs/localData.js';
 
 const linked = {};
 const HistoryList = () => {
+    const navigate = useNavigate();
     const [rows, setRows] = useState([]);
     useEffect(() => {
         linked.rows = rows;
@@ -35,9 +37,6 @@ const HistoryList = () => {
                     action: (
                         <IconButton onClick={() => {
                             delete localStorage[chatId];
-                            console.log(linked.rows, rows,
-                                linked.rows.filter((el)=>el.id!==chatId));
-                            debugger;
                             setRows(linked.rows.filter((el)=>el.id!==chatId));
                         }}>
                             <DeleteSweepIcon size={'large'} />
@@ -70,7 +69,7 @@ const HistoryList = () => {
                                 component='th'
                                 scope='row'
                             >
-                                <Button onClick={()=>navigate(row.id)}>
+                                <Button onClick={()=>navigate('/'+row.id)}>
                                     <Typography sx={{
                                         fontFamily: 'Monospace',
                                         textTransform: 'none',
