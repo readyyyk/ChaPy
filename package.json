@@ -7,7 +7,8 @@
     "dev": "vite --host 0.0.0.0",
     "build": "vite build",
     "lint": "eslint src -c .eslintrc.cjs --ext js,jsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "predeploy": "vite build && npx netlify deploy"
   },
   "dependencies": {
     "@emotion/styled": "^11.11.0",
