@@ -133,6 +133,19 @@ const Chat = () => {
                 self.removeUserFromList(data.name);
             }
         });
+        window.onbeforeunload = ()=> {
+            debugger;
+            if (!/^\/[a-zA-Z]{5}$/.test(location.pathname)) {
+                return;
+            }
+            new LocalData(chat).save({
+                event: 'connection',
+                data: JSON.stringify({
+                    detail: 'disconnected',
+                    name: user.name,
+                }),
+            });
+        };
         return () => {
             new LocalData(chat).save({
                 event: 'connection',
