@@ -24,7 +24,7 @@ const Chat = () => {
     const {chat} = useParams();
     document.title = `B-ChaPy - ${chat}`;
 
-    const [user, setUser] = useState({connected: false, name: ''});
+    const [user, setUser] = useState({connected: false, name: '', connTime: -1});
 
     const actions = {
         message: (data) => {
@@ -68,6 +68,10 @@ const Chat = () => {
      * @return {void}
      * */
     self.addOldMessages = (data) => {
+        // eslint-disable-next-line max-len
+        const uuidRegex = /^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}$/;
+        const unixRegex = /^[0-9]{13}_$/;
+
         const histCurrent = new LocalData(chat).get();
         const histMerged = {
             ...data?.data,
@@ -75,11 +79,11 @@ const Chat = () => {
         };
         let histMsgsList = [];
 
-        // eslint-disable-next-line max-len
-        const uuidRegex = /^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}$/;
-        const unixRegex = /^_[0-9]{13}$/;
         for (const key in histMerged) {
             if (!uuidRegex.test(key) && !unixRegex.test(key)) {
+                continue;
+            }
+            if (histMerged[key].time >= user.connTime) {
                 continue;
             }
             const el = histMerged[key];
@@ -89,6 +93,17 @@ const Chat = () => {
         histMsgsList = histMsgsList.map((el)=> {
             const parsed = JSON.parse(el.data);
             return actions[el.event](parsed);
+        });
+        histMsgsList.forEach((el, i) => {
+            if (unixRegex.test(el.id) && i > 0) {
+                const compareKeys = Object.keys(el).filter((el)=>el!=='id');
+                for (const compareKey of compareKeys) {
+                    if (el[compareKey] !== histMsgsList[i-1][compareKey]) {
+                        return;
+                    }
+                }
+                histMsgsList.splice(i, 1);
+            }
         });
         const onlyNew = msgs.filter((el)=>!el.isOld);
         setMsgs([...histMsgsList, ...onlyNew]);
@@ -134,7 +149,6 @@ const Chat = () => {
             }
         });
         window.onbeforeunload = ()=> {
-            debugger;
             if (!/^\/[a-zA-Z]{5}$/.test(location.pathname)) {
                 return;
             }

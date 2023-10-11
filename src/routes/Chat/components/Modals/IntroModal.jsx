@@ -65,6 +65,7 @@ const IntroModal = ({open, setUser, setWsApi, setUserList}) => {
             setUser({
                 connected: true,
                 name: inputValue,
+                connTime: new Date().getTime(),
             });
             setWsApi(new SSocketApi(res.wsLink, key, (data)=> {
                 if (data.event==='history') {

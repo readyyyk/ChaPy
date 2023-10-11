@@ -31,7 +31,6 @@ export default class SSocketApi {
         this.socketHandler = (eventFetched) => {
             // add secure layer
             let encrypted = JSON.parse(eventFetched.data)
-            console.log(encrypted)
             let encryptedDataBase64 = encrypted["data"];
             let iv = Base64.parse(encrypted["iv"]);
             let decrypted = AES.decrypt(encryptedDataBase64, this.#getKey(), {iv: iv}).toString(Utf8);

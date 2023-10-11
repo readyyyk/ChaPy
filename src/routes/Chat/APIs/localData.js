@@ -27,7 +27,7 @@ export default class LocalData {
         }
 
         const parsedData = JSON.parse(data.data);
-        const id = parsedData.id || "_"+new Date().getTime();
+        const id = parsedData.id || new Date().getTime()+"_";
 
         currentData[id] = {
             time: new Date().getTime(),
@@ -35,6 +35,7 @@ export default class LocalData {
             data: JSON.stringify({
                 ...parsedData,
                 isOld: true,
+                id: id,
             }),
         };
         localStorage.setItem(this.chatId, JSON.stringify(currentData));
