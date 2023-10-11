@@ -61,7 +61,7 @@ const Chat = () => {
      * }>} data
      * @return {void}
      * */
-    self.addMessages = (data) => setMsgs([...msgs, ...data]);
+    const addMessages = (data) => setMsgs((prev) => [...prev, ...data]);
     /**
      * global function to add OLD messages to state
      * @param {{name: string, data: {id: {event: string, data: string}}}} [data]
@@ -94,19 +94,23 @@ const Chat = () => {
             const parsed = JSON.parse(el.data);
             return actions[el.event](parsed);
         });
-        histMsgsList.forEach((el, i) => {
-            if (unixRegex.test(el.id) && i > 0) {
-                const compareKeys = Object.keys(el).filter((el)=>el!=='id');
-                for (const compareKey of compareKeys) {
-                    if (el[compareKey] !== histMsgsList[i-1][compareKey]) {
-                        return;
+        setMsgs((prev)=> {
+            const result = [...histMsgsList, ...prev.filter((el)=>!el.isOld)];
+            result.forEach((el, i) => {
+                if (unixRegex.test(el.id) && i < result.length-1 &&
+                    el?.detail === result[i+1]?.detail) {
+                    const compareKeys = Object.keys(el).filter((el)=>el!=='id');
+                    for (const compareKey of compareKeys) {
+                        if (el[compareKey] !== result[i+1][compareKey]) {
+                            return;
+                        }
                     }
+                    result.splice(i, 1);
                 }
-                histMsgsList.splice(i, 1);
-            }
-        });
-        const onlyNew = msgs.filter((el)=>!el.isOld);
-        setMsgs([...histMsgsList, ...onlyNew]);
+            });
+            return result;
+        },
+        );
     };
 
     const [isConnectionToastOpen, setIsConnectionToastOpen] = useState(false);
@@ -139,9 +143,9 @@ const Chat = () => {
             console.log(data);
             self.addOldMessages(data);
         });
-        wsApi.on('message', (data)=>self.addMessages([actions.message(data)]));
+        wsApi.on('message', (data)=>addMessages([actions.message(data)]));
         wsApi.on('connection', (data)=> {
-            self.addMessages([actions.connection(data)]);
+            addMessages([actions.connection(data)]);
             if (data.detail === 'connected') {
                 self.addUserToList(data.name);
             } else if (data.detail === 'disconnected') {
