@@ -73,19 +73,20 @@ const QrScanner = () => {
             }} />
 
             <Stack useFlexGap gap={'2rem'}>
-                <div>
-                    <Typography>{text}</Typography>
+                <Stack alignItems={'center'}>
+                    <Typography align={'center'}>{text}</Typography>
                     <Button
                         onClick={()=>navigate(isAbleToConnect)}
                         variant='outlined'
                         size='large'
                         sx={{
+                            width: 'min-content',
                             display: isAbleToConnect ? '' : 'none',
                         }}
                     >
                         Connect <LaunchIcon sx={{ml: .5}}/>
                     </Button>
-                </div>
+                </Stack>
                 <Button
                     onClick={()=>callPermission()}
                     variant='outlined'
