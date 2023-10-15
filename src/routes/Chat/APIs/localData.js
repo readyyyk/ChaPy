@@ -21,9 +21,13 @@ export default class LocalData {
     save(data) {
         const currentDataJSON = localStorage.getItem(this.chatId.toString());
         const currentData = currentDataJSON === null ? {} : JSON.parse(currentDataJSON);
-        const maxLength = Number(localStorage.getItem("LD-MAXLEN-PER-CHAT")) || Infinity;
-        while(currentData.length >= maxLength){
-            currentData.shift();
+
+        // remove extra messages from object
+        const maxLength = LocalData.getMaxNumber() || Infinity;
+        for (let key of Object.keys(currentData)){
+            if (Object.keys(currentData).length < maxLength)
+                break;
+            delete currentData[key];
         }
 
         const parsedData = JSON.parse(data.data);
@@ -48,5 +52,16 @@ export default class LocalData {
     get() {
         const currentDataJSON = localStorage.getItem(this.chatId);
         return currentDataJSON === null ? {} : JSON.parse(currentDataJSON);
+    }
+
+    /**
+     * Updates max. number of stored messages per chat
+     * @param {number} number New max number
+    * */
+    static updateMaxNumber(number) {
+        localStorage.setItem('LD-MAXLEN-PER-CHAT', String(number));
+    }
+    static getMaxNumber() {
+        return Number(localStorage.getItem('LD-MAXLEN-PER-CHAT'));
     }
 }

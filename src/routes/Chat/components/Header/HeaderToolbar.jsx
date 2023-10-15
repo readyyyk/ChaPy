@@ -1,6 +1,5 @@
 import React, {
     Suspense,
-    useContext,
 } from 'react';
 import {
     CircularProgress,
@@ -8,13 +7,10 @@ import {
     Link,
     Toolbar,
     Typography,
-    useTheme,
 } from '@mui/material';
 
 import icon from '../../../../../public/favicon-beta.ico';
 import IosShareIcon from '@mui/icons-material/IosShare';
-import Brightness4Icon from '@mui/icons-material/Brightness4';
-import Brightness7Icon from '@mui/icons-material/Brightness7';
 import ScheduleSendIcon from '@mui/icons-material/ScheduleSend';
 
 import {
@@ -24,14 +20,11 @@ import {
 
 import PropTypes from 'prop-types';
 
-import {DarkModeContext} from '../../../../hooks/DarkModeContext.js';
 import LocalData from '../../APIs/localData.js';
 
 
 const HeaderToolbar = ({setIsShareModalOpen, wsApi}) => {
     const {chat} = useParams();
-    const theme = useTheme();
-    const {toggleMode} = useContext(DarkModeContext);
 
     let handleShare = () => false;
 
@@ -66,7 +59,7 @@ const HeaderToolbar = ({setIsShareModalOpen, wsApi}) => {
                         component={'div'}
                         variant='h5'
                         underline={'hover'}
-                        color={'text.primary'}
+                        color={'#fff'}
                         sx={{
                             display: 'flex',
                             alignItems: 'center',
@@ -89,16 +82,6 @@ const HeaderToolbar = ({setIsShareModalOpen, wsApi}) => {
 
             {/* Buttons */}
             <div>
-                {/* Theme button */}
-                <IconButton
-                    sx={{ml: 1}}
-                    onClick={toggleMode}
-                    color='inherit'
-                >
-                    {theme.palette.mode === 'dark' ?
-                        <Brightness7Icon /> : <Brightness4Icon />}
-                </IconButton>
-
                 {/* Share modal button */}
                 {
                     chat ?
