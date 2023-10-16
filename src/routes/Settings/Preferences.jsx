@@ -20,7 +20,6 @@ const Preferences = () => {
                 onSubmit={(e)=>{
                     e.preventDefault();
                     LocalData.updateMaxNumber(laNumber);
-                    console.log(toast);
                     toast.success(`Updated with value ${laNumber}`);
                 }}
             >

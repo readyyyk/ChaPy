@@ -13,8 +13,7 @@ import {Outlet, useLocation} from 'react-router-dom';
 import {ToastContainer} from 'react-toastify';
 import {useTheme} from '@mui/material';
 
-import ReactGA from 'react-ga';
-ReactGA.initialize('G-N8DNCGS22F');
+import ReactGA from 'react-ga4';
 
 
 const _ToastProvider = () => {
@@ -32,7 +31,12 @@ const _ToastProvider = () => {
 const App = () => {
     const location = useLocation();
     useEffect(() => {
-        ReactGA.pageview(location.pathname + location.search);
+        ReactGA.send({
+            hitType: 'pageview',
+            page: location.pathname + location.search,
+            title: location.pathname==='/' ?
+                'index' : location.pathname.replace('/', '') + location.search,
+        });
     }, [location]);
 
     return (

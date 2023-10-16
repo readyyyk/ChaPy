@@ -1,4 +1,4 @@
-import {event as gaEvent} from 'react-ga';
+import ReactGA from 'react-ga4';
 
 import {
     actions,
@@ -29,14 +29,14 @@ const setupWsApi = (
 ) => {
     addOldMessages(null, chatId, userConnTime, setMsgs);
 
-    gaEvent({
+    ReactGA.event({
         category: 'Connection',
         action: 'Connected to chat',
     });
 
     wsApi.addDataChecker('connection', ()=>true);
     wsApi.addDataChecker('message', ()=> {
-        gaEvent({
+        ReactGA.event({
             category: 'Message',
             action: 'Sent message',
         });
@@ -55,7 +55,7 @@ const setupWsApi = (
         addOldMessages(data, chatId, userConnTime, setMsgs);
     });
     wsApi.on('message', (data) => {
-        gaEvent({
+        ReactGA.event({
             category: 'Messages',
             action: 'Received message',
         });
