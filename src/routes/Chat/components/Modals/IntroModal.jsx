@@ -1,4 +1,8 @@
-import React, {useState} from 'react';
+import React, {
+    useEffect,
+    useRef,
+    useState,
+} from 'react';
 
 import '../../../../assets/styles/InputStyles.css';
 
@@ -8,7 +12,7 @@ import {
     Modal,
     Paper,
     Stack,
-    TextField, Tooltip,
+    TextField,
     Typography,
 } from '@mui/material';
 import LoadingButton from '@mui/lab/LoadingButton';
@@ -21,9 +25,14 @@ import {
     useNavigate,
 } from 'react-router-dom';
 
+import {toast} from 'react-toastify';
 import PropTypes from 'prop-types';
+
 import SSocketApi from '../../APIs/sSocketAPI.js';
 import LocalData from '../../APIs/localData.js';
+
+
+const parseJWT = (token) => JSON.parse(atob(token.split('.')[1]));
 
 /**
  * @param {boolean} open - is modal open
@@ -39,13 +48,33 @@ const IntroModal = ({open, setUser, setWsApi, setUserList}) => {
 
     const localData = new LocalData(chat);
 
-    // eslint-disable-next-line max-len
-    const inputErrorText= 'Name should be unique in chat and can contain less than 30 letters, numbers, or underscores';
+    const toastDataVariants = [
+        'This name is already used chat!',
+        'Name can contain less than 30 letters, numbers, or underscores!',
+    ];
 
     const [isLoading, setIsLoading] = useState(false);
     const [isError, setIsError] = useState(false);
+    const toastComponent = useRef(null);
+    const [toastData, setToastData] = useState('');
+    const callWarningToast = () => {
+        toastComponent.current = toast.warning(toastData, {toastId: 'warn-toast'});
+        toast.update(toastComponent.current);
+    };
+    useEffect(() => {
+        if (toastData) {
+            toast.update('warn-toast', {render: toastData});
+        }
+    }, [toastData]);
 
     const [inputValue, setInputValue] = useState('');
+    const handleChange = (e) => {
+        if (e.target.value !== e.target.value.trim()) {
+            callWarningToast();
+        }
+        setInputValue(e.target.value.trim());
+        setIsError(false);
+    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -56,18 +85,20 @@ const IntroModal = ({open, setUser, setWsApi, setUserList}) => {
         setIsLoading(true);
         const res = await chapyApi.connect(inputValue);
 
+        setIsError(!res.connected);
+        setIsLoading(false);
+
+        if (!res.connected) {
+            setToastData(res.message === 'Invalid name' ?
+                toastDataVariants[1] : toastDataVariants[0]);
+            callWarningToast();
+        }
+
         if (res.connected) {
-            const parseJWT = (token) => JSON.parse(atob(token.split('.')[1]));
-            const key = parseJWT(res.wsLink.
-                substring(res.wsLink.search('token=')+6))['key'];
+            const tokenValue = res.wsLink.substring(res.wsLink.search('token=')+6);
+            const key = parseJWT(tokenValue)['key'];
             const currentNames = await chapyApi.names();
-            setUserList(currentNames);
-            setUser({
-                connected: true,
-                name: inputValue,
-                connTime: new Date().getTime(),
-            });
-            setWsApi(new SSocketApi(res.wsLink, key, (data)=> {
+            const wsApiCallback = (data)=> {
                 if (data.event==='history') {
                     return;
                 }
@@ -77,10 +108,16 @@ const IntroModal = ({open, setUser, setWsApi, setUserList}) => {
                 }
                 data.data = JSON.stringify(currentData);
                 localData.save(data);
-            }));
+            };
+            setUserList(currentNames);
+            setUser({
+                connected: true,
+                name: inputValue,
+                connTime: new Date().getTime(),
+            });
+            setWsApi(new SSocketApi(res.wsLink, key, wsApiCallback));
+            toast.dismiss(toastComponent.current);
         }
-        setIsError(!res.connected);
-        setIsLoading(false);
     };
 
     const handleClick = () => navigate('/');
@@ -115,24 +152,14 @@ const IntroModal = ({open, setUser, setWsApi, setUserList}) => {
                     }}
                 >
                     <FormControl>
-                        <Tooltip
-                            arrow
-                            open={isError}
-                            placement={'top'}
-                            title={inputErrorText}
-                        >
-                            <TextField
-                                autoFocus
-                                sx={{mb: 3}}
-                                label={'Your name'}
-                                error={isError}
-                                value={inputValue}
-                                onChange={(e) => {
-                                    setInputValue(e.target.value);
-                                    setIsError(false);
-                                }}
-                            />
-                        </Tooltip>
+                        <TextField
+                            autoFocus
+                            sx={{mb: 3}}
+                            label={'Your name'}
+                            error={isError}
+                            value={inputValue}
+                            onChange={(e)=>handleChange(e)}
+                        />
                     </FormControl>
                     <Stack spacing={1} direction="row" useFlexGap>
                         <Button
