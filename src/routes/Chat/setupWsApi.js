@@ -1,3 +1,5 @@
+import {event as gaEvent} from 'react-ga';
+
 import {
     actions,
     addMessages,
@@ -27,8 +29,19 @@ const setupWsApi = (
 ) => {
     addOldMessages(null, chatId, userConnTime, setMsgs);
 
+    gaEvent({
+        category: 'Connection',
+        action: 'Connected to chat',
+    });
+
     wsApi.addDataChecker('connection', ()=>true);
-    wsApi.addDataChecker('message', ()=>true);
+    wsApi.addDataChecker('message', ()=> {
+        gaEvent({
+            category: 'Message',
+            action: 'Sent message',
+        });
+        return true;
+    });
     wsApi.addDataChecker('history', ()=>true);
     wsApi.socket.onclose = (e) => {
         if (e.code===1000) {
@@ -42,6 +55,10 @@ const setupWsApi = (
         addOldMessages(data, chatId, userConnTime, setMsgs);
     });
     wsApi.on('message', (data) => {
+        gaEvent({
+            category: 'Messages',
+            action: 'Received message',
+        });
         addMessages([actions.message(data, userName)], setMsgs);
     });
     wsApi.on('connection', (data) => {

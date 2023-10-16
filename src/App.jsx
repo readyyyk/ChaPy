@@ -1,15 +1,21 @@
-import React from 'react';
+import React, {
+    useEffect,
+} from 'react';
 
 import 'react-toastify/dist/ReactToastify.css';
 
-import './ScrollStyles.css';
+import './assets/styles/ScrollStyles.css';
 import ThemeWithDarkModeContextProvider
     from './hooks/ThemeWithDarkModeContextProvider.jsx';
 
-import './selection.css';
-import {Outlet} from 'react-router-dom';
+import './assets/styles/selection.css';
+import {Outlet, useLocation} from 'react-router-dom';
 import {ToastContainer} from 'react-toastify';
 import {useTheme} from '@mui/material';
+
+import ReactGA from 'react-ga';
+ReactGA.initialize('G-N8DNCGS22F');
+
 
 const _ToastProvider = () => {
     const theme = useTheme();
@@ -24,6 +30,11 @@ const _ToastProvider = () => {
 };
 
 const App = () => {
+    const location = useLocation();
+    useEffect(() => {
+        ReactGA.pageview(location.pathname + location.search);
+    }, [location]);
+
     return (
         <ThemeWithDarkModeContextProvider>
             <Outlet />

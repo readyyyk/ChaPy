@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 
-import '../../../../InputStyles.css';
+import '../../../../assets/styles/InputStyles.css';
 
 import {
     Button,
