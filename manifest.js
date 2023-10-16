@@ -32,6 +32,13 @@ export default {
                 'url': '/new_chat',
                 'icons': [{'src': '/plus.png', 'sizes': '96x96'}],
             },
+            {
+                'name': 'Scanner',
+                'short_name': 'Scan QR-code',
+                'description': 'Scan QR-code of shared chat',
+                'url': '/scanner',
+                'icons': [{'src': '/scanner.png', 'sizes': '96x96'}],
+            },
         ],
     },
     'workbox': {
