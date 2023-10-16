@@ -1,6 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import App from './App.jsx';
+
+import {router} from './Router.jsx';
+import {RouterProvider} from 'react-router-dom';
+
+import ReactGA from 'react-ga4';
+ReactGA.initialize(import.meta.env.VITE_GA_STREAM);
 
 
 window.addEventListener('beforeinstallprompt', (e) => {
@@ -9,5 +14,5 @@ window.addEventListener('beforeinstallprompt', (e) => {
 });
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-    <App />,
+    <RouterProvider router={router} />,
 );

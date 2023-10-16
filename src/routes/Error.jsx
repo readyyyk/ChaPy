@@ -10,7 +10,7 @@ import {
     useRouteError,
 } from 'react-router-dom';
 
-import logo from '../assets/chapy.png';
+import logo from '../../public/chapy192-beta.png';
 
 import PropTypes from 'prop-types';
 

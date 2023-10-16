@@ -4,64 +4,68 @@ import React, {
     useEffect,
     useState,
 } from 'react';
+import {
+    useNavigate,
+    useParams,
+} from 'react-router-dom';
 
-import {useNavigate, useParams} from 'react-router-dom';
-
-import Header from './components/Header/Header.jsx';
-import MessageContainer from './components/Messages/MessageContainer.jsx';
-import IntroModal from './components/Modals/IntroModal.jsx';
-const ShareModal = lazy(()=>import('./components/Modals/ShareModal.jsx'));
-import ConnectionToast from './components/Toasts/ConnectionToast.jsx';
-
+// 3rd-party components
 import {LinearProgress} from '@mui/material';
 
+// own components
+import Header from './components/Header/Header.jsx';
+import IntroModal from './components/Modals/IntroModal.jsx';
+import ConnectionToast from './components/Toasts/ConnectionToast.jsx';
+import MessageContainer from './components/Messages/MessageContainer.jsx';
+const ShareModal = lazy(()=>import('./components/Modals/ShareModal.jsx'));
+
+// not components
+import LocalData from './APIs/localData.js';
+import setupWsApi from './setupWsApi.js';
 
 const Chat = () => {
-    const navigate = useNavigate();
     const {chat} = useParams();
-    document.title = `ChaPy - ${chat}`;
+    const navigate = useNavigate();
 
-    const [msgs, setMsgs] = useState([]);
-    self.addMessage = (text, sender, type='') => setMsgs([...msgs, {
-        text: text,
-        sender: sender,
-        type: type,
-    }]);
-
-    const [isConnectionToastOpen, setIsConnectionToastOpen] = useState(false);
-    const [isShareModalOpen, setIsShareModalOpen] = useState(false);
-
-    const [user, setUser] = useState({connected: false, name: ''});
+    document.title = `B-ChaPy - ${chat}`;
 
     const [wsApi, setWsApi] = useState(null);
+    const [msgs, setMsgs] = useState([]);
+    const [user, setUser] = useState({connected: false, name: '', connTime: -1});
+
+    const [isShareModalOpen, setIsShareModalOpen] = useState(false);
+    const [isConnectionToastOpen, setIsConnectionToastOpen] = useState(false);
+
     const [userList, setUserList] = useState([]);
-    self.addUserToList = (name) => setUserList([...userList, name]);
-    self.removeUserFromList = (name) => setUserList(
-        userList.filter((el)=>el!==name));
+    const addUserToList = (name) => setUserList((prev) => [...prev, name]);
+    const removeUserFromList = (name) => setUserList(
+        (prev) => prev.filter((el)=>el!==name),
+    );
 
-    const actions = {
-        message: (data) => self.addMessage(data.text, data.sender || user.name),
-        connection: (data) => {
-            if (data.detail === 'connected') {
-                self.addUserToList(data.name);
-            } else if (data.detail === 'disconnected') {
-                self.removeUserFromList(data.name);
-            }
-            self.addMessage(data.name + ' ' + data.detail, data.name, 'server');
-        },
-    };
-
-    useEffect(()=> {
+    useEffect(() => {
         if (!wsApi) {
             return;
         }
 
-        wsApi.addDataChecker('connection', ()=> true);
-        wsApi.addDataChecker('message', ()=> true);
-        wsApi.socket.onclose = () => navigate('/error/408');
+        setupWsApi(
+            wsApi,
+            chat,
+            user.connTime, user.name,
+            addUserToList, removeUserFromList,
+            navigate,
+            setMsgs,
+        );
 
-        wsApi.on('message', actions.message);
-        wsApi.on('connection', actions.connection);
+        return () => {
+            new LocalData(chat).save({
+                event: 'connection',
+                data: JSON.stringify({
+                    detail: 'disconnected',
+                    name: user.name,
+                }),
+            });
+            wsApi.socket.close(1000);
+        };
     }, [wsApi]);
 
     return (
@@ -69,6 +73,7 @@ const Chat = () => {
             <Header
                 setIsShareModalOpen={setIsShareModalOpen}
                 userList={userList}
+                wsApi={wsApi}
             />
             {
                 user.connected &&

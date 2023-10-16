@@ -1,20 +1,25 @@
 import React, {useState} from 'react';
 import {
     Box,
+    Stack,
     Button,
-    FormControl,
     TextField,
     Typography,
+    FormControl,
 } from '@mui/material';
 import {useNavigate} from 'react-router-dom';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import DownloadingIcon from '@mui/icons-material/Downloading';
 import QrCodeScannerIcon from '@mui/icons-material/QrCodeScanner';
+import SettingsIcon from '@mui/icons-material/Settings';
+
 
 import './home.css';
 
 const Home = () => {
+    document.title = `B-ChaPy`;
+
     const navigate = useNavigate();
 
     const [inputValue, setInputValue] = useState('');
@@ -52,7 +57,7 @@ const Home = () => {
                 Install app
                 <DownloadingIcon sx={{ml: .5}}/>
             </Button>
-            <Typography variant='h1'> Home </Typography>
+            <Typography variant='h1'> ChaPy </Typography>
             <Button
                 onClick={()=>navigate('/new_chat')}
                 variant='outlined'
@@ -61,14 +66,24 @@ const Home = () => {
                 Random chat
             </Button>
 
-            <Button
-                onClick={()=>navigate('/scanner')}
-                variant='outlined'
-                size='large'
-                sx={{p: 1, mt: '2rem'}}
-            >
-                <QrCodeScannerIcon fontSize={'large'}/>
-            </Button>
+            <Stack spacing={1} direction="row" useFlexGap>
+                <Button
+                    onClick={()=>navigate('/scanner')}
+                    variant='outlined'
+                    size='large'
+                    sx={{p: 1, mt: '2rem'}}
+                >
+                    <QrCodeScannerIcon fontSize={'large'}/>
+                </Button>
+                <Button
+                    onClick={()=>navigate('/settings')}
+                    variant='outlined'
+                    size='large'
+                    sx={{p: 1, mt: '2rem'}}
+                >
+                    <SettingsIcon fontSize={'large'}/>
+                </Button>
+            </Stack>
 
             <form
                 onSubmit={handleSubmit}

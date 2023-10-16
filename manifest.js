@@ -4,17 +4,17 @@ export default {
         'short_name': 'ChaPy',
         'icons': [
             {
-                'src': '/chapy512.png',
+                'src': '/chapy512-beta.png',
                 'sizes': '512x512',
                 'type': 'image/png',
             },
             {
-                'src': '/chapy192.png',
+                'src': '/chapy192-beta.png',
                 'type': 'image/png',
                 'sizes': '192x192',
             },
             {
-                'src': '/favicon.ico',
+                'src': '/favicon-beta.ico',
                 'type': 'image/x-icon',
                 'sizes': '16x16',
             },
@@ -31,6 +31,13 @@ export default {
                 'description': 'Enter chat with random id',
                 'url': '/new_chat',
                 'icons': [{'src': '/plus.png', 'sizes': '96x96'}],
+            },
+            {
+                'name': 'Scanner',
+                'short_name': 'Scan QR-code',
+                'description': 'Scan QR-code of shared chat',
+                'url': '/scanner',
+                'icons': [{'src': '/scanner.png', 'sizes': '96x96'}],
             },
         ],
     },

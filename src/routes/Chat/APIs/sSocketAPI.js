@@ -11,28 +11,34 @@ export default class SSocketApi {
 
     unemitted = [];
 
-    constructor(link=`ws://${location.host}`, key="") {
+    constructor(link=`ws://${location.host}`, key="", globalCallback=(_)=>{}) {
         sessionStorage.setItem("SSA-WEBSOCKET-KEY", key)
         this.link = link;
-        this.initSocket(link);
+        this.initSocket(link, globalCallback);
     }
 
     #getKey(){
         return Utf8.parse(sessionStorage.getItem("SSA-WEBSOCKET-KEY"))
     }
 
-    initSocket(link){
+    /**
+     * @param link {string} - string for WS connection
+     * @param globalCallback {function({event: string, data: string}): void} - function that is called every time WebSocket receives message
+     * */
+    initSocket(link, globalCallback){
         this.socket = new WebSocket(link);
 
         this.socketHandler = (eventFetched) => {
             // add secure layer
             let encrypted = JSON.parse(eventFetched.data)
-            console.log(encrypted)
             let encryptedDataBase64 = encrypted["data"];
             let iv = Base64.parse(encrypted["iv"]);
             let decrypted = AES.decrypt(encryptedDataBase64, this.#getKey(), {iv: iv}).toString(Utf8);
 
-            const {event, data} = JSON.parse(decrypted)
+            // call provided handler
+            const {event, data} = JSON.parse(decrypted);
+
+            globalCallback({event, data});
 
             this.eventListeners.has(event) ?
                 this.eventListeners.get(event)(JSON.parse(data)) :

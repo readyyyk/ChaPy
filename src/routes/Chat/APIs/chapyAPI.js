@@ -24,7 +24,7 @@ export default class ChapyAPI {
         reqUrl.searchParams.append('name', name);
         reqUrl.searchParams.append('nonce', String(new Date().getTime()));
 
-        const res = await fetch(reqUrl).then(a=>a.json());
+        const res = await fetch(reqUrl).then((a) => a.json());
         if ("message" in res)
             return {connected: false, message: res["message"]};
         return {connected: true, wsLink: res["wsLink"]};
