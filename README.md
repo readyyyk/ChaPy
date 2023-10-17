@@ -8,7 +8,7 @@
 
 <p align="center">
     <a href="https://app.netlify.com/sites/chapy-beta/overview" rel="nofollow">
-        <img src="https://api.netlify.com/api/v1/badges/f626ee3a-6809-4439-bea7-7b6425671fa8/deploy-status" alt="Netlify build status">
+        <img src="https://api.netlify.com/api/v1/badges/89de90df-1af0-434b-8e74-f7aeb963c517/deploy-status" alt="Netlify build status">
     </a>
     <a href="https://www.codefactor.io/repository/github/readyyyk/chapy">
         <img src="https://www.codefactor.io/repository/github/readyyyk/chapy/badge" alt="CodeFactor" />
