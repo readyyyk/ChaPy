@@ -47,7 +47,8 @@ const setupWsApi = (
         if (e.code===1000) {
             return;
         }
-        navigate('/error/408');
+        console.log(e);
+        navigate(`/error/${e.code}?back=${chatId}`);
     };
 
     wsApi.on('history', (data) => {

@@ -1,12 +1,13 @@
 import React from 'react';
 import {
-    Box,
-    Button,
     Link,
+    Stack,
+    Button,
     Typography,
 } from '@mui/material';
 import {
     useParams,
+    useNavigate,
     useRouteError,
 } from 'react-router-dom';
 
@@ -14,7 +15,32 @@ import logo from '../../public/chapy192-beta.png';
 
 import PropTypes from 'prop-types';
 
+
+const BackButton = ({to}) => {
+    const navigate = useNavigate();
+    const toText = (
+        <Typography
+            fontWeight={'bold'}
+            fontFamily={'Monospace'}
+            sx={{textDecoration: 'underline'}}
+        >{to}</Typography>);
+    return (
+        <Button
+            variant={'contained'}
+            color={'secondary'}
+            sx={{textTransform: 'none'}}
+            onClick={()=>navigate(`/${to}`)}
+        >
+            Go back ({toText})
+        </Button>);
+};
+BackButton.propTypes = {
+    to: PropTypes.string,
+};
+
 const Error = ({manualError, routerError}) => {
+    const urlParams = new URLSearchParams(location.search);
+    const navigate = useNavigate();
     const errors = {
         400: ['Bad request.', 'Probably you entered invalid chat id'],
         404: ['Not found.', 'Probably you entered invalid URL'],
@@ -24,6 +50,10 @@ const Error = ({manualError, routerError}) => {
             'correctly. Contact https://t.me/Ready_k'],
         5: ['Internal server error.',
             'Unhandled 5xx error. Contact https://t.me/Ready_k'],
+        10: ['WebSocket Error',
+            'Unhandled websocket error. Contact https://t.me/Ready_k'],
+        1006: ['Connection with chat lost...',
+            (<>Do you want to reconnect? <BackButton to={urlParams.get('back')}/></>)],
     };
 
     let {errorCode} = useParams();
@@ -35,41 +65,39 @@ const Error = ({manualError, routerError}) => {
         errorCode = 500;
         routerErrorData = useRouteError();
     }
-    if (!Number(errorCode) || String(errorCode).length > 3) {
-        location.replace('/error/500');
-    } else {
+
+    try {
         errorCode = Number(errorCode);
+    } catch (e) {
+        console.error(e);
+        navigate('/error/500');
     }
 
     const simplifiedCode = Math.floor(errorCode/100);
     const errorDescription = routerErrorData || Number(errorCode) in errors ?
-        errors[errorCode] :
-        errors[simplifiedCode];
+        errors[errorCode] : errors[simplifiedCode];
 
     return (
-        <Box
+        <Stack
+            alignItems={'center'}
+            justifyContent={'center'}
+            gap={5}
             sx={{
-                display: 'flex',
-                flexDirection: 'column',
-                width: '100%',
                 height: '100dvh',
-                alignItems: 'center',
-                justifyContent: 'center',
-                color: 'text.primary',
-                borderRadius: 1,
                 p: 3,
             }}
         >
             <Typography variant='h1'> {errorCode} </Typography>
-            <br />
-            <Typography variant='h3'> {errorDescription[0]} </Typography>
-            <Typography
-                variant='h6'
-                color={'secondary'}
-                sx={{maxWidth: 350, mb: 5}}
-                align={'center'}
-                fontWeight={'regular'}
-            > {errorDescription[1]} </Typography>
+            <Stack alignItems={'center'} gap={1}>
+                <Typography variant='h3'> {errorDescription[0]} </Typography>
+                <Typography
+                    variant='h6'
+                    color={'secondary'}
+                    sx={{maxWidth: 350}}
+                    align={'center'}
+                    fontWeight={'regular'}
+                > {errorDescription[1]} </Typography>
+            </Stack>
             <Link href="/">
                 <Button
                     variant="outlined"
@@ -84,7 +112,7 @@ const Error = ({manualError, routerError}) => {
                     <Typography variant='h6'> Home </Typography>
                 </Button>
             </Link>
-        </Box>
+        </Stack>
     );
 };
 
