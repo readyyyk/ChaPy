@@ -1,7 +1,17 @@
 import React from 'react';
-import {Avatar, Container, Paper, Typography, useTheme} from '@mui/material';
+import {
+    Avatar,
+    Container,
+    Paper,
+    useTheme,
+} from '@mui/material';
 import PropTypes from 'prop-types';
 import {useLoaderData} from 'react-router-dom';
+import Markdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+
+import './mdStyling.css';
+
 
 const UserMessage = ({isThisUser, sender, text, isLast, isFirst}) => {
     const {randImgApi} = useLoaderData();
@@ -58,10 +68,9 @@ const UserMessage = ({isThisUser, sender, text, isLast, isFirst}) => {
                     objectFit: 'contain',
                 }}
             >
-                <Typography
-                    variant={'body1'}
-                    sx={{lineBreak: 'anywhere'}}
-                >{text}</Typography>
+                <div className={'markdown'}>
+                    <Markdown remarkPlugins={[remarkGfm]}>{text}</Markdown>
+                </div>
             </Paper>
         </Container>
     );
