@@ -54,6 +54,8 @@ const Error = ({manualError, routerError}) => {
             'Unhandled websocket error. Contact https://t.me/Ready_k'],
         1006: ['Connection with chat lost...',
             (<>Do you want to reconnect? <BackButton to={urlParams.get('back')}/></>)],
+        1012: ['Server was in restarting stage...',
+            (<>Do you want to reconnect? <BackButton to={urlParams.get('back')}/></>)],
     };
 
     let {errorCode} = useParams();

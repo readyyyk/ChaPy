@@ -77,6 +77,7 @@ const setupWsApi = (
                         import.meta.env.VITE_RANDIMG_API_MODEL,
                         data.sender,
                     ),
+                    'interaction',
                 );
             } catch (e) {
                 alert(e);
@@ -91,9 +92,10 @@ const setupWsApi = (
     wsApi.on('connection', (data) => {
         addMessages([actions.connection(data)], setMsgs);
         notification(
-            `${data.name} ${data.detail}`,
             '',
+            `${data.name} ${data.detail}`,
             randImgApi.getLink(import.meta.env.VITE_RANDIMG_API_MODEL, data.name),
+            'interaction',
         );
         if (data.detail === 'connected') {
             addUserToList(data.name);

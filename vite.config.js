@@ -16,5 +16,8 @@ export default defineConfig({
             },
         },
     },
+    workbox: {
+        importScripts: ['./setupNotification'],
+    },
     plugins: [react(), splitVendorChunkPlugin(), VitePWA(manifest)],
 });
