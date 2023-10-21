@@ -21,12 +21,21 @@ const MessageInput = ({ws}) => {
             setInputValue('');
         }
     };
+    const handleKeyDown = (e) => {
+        if (e.ctrlKey && e.keyCode===13) {
+            newMessage(e);
+        }
+    };
     return <Container sx={{py: 1, backgroundColor: 'transparent'}}>
         <form
             style={{display: 'flex', alignItems: 'center'}}
             onSubmit={newMessage}
         >
-            <TextField label='Message'
+            <TextField
+                multiline
+                maxRows={4}
+                label='Message'
+                placeholder='Ctrl + Enter to send'
                 sx={{
                     width: 1,
                     borderRadius: '10rem',
@@ -34,6 +43,7 @@ const MessageInput = ({ws}) => {
                 autoFocus
                 value={inputValue}
                 inputProps={{maxLength: 800}}
+                onKeyDown={(e) => handleKeyDown(e)}
                 onChange={(e) => setInputValue(e.target.value)}
             />
             <IconButton

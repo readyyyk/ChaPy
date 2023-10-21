@@ -28,6 +28,8 @@ const Preferences = () => {
                         sx={{width: .83}}
                         type={'number'}
                         inputProps={{
+                            inputMode: 'numeric',
+                            pattern: '[0-9]*',
                             min: 0,
                             max: 100,
                         }}

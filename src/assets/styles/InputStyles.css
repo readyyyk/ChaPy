@@ -1,10 +1,10 @@
-input{
+input, .MuiInputBase-multiline {
     padding: .75rem 1.25rem !important;
 }
 fieldset {
     top: -2px !important;
     bottom: -2px !important;
-    border-radius: 10rem !important;
+    border-radius: 2rem !important;
 }
 fieldset > legend {
     position: relative;
