@@ -17,6 +17,7 @@ import {
     useParams,
     Link as RouterLink,
 } from 'react-router-dom';
+import {toast} from 'react-toastify';
 
 import PropTypes from 'prop-types';
 
@@ -26,13 +27,16 @@ import LocalData from '../../APIs/localData.js';
 const HeaderToolbar = ({setIsShareModalOpen, wsApi}) => {
     const {chat} = useParams();
 
-    let handleShare = () => false;
+    let handleShareHistory = () => false;
 
     if (chat) {
         const localData = new LocalData(chat);
 
-        handleShare = () => {
+        handleShareHistory = () => {
             wsApi.emit('history', localData.get());
+            toast.success(
+                'You shared your history!',
+                {toastId: 'sent_history_share'});
         };
     }
 
@@ -99,7 +103,7 @@ const HeaderToolbar = ({setIsShareModalOpen, wsApi}) => {
                     chat ?
                         <IconButton
                             sx={{ml: 1}}
-                            onClick={() => handleShare()}
+                            onClick={() => handleShareHistory()}
                             color='inherit'
                         >
                             <ScheduleSendIcon/>

@@ -1,4 +1,5 @@
 import ReactGA from 'react-ga4';
+import {toast} from 'react-toastify';
 
 import {
     actions,
@@ -60,6 +61,10 @@ const setupWsApi = (
     };
 
     wsApi.on('history', (data) => {
+        toast.success(
+            `${data.name} shared history with you!`,
+            {toastId: 'got_history_share'});
+
         notification('Got history',
             `You received history from ${data.name}`,
             randImgApi.getLink(import.meta.env.VITE_RANDIMG_API_MODEL, data.name),
