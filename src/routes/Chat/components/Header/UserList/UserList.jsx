@@ -15,8 +15,9 @@ const UserList = ({userList}) => {
                 {userList.map(
                     (el)=>
                         (<UserListItem
-                            userName={el}
-                            key={`user-list-${el}`}
+                            userName={el.name}
+                            isActive={el.isActive}
+                            key={`user-list-${el.name}`}
                         />),
                 )}
             </Stack>
@@ -25,7 +26,7 @@ const UserList = ({userList}) => {
 };
 
 UserList.propTypes = {
-    userList: PropTypes.arrayOf(PropTypes.string),
+    userList: PropTypes.arrayOf(PropTypes.object),
 };
 
 export default UserList;

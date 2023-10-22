@@ -37,9 +37,18 @@ const Chat = () => {
     const [isConnectionToastOpen, setIsConnectionToastOpen] = useState(false);
 
     const [userList, setUserList] = useState([]);
-    const addUserToList = (name) => setUserList((prev) => [...prev, name]);
+    const addUserToList = ({name, isActive}) =>
+        setUserList((prev) => [...prev, {name, isActive}]);
     const removeUserFromList = (name) => setUserList(
-        (prev) => prev.filter((el)=>el!==name),
+        (prev) => prev.filter((el)=>el.name!==name),
+    );
+    const setUserActivity = (name, isActive) => setUserList(
+        (prev) => prev.map((el)=> {
+            if (el.name === name) {
+                el.isActive = isActive;
+            }
+            return el;
+        }),
     );
 
     useEffect(() => {
@@ -51,7 +60,7 @@ const Chat = () => {
             wsApi,
             chat,
             user.connTime, user.name,
-            addUserToList, removeUserFromList,
+            addUserToList, removeUserFromList, setUserActivity,
             navigate,
             setMsgs,
         );

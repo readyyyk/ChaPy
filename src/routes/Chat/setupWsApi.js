@@ -23,6 +23,7 @@ const randImgApi = new RandImgApi(import.meta.env.VITE_RANDIMG_API_LINK);
  * @param {string} userName
  * @param {function} addUserToList
  * @param {function} removeUserFromList
+ * @param {function} setUserActivity
  * @param {function} navigate
  * @param {function} setMsgs
  * */
@@ -30,7 +31,7 @@ const setupWsApi = (
     wsApi,
     chatId,
     userConnTime, userName,
-    addUserToList, removeUserFromList,
+    addUserToList, removeUserFromList, setUserActivity,
     navigate,
     setMsgs,
 ) => {
@@ -42,6 +43,14 @@ const setupWsApi = (
         action: 'Connected to chat',
     });
 
+    const sendFocusActivity = () => {
+        wsApi.emit('activity', {
+            detail: 'focus',
+            sender: userName,
+            value: !document.hidden,
+        });
+    };
+
     wsApi.addDataChecker('connection', ()=>true);
     wsApi.addDataChecker('message', ()=> {
         ReactGA.event({
@@ -51,7 +60,10 @@ const setupWsApi = (
         return true;
     });
     wsApi.addDataChecker('history', ()=>true);
+    wsApi.addDataChecker('activity', ()=>true);
+
     wsApi.socket.onclose = (e) => {
+        document.removeEventListener('visibilitychange', sendFocusActivity);
         notification('Disconnected', `You disconnected from chat ${chatId}`);
         if (e.code===1000) {
             return;
@@ -60,6 +72,12 @@ const setupWsApi = (
         navigate(`/error/${e.code}?back=${chatId}`);
     };
 
+    document.addEventListener('visibilitychange', sendFocusActivity);
+    wsApi.on('activity', (data) => {
+        if (data.detail === 'focus') {
+            setUserActivity(data.sender, data.value);
+        }
+    });
     wsApi.on('history', (data) => {
         toast.success(
             `${data.name} shared history with you!`,
@@ -69,7 +87,6 @@ const setupWsApi = (
             `You received history from ${data.name}`,
             randImgApi.getLink(import.meta.env.VITE_RANDIMG_API_MODEL, data.name),
         );
-        console.log(data);
         addOldMessages(data, chatId, userConnTime, setMsgs);
     });
     wsApi.on('message', (data) => {
@@ -85,7 +102,7 @@ const setupWsApi = (
                     'interaction',
                 );
             } catch (e) {
-                alert(e);
+                console.error(e);
             }
         }
         ReactGA.event({
@@ -103,7 +120,7 @@ const setupWsApi = (
             'interaction',
         );
         if (data.detail === 'connected') {
-            addUserToList(data.name);
+            addUserToList({name: data.name, isActive: true});
         } else if (data.detail === 'disconnected') {
             removeUserFromList(data.name);
         }

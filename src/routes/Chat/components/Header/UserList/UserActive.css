@@ -1,0 +1,12 @@
+.active.userListElement {position: relative;}
+.active.userListElement::after {
+    content: '';
+    position: absolute;
+    right: -.13rem;
+    bottom: -.13rem;
+    width: .7rem;
+    aspect-ratio: 1/1;
+    background: #4cd964;
+    border-radius: 2rem;
+    box-shadow: 0 -1px 5px 1px #99999955;
+}

@@ -3,13 +3,16 @@ import PropTypes from 'prop-types';
 import {Avatar, Chip} from '@mui/material';
 
 import {useLoaderData} from 'react-router-dom';
+import './UserActive.css';
 
-const UserListItem = ({userName}) => {
+
+const UserListItem = ({userName, isActive=false}) => {
     const {randImgApi} = useLoaderData();
 
     return (
         <Chip
             label={userName}
+            className={'userListElement' + (isActive && ' active')}
             avatar={
                 <Avatar
                     src={randImgApi.getLink(
@@ -22,6 +25,7 @@ const UserListItem = ({userName}) => {
 
 UserListItem.propTypes = {
     userName: PropTypes.string,
+    isActive: PropTypes.bool,
 };
 
 export default UserListItem;
