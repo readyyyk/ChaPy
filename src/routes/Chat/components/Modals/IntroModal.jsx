@@ -109,7 +109,7 @@ const IntroModal = ({open, setUser, setWsApi, setUserList}) => {
                 data.data = JSON.stringify(currentData);
                 localData.save(data);
             };
-            setUserList(currentNames);
+            setUserList(currentNames.map((name)=>({name, isActive: true})));
             setUser({
                 connected: true,
                 name: inputValue,
