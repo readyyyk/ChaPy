@@ -36,7 +36,7 @@ const Header = ({setIsShareModalOpen, userList, wsApi}) => {
 Header.propTypes = {
     wsApi: PropTypes.object,
     setIsShareModalOpen: PropTypes.func,
-    userList: PropTypes.arrayOf(PropTypes.string),
+    userList: PropTypes.arrayOf(PropTypes.object),
 };
 
 export default Header;

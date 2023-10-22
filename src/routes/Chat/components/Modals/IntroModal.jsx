@@ -29,7 +29,8 @@ import {toast} from 'react-toastify';
 import PropTypes from 'prop-types';
 
 import SSocketApi from '../../APIs/sSocketAPI.js';
-import LocalData from '../../APIs/localData.js';
+
+import {createWsApiGlobalCallback} from '../../setupWsApi.js';
 
 
 const parseJWT = (token) => JSON.parse(atob(token.split('.')[1]));
@@ -45,8 +46,6 @@ const IntroModal = ({open, setUser, setWsApi, setUserList}) => {
     const {chat} = useParams();
     const {chapyApi} = useLoaderData();
     const navigate = useNavigate();
-
-    const localData = new LocalData(chat);
 
     const toastDataVariants = [
         'This name is already used chat!',
@@ -98,17 +97,7 @@ const IntroModal = ({open, setUser, setWsApi, setUserList}) => {
             const tokenValue = res.wsLink.substring(res.wsLink.search('token=')+6);
             const key = parseJWT(tokenValue)['key'];
             const currentNames = await chapyApi.names();
-            const wsApiCallback = (data)=> {
-                if (data.event==='history') {
-                    return;
-                }
-                const currentData = JSON.parse(data.data);
-                if (!('sender' in currentData)) {
-                    currentData.sender = inputValue;
-                }
-                data.data = JSON.stringify(currentData);
-                localData.save(data);
-            };
+            const wsApiCallback = createWsApiGlobalCallback(inputValue, chat);
             setUserList(currentNames.map((name)=>({name, isActive: true})));
             setUser({
                 connected: true,

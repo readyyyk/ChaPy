@@ -140,5 +140,20 @@ const setupWsApi = (
     };
 };
 
+export const createWsApiGlobalCallback = (currentUserName, chatId) => {
+    const localData = new LocalData(chatId);
+    return (data)=> {
+        if (['history', 'activity'].includes(data.event)) {
+            return;
+        }
+        const currentData = JSON.parse(data.data);
+        if (!('sender' in currentData)) {
+            currentData.sender = currentUserName;
+        }
+        data.data = JSON.stringify(currentData);
+        localData.save(data);
+    };
+};
+
 
 export default setupWsApi;

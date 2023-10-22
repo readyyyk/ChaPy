@@ -36,7 +36,7 @@ const Settings = () => {
         >
             <Header
                 setIsShareModalOpen={(_)=>{}}
-                userList={['']}
+                userList={[{}]}
                 wsApi={{}}
             />
 

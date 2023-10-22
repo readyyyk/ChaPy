@@ -61,7 +61,7 @@ const QrScanner = () => {
         >
             <Header
                 setIsShareModalOpen={(_)=>{}}
-                userList={['']}
+                userList={[{}]}
                 wsApi={{}}
             />
 
