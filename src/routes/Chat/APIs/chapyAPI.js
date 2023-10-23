@@ -31,6 +31,8 @@ export default class ChapyAPI {
     }
 
     async names() {
-        return await fetch(this.baseUrl+this.room+'/names').then(a=>a.json())
+        const reqUrl = new URL(this.baseUrl+this.room+'/names');
+        reqUrl.searchParams.append('nonce', String(new Date().getTime()));
+        return await fetch(reqUrl).then(a=>a.json())
     }
 }
