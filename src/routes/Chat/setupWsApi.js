@@ -44,6 +44,8 @@ const setupWsApi = (
     });
 
     const sendFocusActivity = () => {
+        console.log(12331231);
+        // debugger;
         wsApi.emit('activity', {
             detail: 'focus',
             sender: userName,
@@ -129,6 +131,7 @@ const setupWsApi = (
         if (!/^\/[a-zA-Z]{5}$/.test(location.pathname)) {
             return;
         }
+        wsApi.socket.close(1000);
         notification('Disconnected', `You disconnected from chat ${chatId}`);
         new LocalData(chatId).save({
             event: 'connection',
