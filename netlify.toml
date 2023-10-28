@@ -4,7 +4,7 @@
   status = 200
 
 [[headers]]
-  for=/*.html
+  for="/*.html"
   [headers.values]
 	cache-control = '''
 	max-age=0,
@@ -13,7 +13,7 @@
 	must-revalidate'''
 
 [[headers]]
-  for=/sw.js
+  for="/sw.js"
   [headers.values]
 	cache-control = '''
 	max-age=0,
