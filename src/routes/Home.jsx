@@ -57,7 +57,14 @@ const Home = () => {
                 Install app
                 <DownloadingIcon sx={{ml: .5}}/>
             </Button>
-            <Typography variant='h1'> ChaPy </Typography>
+
+            <Typography
+                variant='h1'
+                sx={{
+                    fontFamily: 'Hero',
+                    letterSpacing: '3px',
+                }}
+            > ChaPy </Typography>
             <Button
                 onClick={()=>navigate('/new_chat')}
                 variant='outlined'
