@@ -107,7 +107,9 @@ const Home = () => {
                         }}
                         inputProps={{
                             maxLength: 5,
+                            name: 'chapy-id',
                             pattern: '[a-zA-Z]{5}',
+                            autoComplete: 'chapy-id',
                         }}
                         onChange={(e) => {
                             setInputValue(e.target.value);

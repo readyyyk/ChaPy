@@ -9,7 +9,7 @@ import {
 } from '@mui/material';
 import ManageHistoryIcon from '@mui/icons-material/ManageHistory';
 
-import HistoryList from './HistoryList.jsx';
+import HistoryList from './HistoryList';
 import Brightness7Icon from '@mui/icons-material/Brightness7.js';
 import Brightness6Icon from '@mui/icons-material/Brightness6';
 import Brightness4Icon from '@mui/icons-material/Brightness4.js';

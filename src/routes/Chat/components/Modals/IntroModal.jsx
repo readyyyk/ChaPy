@@ -144,10 +144,14 @@ const IntroModal = ({open, setUser, setWsApi, setUserList}) => {
                         <TextField
                             autoFocus
                             sx={{mb: 3}}
-                            label={'Your name'}
+                            label={'Your nickname'}
                             error={isError}
                             value={inputValue}
                             onChange={(e)=>handleChange(e)}
+                            inputProps={{
+                                name: 'nickname',
+                                autocomplete: 'nickname',
+                            }}
                         />
                     </FormControl>
                     <Stack spacing={1} direction="row" useFlexGap>

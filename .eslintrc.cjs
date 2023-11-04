@@ -18,7 +18,7 @@ module.exports = {
   ],
   'rules': {
     "indent": ["error", 4],
-    "max-len": ["error", { "code": 90 }],
+    "max-len": ["error", { "code": 90, 'ignoreStrings': true }],
     "linebreak-style": 0,
   },
   "settings": {
