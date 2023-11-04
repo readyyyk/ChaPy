@@ -30,6 +30,7 @@ const MessageInput = ({ws}) => {
         <form
             style={{display: 'flex', alignItems: 'center'}}
             onSubmit={newMessage}
+            autoComplete='off'
         >
             <TextField
                 multiline
