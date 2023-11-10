@@ -8,11 +8,6 @@ import ReactGA from 'react-ga4';
 ReactGA.initialize(import.meta.env.VITE_GA_STREAM);
 
 
-import LogRocket from 'logrocket';
-import setupLogRocketReact from 'logrocket-react';
-LogRocket.init(import.meta.env.VITE_LOGROCKET_ID);
-setupLogRocketReact(LogRocket);
-
 window.addEventListener('beforeinstallprompt', (e) => {
     e.preventDefault();
     window.deferredPrompt = e;

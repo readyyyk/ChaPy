@@ -1,5 +1,7 @@
 import React, {
     useEffect,
+    Suspense,
+    lazy,
 } from 'react';
 
 import 'react-toastify/dist/ReactToastify.css';
@@ -14,6 +16,8 @@ import {ToastContainer} from 'react-toastify';
 import {useTheme} from '@mui/material';
 
 import ReactGA from 'react-ga4';
+
+const Logger = lazy(() => import('./logrocket.jsx'));
 
 
 const _ToastProvider = () => {
@@ -43,6 +47,7 @@ const App = () => {
         <ThemeWithDarkModeContextProvider>
             <Outlet />
             <_ToastProvider />
+            <Suspense fallback={<></>}> <Logger /> </Suspense>
         </ThemeWithDarkModeContextProvider>
     );
 };

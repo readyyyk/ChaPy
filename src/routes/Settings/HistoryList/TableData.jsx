@@ -85,7 +85,7 @@ const TableData = () => {
                             placement='top'
                             enterTouchDelay={0}
                             title="Users' messages / total (including server)">
-                            <Typography variant={'h6'} title="Users' messages / total (including server)">
+                            <Typography variant={'h6'}>
                                 {row.number.users} / {row.number.total}
                             </Typography>
                         </Tooltip>

@@ -44,8 +44,6 @@ const setupWsApi = (
     });
 
     const sendFocusActivity = () => {
-        console.log(12331231);
-        // debugger;
         wsApi.emit('activity', {
             detail: 'focus',
             sender: userName,
