@@ -86,7 +86,8 @@ const notification = (title, text, icon, id='') => {
     }
 
     createNotification(title, text, icon, id).then(res=> {
-        sw.showNotification(res.title, res.options);
+        if(sw?.active)
+            sw.showNotification(res.title, res.options);
     });
 }
 

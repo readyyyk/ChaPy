@@ -59,7 +59,7 @@ const ShareModal = ({open, setOpen}) => {
                     direction={'row'}
                     justifyContent='center'
                     spacing={1}
-                    sx={{width: 1}}
+                    sx={{width: 1, mt: 1}}
                 >
                     <Tooltip
                         title={isLinkCopied ? 'Link copied!' : 'Copy link!'}
