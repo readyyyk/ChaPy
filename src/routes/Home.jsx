@@ -18,7 +18,7 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import './home.css';
 
 const Home = () => {
-    document.title = `B-ChaPy`;
+    document.title = `Nimble`;
 
     const navigate = useNavigate();
 
@@ -64,7 +64,7 @@ const Home = () => {
                     fontFamily: 'Hero',
                     letterSpacing: '3px',
                 }}
-            > ChaPy </Typography>
+            > Nimble </Typography>
             <Button
                 onClick={()=>navigate('/new_chat')}
                 variant='outlined'

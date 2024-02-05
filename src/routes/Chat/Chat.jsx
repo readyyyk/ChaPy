@@ -27,7 +27,7 @@ const Chat = () => {
     const {chat} = useParams();
     const navigate = useNavigate();
 
-    document.title = `B-ChaPy - ${chat}`;
+    document.title = `Nimble - ${chat}`;
 
     const [wsApi, setWsApi] = useState(null);
     const [msgs, setMsgs] = useState([]);

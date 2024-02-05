@@ -72,7 +72,7 @@ const HeaderToolbar = ({setIsShareModalOpen, wsApi}) => {
                         <Suspense fallback={<CircularProgress size={40}/>}>
                             <img src={icon} alt='icon' height='40px'/>
                         </Suspense>
-                        <span style={{marginLeft: '.5rem', fontFamily: 'Hero'}}>Cha<i>Py</i></span>
+                        <span style={{marginLeft: '.5rem', fontFamily: 'sans-serif'}}>Nimble</span>
                     </Link>
                 </RouterLink>
                 {
