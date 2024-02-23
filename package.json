@@ -19,7 +19,7 @@
     "@raedyk/socketapi": "^1.0.2",
     "crypto-js": "^4.2.0",
     "logrocket": "^6.0.2",
-    "logrocket-react": "^6.0.1",
+    "logrocket-react": "^6.0.3",
     "npm": "^10.2.2",
     "prop-types": "^15.8.1",
     "qrcode": "^1.5.3",
